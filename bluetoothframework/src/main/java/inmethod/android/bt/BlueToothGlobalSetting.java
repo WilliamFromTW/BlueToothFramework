@@ -17,6 +17,8 @@ public class BlueToothGlobalSetting {
 	public static final int MESSAGE_DELAY_SEND_BT_COMMAND = 13;
 	public static final int MESSAGE_READ_BUT_NO_COMMNAND_HANDLE = 14;
 
+	public static final String VERSION = "1.0";
+
 	public static final String DEVICE_NAME = "device_name";
 	public static final String DEVICE_ADRESS = "device_adress";
 	public static final String TOAST = "toast";

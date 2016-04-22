@@ -56,6 +56,7 @@ public class BlueToothDeviceConnection {
 		aBTCommandsList = new LinkedList<BTCommands>();
 		aBTInfo = aBtInfo;
 		aBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		aConnectionHandler = aCallBackHandler;
 		aContext = context;
 		mBTChat = aBTChat;
 		mBTChat.setHandler(mHandler);

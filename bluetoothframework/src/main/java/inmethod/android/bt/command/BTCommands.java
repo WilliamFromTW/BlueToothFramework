@@ -28,7 +28,7 @@ public abstract class BTCommands {
 	protected boolean bFinished = false;
 	protected boolean bIsTransferData = false;
 
-	private int iTimeout = 0;
+	private int iTimeout = 8;
 	protected IBlueToothChatService aBTChat = null;
 	protected BlueToothCommandCallbackHandler mCallBackHandler = null;
 	protected BlueToothDeviceConnection aBlueToothDeviceConnection = null;
@@ -48,24 +48,21 @@ public abstract class BTCommands {
 			return this.mCallBackHandler;
 	}
 
-	public abstract void setCallBackHandler(BlueToothCommandCallbackHandler aCallBack);
 
-	public abstract void getData(int iData, Object aChannel) throws Exception;
+	public boolean isDataTransferingCompleted(){return bFinished;};
 
-	public abstract boolean isDataTransferingCompleted();
+	public void setBTInfo(BTInfo aInfo){ this.aBTInfo = aInfo; }
 
-	public abstract void setBTInfo(BTInfo aInfo);
-
-	public abstract BTInfo getBTInfo();
-
-	public abstract void handleTimeout() throws Exception;
+	public BTInfo getBTInfo(){return aBTInfo;}
 
 	/**
 	 * send extra message to remote device.
 	 * 
 	 * @param aExceptionObject
 	 */
-	public abstract void sendExtraCommands(Object aExceptionObject);
+	public void sendExtraCommands(Object aExceptionObject){}
+
+
 
 	public void setTransferDataStatus(boolean bTrueFalse) {
 		bIsTransferData = bTrueFalse;
@@ -89,6 +86,9 @@ public abstract class BTCommands {
 		}
 	}
 
+	/**
+	 * If commands is not finished , this method can cancel command.
+	 */
 	public void cancelCommand() {
 		if (aCommandList != null)
 			aCommandList.clear();
@@ -113,7 +113,7 @@ public abstract class BTCommands {
 	}
 
 	/**
-	 * setting timeout for bluetooth commands , if timeout is zero , connection
+	 * Setting timeout for bluetooth commands , if timeout is zero , connection
 	 * will not close connection when time out. Default timeout is 8 seconds.
 	 * 
 	 * @param iT
@@ -165,7 +165,11 @@ public abstract class BTCommands {
 	public ArrayList<BTCommand> getCommandList() {
 		return aCommandList;
 	}
-	
-	
+
+	public void setCallBackHandler(BlueToothCommandCallbackHandler aCallBack){mCallBackHandler = aCallBack;}
+
+	public abstract void getData(int iData, Object aChannel) throws Exception;
+
+	public abstract void handleTimeout() throws Exception;
 
 }
