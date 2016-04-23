@@ -108,7 +108,7 @@ public abstract class BTCommands {
 	 * 
 	 * @return true: finished , false: not finished
 	 */
-	public boolean getFinished() {
+	public boolean isFinished() {
 		return bFinished;
 	}
 
@@ -168,7 +168,13 @@ public abstract class BTCommands {
 
 	public void setCallBackHandler(BlueToothCommandCallbackHandler aCallBack){mCallBackHandler = aCallBack;}
 
-	public abstract void getData(int iData, Object aChannel) throws Exception;
+	/**
+	 *
+	 * @param byteData reponsed data
+	 * @param aChannel can be Characteristic UUID object or UUID String
+	 * @throws Exception
+     */
+	public abstract void getData(byte byteData, Object aChannel) throws Exception;
 
 	public abstract void handleTimeout() throws Exception;
 

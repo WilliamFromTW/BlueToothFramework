@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Modules.iml" filepath="$PROJECT_DIR$/Modules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidBlueToothFramework.iml" filepath="$PROJECT_DIR$/AndroidBlueToothFramework.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothframework/bluetoothframework.iml" filepath="$PROJECT_DIR$/bluetoothframework/bluetoothframework.iml" />
     </modules>
   </component>

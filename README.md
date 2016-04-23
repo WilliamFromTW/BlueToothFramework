@@ -10,9 +10,10 @@ This is project is Android Bluetooth Framework , Help APP to communicate with sl
 
 There are 3 Sections
 
-* Section 1     
- Discovery Slave BlueTooth Device
-~~~~       
+* Section 1
+ Discovery Slave BlueTooth Device    
+
+~~~~
    // Get discovery service instance
    IBlueToothDiscoveryService aIBlueToothDiscoveryService = BlueToothLeDiscoveryService.getInstance();
 
@@ -118,16 +119,21 @@ There are 3 Sections
   
   In Section 2, Device connected will trigger callback method "DeviceNotificationOrIndicatorEnableSuccess" , we can send "BTCommands" to device.    
   If device response data , callback method "handleCommandResponsedMessage()" will be triggered.    
+
 ~~~~
   BTCommands aBTCommands = new MyBTCommands(aBTInfo);
   aBTCommands.setCallBackHandler(new MyBlueToothCommandCallbackHandler());
   Toast.makeText(activity, "send BT commands to device", Toast.LENGTH_SHORT).show();
-  aBlueToothDeviceConnection.sendBTCommand(aBTCommand);
+  aBlueToothDeviceConnection.sendBTCommand(aBTCommands);
   
   public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.BlueToothCommandCallbackHandler {   
   
     @Override
     public void handleCommandResponsedMessage(Message msg) {
+      switch(msg.what){
+         <MyBTCommands's msg.what>:  // see BTCommands example below 
+         break;
+      }
 	}
 	
   }
@@ -153,17 +159,20 @@ public class MyBTCommands extends BTCommands {
   }
   
   /**
-   * receive responsed data
-   */
+  	*
+  	* @param byteData reponsed data
+    * @param aChannel can be Characteristic UUID object or UUID String
+  	* @throws Exception
+     */
   @Override
-  public void getData(int iData, Object aChannel) throws Exception{
+  public void getData(byte byteData, Object aUUID) throws Exception{
      
   }
   
   @Override
   public void handleTimeout() throws Exception{
     if (!bFinished) {
-	  Message aMessage = getCallBackHandler().obtainMessage( <Timeout Constant integer>, 1, -1);
+	  Message aMessage = getCallBackHandler().obtainMessage( <MyBTCommands's msg.what>, 1, -1);
 	  Bundle aBundle = new Bundle();
 	  aMessage.setData(aBundle);
 	  // callback method will be triggered 

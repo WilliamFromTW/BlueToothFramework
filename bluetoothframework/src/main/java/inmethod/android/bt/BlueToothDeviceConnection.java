@@ -100,7 +100,7 @@ public class BlueToothDeviceConnection {
 				}
 				while (!bStopWatchDog) {
 
-					if (!bFirstBTCommands && !aCommands.getFinished()) {
+					if (!bFirstBTCommands && !aCommands.isFinished()) {
 						Log.d(TAG, "current running cmds=" + aCommands.toString());
 						try {
 							sleep(800);
@@ -135,8 +135,8 @@ public class BlueToothDeviceConnection {
 						aBTCommandsList.clear();
 					}
 
-					if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.getFinished() || bFirstBTCommands)) {
-						if (aCommands.getFinished()) {
+					if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
+						if (aCommands.isFinished()) {
 							Log.i(TAG, "remove timeout thread because command is finished!");
 							mHandler.removeCallbacksAndMessages(null);
 						}
@@ -214,7 +214,7 @@ public class BlueToothDeviceConnection {
 	 * @return
 	 */
 	public BTCommands getCurrentBTCommands() {
-		if (aCommands.getFinished())
+		if (aCommands.isFinished())
 			return null;
 		else
 			return aCommands;
@@ -479,7 +479,7 @@ public class BlueToothDeviceConnection {
 								+ HexAndStringConverter.convertHexByteToHexString(cmd.getCommandString()) + ")");
 					}
 					try {
-						if (!aCommands.getFinished()) {
+						if (!aCommands.isFinished()) {
 							Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
 							aCommands.handleTimeout();
 						} else {
@@ -533,7 +533,7 @@ public class BlueToothDeviceConnection {
 				
 				if (aCommands != null && !aCommands.isDataTransferingCompleted()) {
 					try {
-						aCommands.getData(msg.arg1, msg.obj);
+						aCommands.getData((byte)msg.arg1, msg.obj);
 					} catch (Exception e) {
 						e.printStackTrace();
 						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_UNKNOWN_EXCEPTION, msg.arg1, -1);
