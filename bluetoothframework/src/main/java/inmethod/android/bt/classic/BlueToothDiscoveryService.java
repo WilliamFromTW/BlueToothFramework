@@ -334,6 +334,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 			} catch (Exception eee) {
 			}
 		}
+		if( !isRunning()) return;
 		if (D)
 			Log.d(TAG, "doDiscovery()");
 		bRun = true;

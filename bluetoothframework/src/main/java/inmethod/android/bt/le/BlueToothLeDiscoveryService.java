@@ -24,11 +24,10 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
 	protected Context aContext = null;
 	private BlueToothDiscoveryServiceCallbackHandler mHandler;
-	private static Handler stopScanHandler;
-	protected static final boolean D = true;
+	private  Handler stopScanHandler;
 	protected boolean bRun = false;
-	protected static BluetoothAdapter mBluetoothAdapter = null;
-	private static BluetoothAdapter.LeScanCallback mLeScanCallback = null;
+	protected  BluetoothAdapter mBluetoothAdapter = null;
+	private  BluetoothAdapter.LeScanCallback mLeScanCallback = null;
 	// bluetooth set
 	protected ArrayList<BTInfo> aOnlineDeviceList = new ArrayList<BTInfo>();
 	protected ArrayList<BTInfo> aOneOnlineDeviceList = new ArrayList<BTInfo>();
@@ -40,7 +39,7 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 	private boolean isDiscovering = false;
 	private boolean bCancelDiscovery = false;
 	private Vector<String> aFilter = null;
-	private static BluetoothManager bluetoothManager = null;
+	private  BluetoothManager bluetoothManager = null;
 
 	private int iDefaultDiscoveryMode = DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
 
@@ -55,7 +54,7 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 	public static BlueToothLeDiscoveryService getInstance() {
 		if (aBlueToothLeDiscoveryService == null) {
 			aBlueToothLeDiscoveryService = new BlueToothLeDiscoveryService();
-			stopScanHandler = new Handler();
+			aBlueToothLeDiscoveryService.stopScanHandler = new Handler();
 		}
 		return aBlueToothLeDiscoveryService;
 	}
@@ -121,7 +120,7 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 		mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 			@Override
 			public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord) {
-				if (device == null)
+				if (device == null || !isRunning())
 					return;
 				/*
 				List<ScanRecord> aScanRecord = ScanRecord.parseScanRecord(scanRecord);
@@ -257,16 +256,18 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 	}
 
 	public void cancelDiscovery() {
+		if(!isRunning()) return;
 		if (mBluetoothAdapter != null) {
 			bCancelDiscovery = true;
 			mHandler.removeMessages(BlueToothGlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND);
 		}
+
 		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				mBluetoothAdapter.stopLeScan(mLeScanCallback);
 				Log.d(TAG, "cancelDiscovery()");
-				bRun = true;
+
 				isDiscovering = false;
 			}
 		}, 10);
@@ -287,8 +288,10 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 			} catch (Exception eee) {
 			}
 		}
-		Log.d(TAG, "doDiscovery()");
-		bRun = true;
+		Log.d(TAG,"is running?"+isRunning());
+		if( !isRunning()) return;
+ 		Log.d(TAG, "doDiscovery()");
+
 		try {
 
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
@@ -299,6 +302,7 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 				public void run() {
 					isDiscovering = false;
 					mBluetoothAdapter.stopLeScan(mLeScanCallback);
+					if(!isRunning()) return;
 					Log.i(TAG, "device found?" + bDeviceFound);
 
 					if (!bDeviceFound) {
