@@ -1,6 +1,10 @@
+
 # README #
 
-This is project is Android Bluetooth Framework , Help APP to communicate with slave Bluetooth device easily.
+This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
+
+* simple sequence diagram
+![Simple Framework.png](https://bitbucket.org/repo/jagqny/images/364558861-Simple%20Framework.png)
 
 # System Requirement #
 * Android 4.3 or above
