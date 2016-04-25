@@ -71,6 +71,13 @@ public class BlueToothDeviceConnection {
 	}
 
 	/**
+	 * get Connection call back handler.
+	 */
+	public BlueToothConnectionCallbackHandler getCallBackHandler() {
+		return aConnectionHandler ;
+	}
+
+	/**
 	 * get blue tooth info of this connection
 	 * 
 	 * @return bluetooth info

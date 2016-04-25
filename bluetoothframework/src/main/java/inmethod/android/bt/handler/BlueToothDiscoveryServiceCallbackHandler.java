@@ -12,7 +12,7 @@ import inmethod.android.bt.BlueToothGlobalSetting;
 public abstract class BlueToothDiscoveryServiceCallbackHandler extends Handler {
 	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
 
-	public static ArrayList<BTInfo> aOnlineDeviceList;
+	public ArrayList<BTInfo> aOnlineDeviceList;
 
 	public void handleMessage(Message msg) {
 		switch (msg.what) {

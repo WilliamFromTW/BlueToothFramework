@@ -1,15 +1,12 @@
 package inmethod.android.bt.command;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.BlueToothDeviceConnection;
 import inmethod.android.bt.BlueToothGlobalSetting;
-import inmethod.android.bt.exception.NoCallBackHandlerException;
 import inmethod.android.bt.handler.BlueToothCommandCallbackHandler;
 import inmethod.android.bt.interfaces.IBlueToothChatService;
 import inmethod.commons.util.HexAndStringConverter;
@@ -24,14 +21,14 @@ public abstract class BTCommands {
 
 	protected ArrayList<BTCommand> aCommandList = new ArrayList<BTCommand>();
 	protected ArrayList<BTCommand> aOriginalCommandList = new ArrayList<BTCommand>();
-	protected BTInfo aBTInfo = null;
-	protected boolean bFinished = false;
-	protected boolean bIsTransferData = false;
+	private BTInfo aBTInfo = null;
+	private boolean bFinished = false;
+	private boolean bIsTransferData = false;
 
 	private int iTimeout = 8;
-	protected IBlueToothChatService aBTChat = null;
-	protected BlueToothCommandCallbackHandler mCallBackHandler = null;
-	protected BlueToothDeviceConnection aBlueToothDeviceConnection = null;
+	private IBlueToothChatService aBTChat = null;
+	private BlueToothCommandCallbackHandler mCallBackHandler = null;
+	private BlueToothDeviceConnection aBlueToothDeviceConnection = null;
 
 	public void setBTChat(IBlueToothChatService mBTChat) {
 		aBTChat = mBTChat;
@@ -41,10 +38,7 @@ public abstract class BTCommands {
 		return aBTChat;
 	}
 
-	public BlueToothCommandCallbackHandler getCallBackHandler() throws NoCallBackHandlerException {
-		if (this.mCallBackHandler == null)
-			throw new NoCallBackHandlerException("handler is null!");
-		else
+	public BlueToothCommandCallbackHandler getCallBackHandler()  {
 			return this.mCallBackHandler;
 	}
 

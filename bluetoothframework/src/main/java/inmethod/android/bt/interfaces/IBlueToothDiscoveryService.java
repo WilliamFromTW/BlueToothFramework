@@ -3,6 +3,8 @@ package inmethod.android.bt.interfaces;
 import java.util.Vector;
 
 import android.content.Context;
+
+import inmethod.android.bt.handler.BlueToothConnectionCallbackHandler;
 import inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler;
 
 public interface IBlueToothDiscoveryService {
@@ -25,6 +27,11 @@ public interface IBlueToothDiscoveryService {
 	 * @param mHandler
 	 */
 	public void setCallBackHandler(BlueToothDiscoveryServiceCallbackHandler mHandler);
+
+	/**
+	 * get BlueToothDiscoveryServiceCallbackHandler call back handler.
+	 */
+	public BlueToothDiscoveryServiceCallbackHandler getCallBackHandler() ;
 
 	/**
 	 * check bluetooth device is enable or disable.

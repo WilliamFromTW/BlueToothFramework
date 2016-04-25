@@ -79,6 +79,11 @@ public class BlueToothLeDiscoveryService implements IBlueToothDiscoveryService {
 		this.mHandler = mHandler;
 	}
 
+	@Override
+	public BlueToothDiscoveryServiceCallbackHandler getCallBackHandler() {
+		return mHandler;
+	}
+
 	/**
 	 * check bluetooth device is enable or disable.
 	 * 

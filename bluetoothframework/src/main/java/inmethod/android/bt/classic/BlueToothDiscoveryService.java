@@ -56,7 +56,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	/**
 	 * default is BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE.
 	 * 
-	 * @param iDiscoverBlueooth
+	 * @param iDiscoverFilter
 	 *            BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_ONLY: find
 	 *            classic bluetooth only ,
 	 *            BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE: find
@@ -109,6 +109,11 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	 */
 	public void setCallBackHandler(BlueToothDiscoveryServiceCallbackHandler mHandler) {
 		this.mHandler = mHandler;
+	}
+
+	@Override
+	public BlueToothDiscoveryServiceCallbackHandler getCallBackHandler() {
+		return mHandler;
 	}
 
 	/**
