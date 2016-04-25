@@ -23,7 +23,6 @@ public abstract class BTCommands {
 	protected ArrayList<BTCommand> aOriginalCommandList = new ArrayList<BTCommand>();
 	private BTInfo aBTInfo = null;
 	private boolean bFinished = false;
-	private boolean bIsTransferData = false;
 
 	private int iTimeout = 8;
 	private IBlueToothChatService aBTChat = null;
@@ -43,8 +42,6 @@ public abstract class BTCommands {
 	}
 
 
-	public boolean isDataTransferingCompleted(){return bFinished;};
-
 	public void setBTInfo(BTInfo aInfo){ this.aBTInfo = aInfo; }
 
 	public BTInfo getBTInfo(){return aBTInfo;}
@@ -58,26 +55,20 @@ public abstract class BTCommands {
 
 
 
-	public void setTransferDataStatus(boolean bTrueFalse) {
-		bIsTransferData = bTrueFalse;
-	}
-
-	public boolean getTransferDataStatus() {
-		return bIsTransferData;
-	}
-
+	/**
+	 * set Current bt connection.
+	 * @param aBlueToothDeviceConnection
+     */
 	public void setCurrentConnection(BlueToothDeviceConnection aBlueToothDeviceConnection) {
 		this.aBlueToothDeviceConnection = aBlueToothDeviceConnection;
 	}
 
-	public void beginTransferData() {
-		if (mCallBackHandler != null) {
-			Message aMessage = mCallBackHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_TRANSFER_DATA, 1, -1);
-			Bundle aBundle = new Bundle();
-			aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-			aMessage.setData(aBundle);
-			mCallBackHandler.sendMessage(aMessage);
-		}
+	/**
+	 * return current bt connection.
+	 * @return
+     */
+	public BlueToothDeviceConnection getCurrentConnection() {
+		return this.aBlueToothDeviceConnection;
 	}
 
 	/**

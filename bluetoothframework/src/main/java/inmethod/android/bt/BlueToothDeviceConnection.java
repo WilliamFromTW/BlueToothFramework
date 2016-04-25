@@ -152,10 +152,7 @@ public class BlueToothDeviceConnection {
 						aCommands.setBTInfo(aBTInfo);
 						iCommandSize = aCommands.getCommandList().size();
 						if (aCommands.getCommandList().size() >= 1) {
-							if (!aCommands.getTransferDataStatus()) {
-								aCommands.setTransferDataStatus(true);
-								aCommands.beginTransferData();
-							}
+
 							try {
 								mHandler.sendMessage(mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 1, -1));
 							} catch (Exception ex) {
@@ -538,7 +535,7 @@ public class BlueToothDeviceConnection {
 			case BlueToothGlobalSetting.MESSAGE_READ:
 			//	Log.d(TAG, "data received =" + HexAndStringConverter.convertHexByteToHexString((byte)msg.arg1));
 				
-				if (aCommands != null && !aCommands.isDataTransferingCompleted()) {
+				if (aCommands != null && !aCommands.isFinished()) {
 					try {
 						aCommands.getData((byte)msg.arg1, msg.obj);
 					} catch (Exception e) {

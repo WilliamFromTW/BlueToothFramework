@@ -46,7 +46,6 @@ public class BlueToothGlobalSetting {
 	public static final int MESSAGE_STATUS_DEVICE_NOT_FOUND = 1007;
 	public static final int MESSAGE_STATUS_DISCONNECT_REQUESTED = 10008;
 	public static final int MESSAGE_STATUS_BLUETOOTH_OFF = 10009;
-	public static final int MESSAGE_STATUS_TRANSFER_DATA = 10010;
 	public static final int MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED = 10011;
 
 	// for BlueToothDeviceConnection
