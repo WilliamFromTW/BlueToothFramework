@@ -1,4 +1,3 @@
-
 # README #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
@@ -155,7 +154,7 @@ There are 3 Sections
 public class MyBTCommands extends BTCommands {
 
   public MyBTCommands(BTInfo aBTInfo) {
-	this.aBTInfo = aBTInfo;
+	super(aBTInfo);
 	BTCommand aCmd = new BTCommand();
 	byte[] byteCmd = new byte[4];
 	byteCmd[0] = (byte) 0x6F;
