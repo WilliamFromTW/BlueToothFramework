@@ -108,7 +108,7 @@ public class BlueToothDeviceConnection {
 				while (!bStopWatchDog) {
 
 					if (!bFirstBTCommands && !aCommands.isFinished()) {
-						Log.d(TAG, "current running cmds=" + aCommands.toString());
+					//	Log.d(TAG, "current running cmds=" + aCommands.toString());
 						try {
 							sleep(800);
 						} catch (InterruptedException e) {

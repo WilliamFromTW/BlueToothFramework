@@ -5,6 +5,7 @@ This is project is Android Bluetooth Framework , Help APP to communicate with sl
 # System Requirement #
 * Android 4.3 or above
 * Support Classic Bluetooth and Bluetooth Low Energy
+* Android Studio 2.0 or above
 
 ## How To Use This  Framework ##
 
