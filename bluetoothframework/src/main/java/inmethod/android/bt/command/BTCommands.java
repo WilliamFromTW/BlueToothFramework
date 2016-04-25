@@ -41,7 +41,9 @@ public abstract class BTCommands {
 			return this.mCallBackHandler;
 	}
 
-
+	public BTCommands(BTInfo aBTInfo){
+	   setBTInfo(aBTInfo);
+	}
 	public void setBTInfo(BTInfo aInfo){ this.aBTInfo = aInfo; }
 
 	public BTInfo getBTInfo(){return aBTInfo;}

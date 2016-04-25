@@ -3,7 +3,11 @@
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
-* simple sequence diagram
+Note:
+>  This framework can not  send multiple BTCommands to slave bluetooth device  concurrently!    
+> It send one BTCommands at one time , other BTCommands will be queued and wait to execute!
+
+# Simple sequence diagram
 ![Simple Framework.png](https://bitbucket.org/repo/jagqny/images/364558861-Simple%20Framework.png)
 
 # System Requirement #
