@@ -158,10 +158,10 @@ public abstract class BTCommands {
 	/**
 	 *
 	 * @param byteData reponsed data
-	 * @param aChannel can be Characteristic UUID object or UUID String
+	 * @param aNotificationChannelUUID can be Characteristic UUID object or UUID String
 	 * @throws Exception
      */
-	public abstract void getData(byte byteData, Object aChannel) throws Exception;
+	public abstract void getData(byte byteData, Object aNotificationChannelUUID) throws Exception;
 
 	public abstract void handleTimeout() throws Exception;
 
