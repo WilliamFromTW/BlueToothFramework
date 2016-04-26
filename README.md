@@ -1,4 +1,3 @@
-
 # README #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
@@ -154,39 +153,52 @@ There are 3 Sections
 
 public class MyBTCommands extends BTCommands {
 
+  private final static String MY_WRITER_UUID = "0000xxxx-0000-1000-8000-00805f9b34fb";
+  private final static int MY_CALLBACK_SUCCESS = "10000";
+  private final static int MY_CALLBACK_TIMEOUT = "10001";
+
   public MyBTCommands(BTInfo aBTInfo) {
-	this.aBTInfo = aBTInfo;
-	BTCommand aCmd = new BTCommand();
-	byte[] byteCmd = new byte[4];
-	byteCmd[0] = (byte) 0x6F;
-	byteCmd[1] = (byte) 0x53;
-	byteCmd[2] = (byte) 0x01;
-	byteCmd[3] = (byte) 0x35;
-	aCmd.setCommandString(byteCmd);
-	addCommand(aCmd);
-	setTimeout(800);
+        super(aBTInfo);
+        BTCommand aCmd = new BTCommand();
+        aCmd.setWriterChannelUUID(MY_WRITER_UUID);  
+        byte[] byteCmd = new byte[4];
+        byteCmd[0] = (byte) 0x6F;
+        byteCmd[1] = (byte) 0x53;
+        byteCmd[2] = (byte) 0x01;
+        byteCmd[3] = (byte) 0x35;
+        aCmd.setCommandString(byteCmd);
+        addCommand(aCmd);
+        setTimeout(800);
   }
   
   /**
-  	*
-  	* @param byteData reponsed data
+    *
+    * @param byteData reponse data
     * @param aChannel can be Characteristic UUID object or UUID String
-  	* @throws Exception
-     */
+    * @throws Exception
+    */
   @Override
-  public void getData(byte byteData, Object aUUID) throws Exception{
-     
+  public void getData(byte byteData, Object aNotificationUUID) throws Exception{
+    
+    if (!isFinished()) {
+      Message aMessage = getCallBackHandler().obtainMessage( MY_CALLBACK_SUCCESS, 1, -1);
+      Bundle aBundle = new Bundle();
+      aMessage.setData(aBundle);
+      // callback method will be triggered 
+      getCallBackHandler().sendMessage(aMessage);
+      setFinished(true);
+    }
   }
   
   @Override
   public void handleTimeout() throws Exception{
-    if (!bFinished) {
-	  Message aMessage = getCallBackHandler().obtainMessage( <MyBTCommands's msg.what>, 1, -1);
+    if (!isFinished()) {
+	  Message aMessage = getCallBackHandler().obtainMessage( MY_CALLBACK_TIMEOUT, 1, -1);
 	  Bundle aBundle = new Bundle();
 	  aMessage.setData(aBundle);
 	  // callback method will be triggered 
 	  getCallBackHandler().sendMessage(aMessage);
-	  bFinished = true;
+	  setFinished(true);
 	}
   }
 	
