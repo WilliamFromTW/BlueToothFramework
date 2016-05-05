@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.BlueToothGlobalSetting;
-import inmethod.android.bt.command.BTCommands;
 
 public abstract class BlueToothConnectionCallbackHandler extends Handler {
 	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
@@ -50,7 +49,7 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 		case BlueToothGlobalSetting.MESSAGE_RAW_DATA: // all raw data
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
-			responseNotificationData(aInfo, (byte) msg.arg1, aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			allResponseData(aInfo, (byte) msg.arg1, aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 
 			break;
 		case BlueToothGlobalSetting.MESSAGE_UNKNOWN_EXCEPTION:
@@ -61,12 +60,12 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 		case BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS:
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
-			DeviceNotificationOrIndicatorEnableSuccess(aInfo,aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			NotificationEnabled(aInfo,aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 			break;
 		case BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
-			DeviceNotificationOrIndicatorEnableFail(aInfo,aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			NotificationEnableFail(aInfo,aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 			break;
 		}
 	}
@@ -101,7 +100,7 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 	 * @param rawData byte data
 	 * @param sUUID notification or indicator UUID
 	 */
-	public void responseNotificationData(BTInfo aBTInfo, byte rawData, String sUUID) {
+	public void allResponseData(BTInfo aBTInfo, byte rawData, String sUUID) {
 	};
 
 	/**
@@ -130,12 +129,12 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 	 * @param aBTInfo
 	 * @param sUUID
      */
-	public void DeviceNotificationOrIndicatorEnableSuccess(BTInfo aBTInfo,String sUUID){};
+	public void NotificationEnabled(BTInfo aBTInfo, String sUUID){};
 
 	/**
 	 * If BLE device set notification or indicator fail , than trigger this method
 	 * @param aBTInfo
 	 * @param sUUID
      */
-	public void DeviceNotificationOrIndicatorEnableFail(BTInfo aBTInfo,String sUUID){};
+	public void NotificationEnableFail(BTInfo aBTInfo, String sUUID){};
 }

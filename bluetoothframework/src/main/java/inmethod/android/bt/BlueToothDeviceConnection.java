@@ -511,7 +511,7 @@ public class BlueToothDeviceConnection {
 					aBundle = new Bundle();
 					aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 					aMessage.setData(aBundle);
-					aConnectionHandler.sendMessageDelayed(aMessage, 800);
+					aConnectionHandler.sendMessageDelayed(aMessage, 50);
 					bIsConnected = true;
 					if (!aWatchDogThread.isAlive()) {
 						Log.d(TAG, "watchdog thread start()");
@@ -601,7 +601,7 @@ public class BlueToothDeviceConnection {
 				aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
 						aTmpBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 				aMessage.setData(aBundle);
-				aConnectionHandler.sendMessageDelayed(aMessage, 800);
+				aConnectionHandler.sendMessageDelayed(aMessage, 500);
 				break;
 			case BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
 				aTmpBundle = msg.getData();
@@ -613,7 +613,7 @@ public class BlueToothDeviceConnection {
 				aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
 						aTmpBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 				aMessage.setData(aBundle);
-				aConnectionHandler.sendMessageDelayed(aMessage, 800);
+				aConnectionHandler.sendMessageDelayed(aMessage, 500);
 				break;
 			case BlueToothGlobalSetting.MESSAGE_TOAST:
 				break;
