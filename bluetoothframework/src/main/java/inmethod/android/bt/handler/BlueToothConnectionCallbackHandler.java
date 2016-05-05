@@ -50,7 +50,7 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 		case BlueToothGlobalSetting.MESSAGE_RAW_DATA: // all raw data
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
-			RawData(aInfo, (byte) msg.arg1, aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			responseNotificationData(aInfo, (byte) msg.arg1, aBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 
 			break;
 		case BlueToothGlobalSetting.MESSAGE_UNKNOWN_EXCEPTION:
@@ -95,11 +95,13 @@ public abstract class BlueToothConnectionCallbackHandler extends Handler {
 	};
 
 	/**
-	 * all raw data .
+	 * all responseNotification or indicator data
 	 * 
 	 * @param aBTInfo
+	 * @param rawData byte data
+	 * @param sUUID notification or indicator UUID
 	 */
-	public void RawData(BTInfo aBTInfo, byte rawData, String sUUID) {
+	public void responseNotificationData(BTInfo aBTInfo, byte rawData, String sUUID) {
 	};
 
 	/**
