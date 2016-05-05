@@ -1,4 +1,4 @@
-# README #
+# Android Bluetooth Framework v1.0 Released (20160505) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
