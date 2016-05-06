@@ -3,8 +3,6 @@ package inmethod.android.bt;
 import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
 import android.os.Parcelable;
-import inmethod.android.bt.classic.BlueToothChatService;
-import inmethod.android.bt.interfaces.IBlueToothChatService;
 
 /**
  * Get bluetooth device information.

@@ -1,7 +1,7 @@
 /**
  * interface .
- * IBlueToothDiscoveryService
- * IBlueToothChatService
+ * IDiscoveryService
+ * IChatService
  * @author william chen
  *
  */

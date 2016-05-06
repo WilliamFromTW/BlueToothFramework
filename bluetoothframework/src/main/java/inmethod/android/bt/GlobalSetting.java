@@ -1,6 +1,6 @@
 package inmethod.android.bt;
 
-public class BlueToothGlobalSetting {
+public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
@@ -48,7 +48,7 @@ public class BlueToothGlobalSetting {
 	public static final int MESSAGE_STATUS_BLUETOOTH_OFF = 10009;
 	public static final int MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED = 10011;
 
-	// for BlueToothDeviceConnection
+	// for DeviceConnection
 	public static final int MESSAGE_EXCEPTION_NO_WRITER_UUID = 20001;
 	public static final int MESSAGE_EXCEPTION_NO_READER_UUID = 20003;
 	public static final int MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS = 20004;

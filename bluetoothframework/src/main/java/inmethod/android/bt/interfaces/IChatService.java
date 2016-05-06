@@ -1,15 +1,12 @@
 package inmethod.android.bt.interfaces;
 
-import java.util.ArrayList;
-
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Handler;
-import inmethod.android.bt.BlueToothGlobalSetting;
+
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
 
-public interface IBlueToothChatService {
+public interface IChatService {
 
 	// Constants that indicate the current connection state
 	public static final int STATE_NONE = 0; // we're doing nothing
@@ -77,7 +74,7 @@ public interface IBlueToothChatService {
 	/**
 	 * Read characteristic data. Only for BLE .
 	 * 
-	 * @param objWriterChannel
+	 * @param objReaderChannel
 	 *            must be Characteristic or String(Characteristic UUID)
 	 * @throws NoBTReaderException
 	 */

@@ -1,18 +1,11 @@
 package inmethod.android.bt.le;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -22,32 +15,24 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothGlobalSetting;
-import inmethod.android.bt.classic.BlueToothChatService;
+
+import inmethod.android.bt.GlobalSetting;
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
-import inmethod.android.bt.interfaces.IBlueToothChatService;
+import inmethod.android.bt.interfaces.IChatService;
 import inmethod.commons.util.HexAndStringConverter;
 
 /** 
  *
  */
-public class BlueToothLeChatService implements IBlueToothChatService {
+public class LeChatService implements IChatService {
 	// Debugging
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 	private static final boolean D = true;
 
 	// Member fields
@@ -87,15 +72,15 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 	 * @param aSetNotifyOrIndicatorCharacteristicListenerUUID
 	 *            these characteristic is used to enable nofity or indicator
 	 */
-	public BlueToothLeChatService(BluetoothAdapter adapter, Context context,
-			ArrayList<String> aSetNotifyOrIndicatorCharacteristicListenerUUID) {
+	public LeChatService(BluetoothAdapter adapter, Context context,
+						 ArrayList<String> aSetNotifyOrIndicatorCharacteristicListenerUUID) {
 		mBluetoothAdapter = adapter;
 		mState = STATE_NONE;
 		this.context = context;
 		this.aSetNotifyOrIndicatorCharacteristicListenerUUID = aSetNotifyOrIndicatorCharacteristicListenerUUID;
 	}
 
-	private BlueToothLeChatService() {
+	private LeChatService() {
 	};
 
 	/**
@@ -108,7 +93,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 		// Log.d(TAG, "setState() " + mState + " -> " + state);
 		mState = state;
 		// Give the new state to the Handler so the UI Activity can update
-		mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+		mHandler.obtainMessage(GlobalSetting.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
 	}
 
 	/**
@@ -119,7 +104,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 	}
 
 	private void initial() {
-		Log.d(TAG, "BlueToothChatService initial");
+		Log.d(TAG, "ClassicChatService initial");
 	}
 
 	private void broadcastUpdate(String action, BluetoothGattCharacteristic characteristic) {
@@ -127,7 +112,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 		if (data != null && data.length > 0) {
 
 			for (byte bytes : data)
-				mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_READ, bytes, -1, characteristic.getUuid().toString())
+				mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, characteristic.getUuid().toString())
 						.sendToTarget();
 		}
 	}
@@ -137,7 +122,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 	 * session in listening (server) mode. Called by the Activity onResume()
 	 */
 	public synchronized void start() {
-		Log.d(TAG, "BlueToothChatService start");
+		Log.d(TAG, "ClassicChatService start");
 		initial();
 	}
 
@@ -146,7 +131,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 	 */
 	public void stop() {
 
-		Log.d(TAG, "BlueToothLeChatService synchronized stop");
+		Log.d(TAG, "LeChatService synchronized stop");
 		setState(STATE_NONE);
 
 		if (mBluetoothAdapter == null) {
@@ -155,7 +140,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 		if (mBluetoothGatt != null) {
 			mBluetoothGatt.close();
 			mBluetoothGatt = null;
-			mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
+			mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
 		}
 	}
 
@@ -187,7 +172,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 			mState = STATE_CONNECTING;
 		} catch (Exception ex) {
 			Log.e(TAG, "device.connectGatt failed!");
-			mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_FAIL).sendToTarget();
+			mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL).sendToTarget();
 			setState(STATE_LOST);
 		}
 	}
@@ -235,7 +220,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 					mState = STATE_DISCONNECTED;
 					setState(mState);
 					try {
-						BlueToothLeChatService.this.stop();
+						LeChatService.this.stop();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -253,7 +238,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 					mState = STATE_DISCONNECTED;
 					setState(mState);
 					try {
-						BlueToothLeChatService.this.stop();
+						LeChatService.this.stop();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
@@ -280,7 +265,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 				if (status == BluetoothGatt.GATT_SUCCESS) {
 					if (gatt == null) {
 						Log.e(TAG, "gatt is null");
-						Message msg1 = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_FAIL);
+						Message msg1 = mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL);
 						mHandler.sendMessage(msg1);
 						return;
 					}
@@ -309,7 +294,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 					}
 				} else {
 					Log.w(TAG, "onServicesDiscovered failed! status = " + status);
-					Message msg1 = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_FAIL);
+					Message msg1 = mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL);
 					mHandler.sendMessage(msg1);
 				}
 			}
@@ -346,17 +331,17 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 								+ descriptor.getUuid() + ",status=" + status);
 				if (status == BluetoothGatt.GATT_SUCCESS) {
 					Message aMessage = mHandler
-							.obtainMessage(BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);
+							.obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);
 					Bundle aBundle = new Bundle();
-					aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
+					aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
 							descriptor.getCharacteristic().getUuid().toString());
 					aMessage.setData(aBundle);
 					mHandler.sendMessage(aMessage);
 				} else {
 					Message aMessage = mHandler
-							.obtainMessage(BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
+							.obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
 					Bundle aBundle = new Bundle();
-					aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
+					aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
 							descriptor.getCharacteristic().getUuid().toString());
 					aMessage.setData(aBundle);
 					mHandler.sendMessage(aMessage);
@@ -426,7 +411,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 		try {
 			mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 			BluetoothGattDescriptor descriptor = characteristic
-					.getDescriptor(UUID.fromString(BlueToothGlobalSetting.Client_Characteristic_Configuration));
+					.getDescriptor(UUID.fromString(GlobalSetting.Client_Characteristic_Configuration));
 			descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
 
 			writeDescriptor(descriptor);
@@ -445,7 +430,7 @@ public class BlueToothLeChatService implements IBlueToothChatService {
 		try {
 			mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 			BluetoothGattDescriptor descriptor = characteristic
-					.getDescriptor(UUID.fromString(BlueToothGlobalSetting.Client_Characteristic_Configuration));
+					.getDescriptor(UUID.fromString(GlobalSetting.Client_Characteristic_Configuration));
 			descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 			writeDescriptor(descriptor);
 

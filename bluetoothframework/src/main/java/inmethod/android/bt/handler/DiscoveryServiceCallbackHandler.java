@@ -7,42 +7,39 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothGlobalSetting;
+import inmethod.android.bt.GlobalSetting;
 
-public abstract class BlueToothDiscoveryServiceCallbackHandler extends Handler {
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+public abstract class DiscoveryServiceCallbackHandler extends Handler {
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 
 	public ArrayList<BTInfo> aOnlineDeviceList;
 
 	public void handleMessage(Message msg) {
 		switch (msg.what) {
-		case BlueToothGlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF:
+		case GlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF:
 			BlueToothDisabled();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE:
+		case GlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE:
 			BlueToothInNotEnable();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS:
-			StartDiscoveryServiceSuccess();
+		case GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS:
+			StartServiceSuccess();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_STOP_DISCOVERY_SERVICE:
-			StopDiscoveryService();
+		case GlobalSetting.MESSAGE_STOP_DISCOVERY_SERVICE:
+			StopService();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_STATUS_TRY_PAIRING:
-			TryToPairing();
-			break;
-		case BlueToothGlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND:
+		case GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND:
 			Log.i(TAG, "Device not found!");
 			OnlineDeviceNotFound();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED:
+		case GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED:
 			discoveryFinished();
 			break;
-		case BlueToothGlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST:
+		case GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST:
 			Log.i(TAG, "Online Device found!");
 			try {
 				Bundle aBundle = msg.getData();
-				aOnlineDeviceList = (ArrayList<BTInfo>) (aBundle.get(BlueToothGlobalSetting.BUNDLE_ONLINE_DEVICE_LIST));
+				aOnlineDeviceList = (ArrayList<BTInfo>) (aBundle.get(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST));
 				if (aOnlineDeviceList != null && aOnlineDeviceList.size() > 0) {
 					getOnlineDevice(aOnlineDeviceList.get(0));
 				}
@@ -70,23 +67,17 @@ public abstract class BlueToothDiscoveryServiceCallbackHandler extends Handler {
 		Log.i(TAG, "BLUETOOTH_NOT_ENABLE!");
 	}
 
-	/**
-	 * when bluetooth is trying to pair
-	 */
-	public void TryToPairing() {
-		Log.i(TAG, "TRY_PAIRING...");
-	}
 
 
 	/**
 	 * when DiscoveryService stop
 	 */
-	public void StopDiscoveryService() {
+	public void StopService() {
 		Log.i(TAG, "StopDisconeryService");
 	}
 
 	/**
-	 * get online device bluetooth info when BlueToothDiscoveryService discover and
+	 * get online device bluetooth info when ClassicDiscoveryService discover and
 	 * found bluetooth device.
 	 * 
 	 * @param aBTInfo
@@ -107,6 +98,6 @@ public abstract class BlueToothDiscoveryServiceCallbackHandler extends Handler {
 	/**
 	 * when DiscoveryService starting
 	 */
-	public abstract void StartDiscoveryServiceSuccess() ;
+	public abstract void StartServiceSuccess() ;
 
 }

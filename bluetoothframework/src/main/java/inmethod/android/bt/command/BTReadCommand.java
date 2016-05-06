@@ -6,7 +6,7 @@ package inmethod.android.bt.command;
  * @author william chen 
  *
  */
-public class ReadBTCommand extends BTCommand{
+public class BTReadCommand extends BTCommand{
 	
   private String sReaderCharacteristicUUID;
   

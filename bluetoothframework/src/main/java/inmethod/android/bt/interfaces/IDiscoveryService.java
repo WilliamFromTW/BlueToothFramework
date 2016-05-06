@@ -4,10 +4,9 @@ import java.util.Vector;
 
 import android.content.Context;
 
-import inmethod.android.bt.handler.BlueToothConnectionCallbackHandler;
-import inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler;
+import inmethod.android.bt.handler.DiscoveryServiceCallbackHandler;
 
-public interface IBlueToothDiscoveryService {
+public interface IDiscoveryService {
 
 	public final static int DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY = 1001;
 
@@ -26,12 +25,12 @@ public interface IBlueToothDiscoveryService {
 	 * 
 	 * @param mHandler
 	 */
-	public void setCallBackHandler(BlueToothDiscoveryServiceCallbackHandler mHandler);
+	public void setCallBackHandler(DiscoveryServiceCallbackHandler mHandler);
 
 	/**
-	 * get BlueToothDiscoveryServiceCallbackHandler call back handler.
+	 * get DiscoveryServiceCallbackHandler call back handler.
 	 */
-	public BlueToothDiscoveryServiceCallbackHandler getCallBackHandler() ;
+	public DiscoveryServiceCallbackHandler getCallBackHandler() ;
 
 	/**
 	 * check bluetooth device is enable or disable.
@@ -64,8 +63,8 @@ public interface IBlueToothDiscoveryService {
 	 * BlueToothCommunication.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 * 
 	 * @param iMode
-	 *            one of IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
-	 *            ,IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *            one of IDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *            ,IDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 */
 	public void setDiscoveryMode(int iMode);
 
@@ -73,8 +72,8 @@ public interface IBlueToothDiscoveryService {
 	 * get discovery mode
 	 * 
 	 * @return one of
-	 *         IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
-	 *         ,IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *         IDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *         ,IDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 */
 	public int getDiscoveryMode();
 

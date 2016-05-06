@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothGlobalSetting;
+import inmethod.android.bt.GlobalSetting;
 
-public abstract class BlueToothCommandCallbackHandler extends Handler {
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+public abstract class CommandCallbackHandler extends Handler {
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 
 	Bundle aBundle = null;
 	BTInfo aInfo = null;
@@ -17,7 +17,7 @@ public abstract class BlueToothCommandCallbackHandler extends Handler {
 	public void handleMessage(Message msg) {
 		switch (msg.what) {
 		default:
-			handleCommandResponsedMessage(msg);
+			handleCommandResponseMessage(msg);
 			break;
 		}
 	}
@@ -27,6 +27,6 @@ public abstract class BlueToothCommandCallbackHandler extends Handler {
 	 * 
 	 * @param msg
 	 */
-	public abstract void handleCommandResponsedMessage(Message msg);
+	public abstract void handleCommandResponseMessage(Message msg);
 
 }

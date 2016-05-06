@@ -3,26 +3,21 @@ package inmethod.android.bt.classic;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothGlobalSetting;
+import inmethod.android.bt.GlobalSetting;
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
-import inmethod.android.bt.interfaces.IBlueToothChatService;
+import inmethod.android.bt.interfaces.IChatService;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -30,9 +25,9 @@ import inmethod.android.bt.interfaces.IBlueToothChatService;
  * connections, a thread for connecting with a device, and a thread for
  * performing data transmissions when connected.
  */
-public class BlueToothChatService implements IBlueToothChatService {
+public class ClassicChatService implements IChatService {
 	// Debugging
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 
 	// Name for the SDP record when creating server socket
 	private static final String NAME_SECURE = "BluetoothChatSecure";
@@ -42,13 +37,13 @@ public class BlueToothChatService implements IBlueToothChatService {
 	 * Unique UUID for this application. default is Serial Port Profile
 	 * 00001101-0000-1000-8000-00805F9B34FB
 	 */
-	public static final UUID MY_UUID_SECURE = UUID.fromString(BlueToothGlobalSetting.SPP_UUID);
+	public static final UUID MY_UUID_SECURE = UUID.fromString(GlobalSetting.SPP_UUID);
 
 	/**
 	 * Unique UUID for this application. default is Serial Port Profile
 	 * 00001101-0000-1000-8000-00805F9B34FB
 	 */
-	public static final UUID MY_UUID_INSECURE = UUID.fromString(BlueToothGlobalSetting.SPP_UUID);
+	public static final UUID MY_UUID_INSECURE = UUID.fromString(GlobalSetting.SPP_UUID);
 
 	private static UUID SecureUUID = MY_UUID_SECURE;
 	private static UUID InSecureUUID = MY_UUID_INSECURE;
@@ -80,7 +75,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 	/**
 	 * Constructor. Prepares a new BluetoothChat session.
 	 */
-	public BlueToothChatService() {
+	public ClassicChatService() {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
 		mState = STATE_NONE;
 	}
@@ -88,7 +83,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 	/**
 	 * Constructor. Prepares a new BluetoothChat session.
 	 */
-	public BlueToothChatService(String sSecureUUID, String sInSecureUUID) {
+	public ClassicChatService(String sSecureUUID, String sInSecureUUID) {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
 		mState = STATE_NONE;
 		this.SecureUUID = UUID.fromString(sSecureUUID);
@@ -128,7 +123,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 		Log.d(TAG, "setState() " + mState + " -> " + state);
 		mState = state;
 		// Give the new state to the Handler so the UI Activity can update
-		mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+		mHandler.obtainMessage(GlobalSetting.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
 	}
 
 	/**
@@ -140,7 +135,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 
 	private void initial() {
 
-		Log.d(TAG, "BlueToothChatService initial");
+		Log.d(TAG, "ClassicChatService initial");
 		if (mAdapter == null)
 			mAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -164,7 +159,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 	 */
 	public synchronized void start() {
 
-		Log.d(TAG, "BlueToothChatService start");
+		Log.d(TAG, "ClassicChatService start");
 		initial();
 
 		// Start the thread to listen on a BluetoothServerSocket
@@ -270,19 +265,19 @@ public class BlueToothChatService implements IBlueToothChatService {
 			ee.printStackTrace();
 		}
 		// Send the name of the connected device back to the UI Activity
-		Message msg = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_DEVICE_NAME);
+		Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_DEVICE_NAME);
 		Bundle bundle = new Bundle();
-		bundle.putString(BlueToothGlobalSetting.DEVICE_NAME, device.getName());
-		bundle.putString(BlueToothGlobalSetting.DEVICE_ADRESS, device.getAddress());
+		bundle.putString(GlobalSetting.DEVICE_NAME, device.getName());
+		bundle.putString(GlobalSetting.DEVICE_ADRESS, device.getAddress());
 		msg.setData(bundle);
 		mHandler.sendMessage(msg);
 
-		Message msg2 = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTED);
+		Message msg2 = mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTED);
 		Bundle bundle2 = new Bundle();
 		BTInfo aBTInfo = new BTInfo();
 		aBTInfo.setDeviceName(device.getName());
 		aBTInfo.setDeviceAddress(device.getAddress());
-		bundle2.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+		bundle2.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 		msg2.setData(bundle2);
 		mHandler.sendMessage(msg2);
 
@@ -294,7 +289,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 	 */
 	public synchronized void stop() {
 
-		Log.d(TAG, "BlueToothChatService synchronized stop");
+		Log.d(TAG, "ClassicChatService synchronized stop");
 		setState(STATE_NONE);
 
 		if (mConnectThread != null) {
@@ -342,11 +337,11 @@ public class BlueToothChatService implements IBlueToothChatService {
 	 */
 	private void connectionFailed() {
 		// System.out.println("connection failed");
-		mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_FAIL).sendToTarget();
+		mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL).sendToTarget();
 		try {
 			// if(
-			// BlueToothChatService.this.mState==BlueToothChatService.STATE_CONNECTED)
-			BlueToothChatService.this.stop();
+			// ClassicChatService.this.mState==ClassicChatService.STATE_CONNECTED)
+			ClassicChatService.this.stop();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -357,7 +352,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 	 */
 	private void connectionLost() {
 		// Send a failure message back to the Activity
-		mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
+		mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
 		/*
 		 * Bundle bundle = new Bundle(); bundle.putString(BlueToothGlobal.TOAST,
 		 * "Device connection was lost"); msg.setData(bundle);
@@ -365,12 +360,12 @@ public class BlueToothChatService implements IBlueToothChatService {
 		 */
 		// Start the service over to restart listening mode
 		try {
-			if (BlueToothChatService.this.mState == BlueToothChatService.STATE_CONNECTED)
-				BlueToothChatService.this.stop();
+			if (ClassicChatService.this.mState == ClassicChatService.STATE_CONNECTED)
+				ClassicChatService.this.stop();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		// BlueToothChatService.this.start();
+		// ClassicChatService.this.start();
 	}
 
 	/**
@@ -420,7 +415,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 
 				// If a connection was accepted
 				if (socket != null) {
-					synchronized (BlueToothChatService.this) {
+					synchronized (ClassicChatService.this) {
 						switch (mState) {
 						case STATE_LISTEN:
 						case STATE_CONNECTING:
@@ -524,7 +519,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 			}
 
 			// Reset the ConnectThread because we're done
-			synchronized (BlueToothChatService.this) {
+			synchronized (ClassicChatService.this) {
 				mConnectThread = null;
 			}
 
@@ -580,7 +575,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 					// Read from the InputStream
 					bytes = mmInStream.read();
 					if (bytes != -1)
-						mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_READ, bytes, -1, null).sendToTarget();
+						mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, null).sendToTarget();
 					/*
 					 * // Read from the InputStream bytes =
 					 * mmInStream.read(buffer);
@@ -609,7 +604,7 @@ public class BlueToothChatService implements IBlueToothChatService {
 				mmOutStream.write(buffer);
 				mmOutStream.flush();
 				// Share the sent message back to the UI Activity
-				mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+				mHandler.obtainMessage(GlobalSetting.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 			} catch (IOException e) {
 				Log.e(TAG, "Exception during write", e);
 			}

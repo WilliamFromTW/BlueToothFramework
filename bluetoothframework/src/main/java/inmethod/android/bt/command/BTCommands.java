@@ -2,13 +2,10 @@ package inmethod.android.bt.command;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
-import android.os.Message;
 import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothDeviceConnection;
-import inmethod.android.bt.BlueToothGlobalSetting;
-import inmethod.android.bt.handler.BlueToothCommandCallbackHandler;
-import inmethod.android.bt.interfaces.IBlueToothChatService;
+import inmethod.android.bt.DeviceConnection;
+import inmethod.android.bt.handler.CommandCallbackHandler;
+import inmethod.android.bt.interfaces.IChatService;
 import inmethod.commons.util.HexAndStringConverter;
 
 /**
@@ -25,19 +22,19 @@ public abstract class BTCommands {
 	private boolean bFinished = false;
 
 	private int iTimeout = 8;
-	private IBlueToothChatService aBTChat = null;
-	private BlueToothCommandCallbackHandler mCallBackHandler = null;
-	private BlueToothDeviceConnection aBlueToothDeviceConnection = null;
+	private IChatService aBTChat = null;
+	private CommandCallbackHandler mCallBackHandler = null;
+	private DeviceConnection aDeviceConnection = null;
 
-	public void setBTChat(IBlueToothChatService mBTChat) {
+	public void setBTChat(IChatService mBTChat) {
 		aBTChat = mBTChat;
 	}
 
-	public IBlueToothChatService getBTChat() {
+	public IChatService getBTChat() {
 		return aBTChat;
 	}
 
-	public BlueToothCommandCallbackHandler getCallBackHandler()  {
+	public CommandCallbackHandler getCallBackHandler()  {
 			return this.mCallBackHandler;
 	}
 
@@ -59,18 +56,18 @@ public abstract class BTCommands {
 
 	/**
 	 * set Current bt connection.
-	 * @param aBlueToothDeviceConnection
+	 * @param aDeviceConnection
      */
-	public void setCurrentConnection(BlueToothDeviceConnection aBlueToothDeviceConnection) {
-		this.aBlueToothDeviceConnection = aBlueToothDeviceConnection;
+	public void setCurrentConnection(DeviceConnection aDeviceConnection) {
+		this.aDeviceConnection = aDeviceConnection;
 	}
 
 	/**
 	 * return current bt connection.
 	 * @return
      */
-	public BlueToothDeviceConnection getCurrentConnection() {
-		return this.aBlueToothDeviceConnection;
+	public DeviceConnection getCurrentConnection() {
+		return this.aDeviceConnection;
 	}
 
 	/**
@@ -153,7 +150,7 @@ public abstract class BTCommands {
 		return aCommandList;
 	}
 
-	public void setCallBackHandler(BlueToothCommandCallbackHandler aCallBack){mCallBackHandler = aCallBack;}
+	public void setCallBackHandler(CommandCallbackHandler aCallBack){mCallBackHandler = aCallBack;}
 
 	/**
 	 *

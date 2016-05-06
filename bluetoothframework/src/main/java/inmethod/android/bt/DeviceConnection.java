@@ -1,6 +1,5 @@
 package inmethod.android.bt;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import android.bluetooth.BluetoothAdapter;
@@ -9,21 +8,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import inmethod.android.bt.classic.BlueToothChatService;
+import inmethod.android.bt.classic.ClassicChatService;
 import inmethod.android.bt.command.BTCommand;
 import inmethod.android.bt.command.BTCommands;
-import inmethod.android.bt.command.ReadBTCommand;
+import inmethod.android.bt.command.BTReadCommand;
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
-import inmethod.android.bt.exception.NoUuidException;
-import inmethod.android.bt.handler.BlueToothConnectionCallbackHandler;
-import inmethod.android.bt.interfaces.IBlueToothChatService;
-import inmethod.android.bt.le.BlueToothLeChatService;
+import inmethod.android.bt.handler.ConnectionCallbackHandler;
+import inmethod.android.bt.interfaces.IChatService;
 import inmethod.commons.util.HexAndStringConverter;
 
-public class BlueToothDeviceConnection {
+public class DeviceConnection {
 
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 
 	protected static final boolean D = true;
 
@@ -35,13 +32,13 @@ public class BlueToothDeviceConnection {
 	private boolean bFirstBTCommands = true;
 	private BTInfo aBTInfo = null;
 	private BluetoothAdapter aBluetoothAdapter = null;
-	private IBlueToothChatService mBTChat = null;
+	private IChatService mBTChat = null;
 	private LinkedList<BTCommands> aBTCommandsList = null;
-	private BlueToothConnectionCallbackHandler aConnectionHandler = null;
+	private ConnectionCallbackHandler aConnectionHandler = null;
 	private Thread aWatchDogThread = null;
 	private Context aContext = null;
 
-	private BlueToothDeviceConnection() {
+	private DeviceConnection() {
 	}
 
 	/**
@@ -51,8 +48,8 @@ public class BlueToothDeviceConnection {
 	 * @param aBTChat
 	 * @param aCallBackHandler
 	 */
-	public BlueToothDeviceConnection(BTInfo aBtInfo, Context context, IBlueToothChatService aBTChat,
-			BlueToothConnectionCallbackHandler aCallBackHandler) {
+	public DeviceConnection(BTInfo aBtInfo, Context context, IChatService aBTChat,
+							ConnectionCallbackHandler aCallBackHandler) {
 		aBTCommandsList = new LinkedList<BTCommands>();
 		aBTInfo = aBtInfo;
 		aBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -66,14 +63,14 @@ public class BlueToothDeviceConnection {
 	/**
 	 * set Connection call back handler.
 	 */
-	public void setCallBackHandler(BlueToothConnectionCallbackHandler aHandler) {
+	public void setCallBackHandler(ConnectionCallbackHandler aHandler) {
 		aConnectionHandler = aHandler;
 	}
 
 	/**
 	 * get Connection call back handler.
 	 */
-	public BlueToothConnectionCallbackHandler getCallBackHandler() {
+	public ConnectionCallbackHandler getCallBackHandler() {
 		return aConnectionHandler ;
 	}
 
@@ -115,7 +112,7 @@ public class BlueToothDeviceConnection {
 						}
 					}
 
-					if (mBTChat != null && mBTChat.getState() != BlueToothChatService.STATE_CONNECTED) {
+					if (mBTChat != null && mBTChat.getState() != ClassicChatService.STATE_CONNECTED) {
 						aBTCommandsList.clear();
 					}
 
@@ -154,7 +151,7 @@ public class BlueToothDeviceConnection {
 						if (aCommands.getCommandList().size() >= 1) {
 
 							try {
-								mHandler.sendMessage(mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 1, -1));
+								mHandler.sendMessage(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 1, -1));
 							} catch (Exception ex) {
 								ex.printStackTrace();
 							}
@@ -163,7 +160,7 @@ public class BlueToothDeviceConnection {
 						if (aCommands.getCommandList().size() >= 2) {
 							try {
 								mHandler.sendMessageDelayed(
-										mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 2, -1),
+										mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 2, -1),
 										((BTCommand) aCommands.getCommandList().get(0)).getDelayTime());
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -173,7 +170,7 @@ public class BlueToothDeviceConnection {
 						if (aCommands.getCommandList().size() >= 3) {
 							try {
 								mHandler.sendMessageDelayed(
-										mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 3, -1),
+										mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 3, -1),
 										((BTCommand) aCommands.getCommandList().get(0)).getDelayTime()
 												+ ((BTCommand) aCommands.getCommandList().get(1)).getDelayTime());
 							} catch (Exception ex) {
@@ -183,7 +180,7 @@ public class BlueToothDeviceConnection {
 						if (aCommands.getCommandList().size() >= 4) {
 							try {
 								mHandler.sendMessageDelayed(
-										mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 4, -1),
+										mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 4, -1),
 										((BTCommand) aCommands.getCommandList().get(0)).getDelayTime()
 												+ ((BTCommand) aCommands.getCommandList().get(1)).getDelayTime()
 												+ ((BTCommand) aCommands.getCommandList().get(2)).getDelayTime());
@@ -198,7 +195,7 @@ public class BlueToothDeviceConnection {
 							r = new Runnable() {
 								public void run() {
 									mHandler.sendMessage(
-											mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_SEND_DATA, 5, -1));
+											mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1));
 								}
 							};
 							mHandler.postDelayed(r, aCommands.getTimeout());
@@ -294,13 +291,13 @@ public class BlueToothDeviceConnection {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case BlueToothGlobalSetting.MESSAGE_SERVICE_STOP:
+			case GlobalSetting.MESSAGE_SERVICE_STOP:
 				// System.out.println("MESSAGE SERVICE STOP");
 				bIsConnected = false;
 				if (mBTChat != null)
 					mBTChat.stop();
 				break;
-			case BlueToothGlobalSetting.MESSAGE_SEND_DATA:
+			case GlobalSetting.MESSAGE_SEND_DATA:
 				switch (msg.arg1) {
 				case 1:
 					BTCommand aCmd1 = (BTCommand) aCommands.getCommandList().get(0);
@@ -308,17 +305,17 @@ public class BlueToothDeviceConnection {
 							+ HexAndStringConverter.convertHexByteToHexString(aCmd1.getCommandString()) + ")");
 
 					if (mBTChat == null || mBTChat.getState() != mBTChat.STATE_CONNECTED) {
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 						aBundle = new Bundle();
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 						break;
 					}
 
 					try {
-						if (aCmd1 instanceof ReadBTCommand) {
-							mBTChat.read(((ReadBTCommand) aCmd1).getReaderChannelUUID());
+						if (aCmd1 instanceof BTReadCommand) {
+							mBTChat.read(((BTReadCommand) aCmd1).getReaderChannelUUID());
 						} else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
 							mBTChat.write(aCmd1.getCommandString(), null);
 						} else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
@@ -326,25 +323,25 @@ public class BlueToothDeviceConnection {
 								mBTChat.write(aCmd1.getCommandString(), aCmd1.getWriterChannelUUID());
 							} else {
 								aMessage = aConnectionHandler
-										.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+										.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
 								aBundle = new Bundle();
-								aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+								aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 								aMessage.setData(aBundle);
 								aConnectionHandler.sendMessage(aMessage);
 							}
 						}
 					} catch (NoWriterException e) {
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1,
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1,
 								-1);
 						aBundle = new Bundle();
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 					} catch (NoBTReaderException e) {
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_READER_UUID, 1,
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_READER_UUID, 1,
 								-1);
 						aBundle = new Bundle();
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 					}
@@ -359,16 +356,16 @@ public class BlueToothDeviceConnection {
 						Log.i(TAG, "MESSAGE_SEND_COMMAND 2 = asc(" + new String(aCmd2.getCommandString()) + "),hex("
 								+ HexAndStringConverter.convertHexByteToHexString(aCmd2.getCommandString()) + ")");
 						if (mBTChat == null || mBTChat.getState() != mBTChat.STATE_CONNECTED) {
-							aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+							aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 							aBundle = new Bundle();
-							aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+							aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 							aMessage.setData(aBundle);
 							aConnectionHandler.sendMessage(aMessage);
 							break;
 						}
 
-						if (aCmd2 instanceof ReadBTCommand) {
-							mBTChat.read(((ReadBTCommand) aCmd2).getReaderChannelUUID());
+						if (aCmd2 instanceof BTReadCommand) {
+							mBTChat.read(((BTReadCommand) aCmd2).getReaderChannelUUID());
 						}  else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
 							mBTChat.write(aCmd2.getCommandString(), null);
 						} else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
@@ -376,9 +373,9 @@ public class BlueToothDeviceConnection {
 								mBTChat.write(aCmd2.getCommandString(), aCmd2.getWriterChannelUUID());
 							} else {
 								aMessage = aConnectionHandler
-										.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+										.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
 								aBundle = new Bundle();
-								aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+								aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 								aMessage.setData(aBundle);
 								aConnectionHandler.sendMessage(aMessage);
 							}
@@ -398,17 +395,17 @@ public class BlueToothDeviceConnection {
 					Log.i(TAG, "MESSAGE_SEND_COMMAND 3 = asc(" + new String(aCmd3.getCommandString()) + "),hex("
 							+ HexAndStringConverter.convertHexByteToHexString(aCmd3.getCommandString()) + ")");
 					if (mBTChat == null || mBTChat.getState() != mBTChat.STATE_CONNECTED) {
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 						aBundle = new Bundle();
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 						break;
 					}
 
 					try {
-						if (aCmd3 instanceof ReadBTCommand) {
-							mBTChat.read(((ReadBTCommand) aCmd3).getReaderChannelUUID());
+						if (aCmd3 instanceof BTReadCommand) {
+							mBTChat.read(((BTReadCommand) aCmd3).getReaderChannelUUID());
 						}  else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
 							mBTChat.write(aCmd3.getCommandString(), null);
 						} else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
@@ -416,9 +413,9 @@ public class BlueToothDeviceConnection {
 								mBTChat.write(aCmd3.getCommandString(), aCmd3.getWriterChannelUUID());
 							} else {
 								aMessage = aConnectionHandler
-										.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+										.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
 								aBundle = new Bundle();
-								aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+								aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 								aMessage.setData(aBundle);
 								aConnectionHandler.sendMessage(aMessage);
 							}
@@ -440,18 +437,18 @@ public class BlueToothDeviceConnection {
 					BTCommand aCmd4 = (BTCommand) aCommands.getCommandList().get(3);
 					Log.i(TAG, "MESSAGE_SEND_COMMAND 4 = asc(" + new String(aCmd4.getCommandString()) + "),hex("
 							+ HexAndStringConverter.convertHexByteToHexString(aCmd4.getCommandString()) + ")");
-					if (mBTChat == null || mBTChat.getState() != IBlueToothChatService.STATE_CONNECTED) {
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+					if (mBTChat == null || mBTChat.getState() != IChatService.STATE_CONNECTED) {
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 						aBundle = new Bundle();
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 						break;
 					}
 
 					try {
-						if (aCmd4 instanceof ReadBTCommand) {
-							mBTChat.read(((ReadBTCommand) aCmd4).getReaderChannelUUID());
+						if (aCmd4 instanceof BTReadCommand) {
+							mBTChat.read(((BTReadCommand) aCmd4).getReaderChannelUUID());
 						} else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
 							mBTChat.write(aCmd4.getCommandString(), null);
 						} else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
@@ -459,9 +456,9 @@ public class BlueToothDeviceConnection {
 								mBTChat.write(aCmd4.getCommandString(), aCmd4.getWriterChannelUUID());
 							} else {
 								aMessage = aConnectionHandler
-										.obtainMessage(BlueToothGlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+										.obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
 								aBundle = new Bundle();
-								aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+								aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 								aMessage.setData(aBundle);
 								aConnectionHandler.sendMessage(aMessage);
 							}
@@ -499,17 +496,17 @@ public class BlueToothDeviceConnection {
 
 				}
 				break;
-			case BlueToothGlobalSetting.MESSAGE_STATE_CHANGE:
+			case GlobalSetting.MESSAGE_STATE_CHANGE:
 				if (D)
 					Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
 				switch (msg.arg1) {
-				case BlueToothChatService.STATE_CONNECTED:
+				case ClassicChatService.STATE_CONNECTED:
 					if (bTriggerConnectedAndThenSendCommand) {
 						bTriggerConnectedAndThenSendCommand = false;
 					}
-					aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTED, 1, -1);
+					aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTED, 1, -1);
 					aBundle = new Bundle();
-					aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+					aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 					aMessage.setData(aBundle);
 					aConnectionHandler.sendMessageDelayed(aMessage, 50);
 					bIsConnected = true;
@@ -519,20 +516,20 @@ public class BlueToothDeviceConnection {
 					}
 
 					break;
-				case BlueToothChatService.STATE_CONNECTING:
+				case ClassicChatService.STATE_CONNECTING:
 					break;
-				case BlueToothChatService.STATE_LISTEN:
-				case BlueToothChatService.STATE_NONE:
+				case ClassicChatService.STATE_LISTEN:
+				case ClassicChatService.STATE_NONE:
 					break;
-				case BlueToothChatService.STATE_LOST:
+				case ClassicChatService.STATE_LOST:
 					bIsConnected = false;
 					break;
 				}
 				break;
-			case BlueToothGlobalSetting.MESSAGE_WRITE:
+			case GlobalSetting.MESSAGE_WRITE:
 
 				break;
-			case BlueToothGlobalSetting.MESSAGE_READ:
+			case GlobalSetting.MESSAGE_READ:
 			//	Log.d(TAG, "data received =" + HexAndStringConverter.convertHexByteToHexString((byte)msg.arg1));
 				
 				if (aCommands != null && !aCommands.isFinished()) {
@@ -540,82 +537,82 @@ public class BlueToothDeviceConnection {
 						aCommands.getData((byte)msg.arg1, msg.obj);
 					} catch (Exception e) {
 						e.printStackTrace();
-						aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_UNKNOWN_EXCEPTION, msg.arg1, -1);
+						aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_UNKNOWN_EXCEPTION, msg.arg1, -1);
 						aBundle = new Bundle();
-						aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_UNKNOWN_EXCEPTION_STRING, e.getMessage());
-						aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+						aBundle.putString(GlobalSetting.BUNDLE_KEY_UNKNOWN_EXCEPTION_STRING, e.getMessage());
+						aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 					}
 				} else {
-					aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_READ_BUT_NO_COMMNAND_HANDLE, msg.arg1, -1);
+					aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_READ_BUT_NO_COMMNAND_HANDLE, msg.arg1, -1);
 					aBundle = new Bundle();
 					if(msg.obj!=null)
-							aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
+							aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
 					aMessage.setData(aBundle);
 					aConnectionHandler.sendMessage(aMessage);
 				}
-				aRawMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_RAW_DATA, msg.arg1, -1);
+				aRawMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_RAW_DATA, msg.arg1, -1);
 				aBundle = new Bundle();
 				if(msg.obj!=null)
-				aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
+				aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
 				aRawMessage.setData(aBundle);
 				aConnectionHandler.sendMessage(aRawMessage);
 				break;
-			case BlueToothGlobalSetting.MESSAGE_DEVICE_NAME:
+			case GlobalSetting.MESSAGE_DEVICE_NAME:
 				break;
-			case BlueToothGlobalSetting.MESSAGE_CONNECTION_FAIL:
+			case GlobalSetting.MESSAGE_CONNECTION_FAIL:
 				stop();
 				Log.e(TAG, "MESSAGE_CONNECTION_FAIL!");
 				if (aConnectionHandler == null) {
 					Log.e(TAG, "No connectionHandler!");
 					return;
 				}
-				aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+				aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 				aBundle = new Bundle();
-				aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+				aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 				aMessage.setData(aBundle);
 				aConnectionHandler.sendMessage(aMessage);
 				break;
-			case BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST:
+			case GlobalSetting.MESSAGE_CONNECTION_LOST:
 				stop();
 				Log.e(TAG, "MESSAGE_CONNECTION_LOST!");
 				if (aConnectionHandler == null) {
 					Log.e(TAG, "No connectionHandler!");
 					return;
 				}
-				aMessage = aConnectionHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+				aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
 				aBundle = new Bundle();
-				aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+				aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 				aMessage.setData(aBundle);
 				aConnectionHandler.sendMessage(aMessage);
 
 				break;
-			case BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS:
+			case GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS:
 				aTmpBundle = msg.getData();
 
 				aMessage = aConnectionHandler
-						.obtainMessage(BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);
+						.obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);
 				aBundle = new Bundle();
-				aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-				aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
-						aTmpBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+				aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+				aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
+						aTmpBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 				aMessage.setData(aBundle);
 				aConnectionHandler.sendMessageDelayed(aMessage, 500);
 				break;
-			case BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
+			case GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
 				aTmpBundle = msg.getData();
 
 				aMessage = aConnectionHandler
-						.obtainMessage(BlueToothGlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
+						.obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
 				aBundle = new Bundle();
-				aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-				aBundle.putString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
-						aTmpBundle.getString(BlueToothGlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+				aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+				aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
+						aTmpBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 				aMessage.setData(aBundle);
 				aConnectionHandler.sendMessageDelayed(aMessage, 500);
 				break;
-			case BlueToothGlobalSetting.MESSAGE_TOAST:
+			case GlobalSetting.MESSAGE_TOAST:
 				break;
 			}
 		}

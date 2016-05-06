@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v1.0 Released (20160505) #
+# Android Bluetooth Framework v3.0 Released (20160506) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
@@ -7,7 +7,7 @@ Note:
 > It send one BTCommands at one time , other BTCommands will be queued and wait to execute!
 
 # Simple sequence diagram
-![Simple Framework.png](https://bitbucket.org/repo/jagqny/images/364558861-Simple%20Framework.png)
+![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/103990795-SimpleFramework.png)
 
 # System Requirement #
 * Android 4.3 or above
@@ -23,7 +23,7 @@ There are 3 Sections
 
 ~~~~
    // Get discovery service instance
-   IBlueToothDiscoveryService aIBlueToothDiscoveryService = BlueToothLeDiscoveryService.getInstance();
+   IDiscoveryService aIBlueToothDiscoveryService = LeDiscoveryService.getInstance();
 
    // Set discovery filter
    Vector<String> aBlueToothDeviceNameFilter = new Vector<String>();
@@ -66,10 +66,10 @@ There are 3 Sections
         /*
          *
          * @see
-         * inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler#StartDiscoveryServiceSuccess()
+         * inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler#StartServiceSuccess()
          */
         @Override
-        public void StartDiscoveryServiceSuccess() {
+        public void StartServiceSuccess() {
             Log.d(TAG, "StartDiscoveryServiceSuccess!");
             // doDiscovery will discovery slave device and trigger OnlineDeviceNotFound() or getOnlineDevice(BTInfo)
             aIBlueToothDiscoveryService.doDiscovery();
@@ -91,15 +91,15 @@ There are 3 Sections
  aReaderUUIDArray.add("0000xxxx-0000-1000-8000-00805f9b34fb"); 
 
  // Create ble chat service 
- IBlueToothChatService  aIBlueToothChatService = new BlueToothLeChatService(BluetoothAdapter.getDefaultAdapter(), activity , aReaderUUIDArray);
+ IChatService  aIBlueToothChatService = new LeChatService(BluetoothAdapter.getDefaultAdapter(), activity , aReaderUUIDArray);
 
  // Create connection object and setup connection call back handler
- BlueToothDeviceConnection aBlueToothDeviceConnection = new BlueToothDeviceConnection(aBTInfo, activity, aIBlueToothChatService, new MyBlueToothConnectionCallbackHandler());
+ DeviceConnection aBlueToothDeviceConnection = new DeviceConnection(aBTInfo, activity, aIBlueToothChatService, new MyBlueToothConnectionCallbackHandler());
 
  // connect to device
  aBlueToothDeviceConnection.connect();
 
- public static class MyBlueToothConnectionCallbackHandler extends BlueToothConnectionCallbackHandler {
+ public static class MyBlueToothConnectionCallbackHandler extends ConnectionCallbackHandler {
 
  @Override
  public void DeviceConnected(BTInfo aBTInfo) {
@@ -112,21 +112,21 @@ There are 3 Sections
   }
 
  @Override
- public void DeviceNotificationOrIndicatorEnableFail(BTInfo arg0, String sErrorMessage) {
-     Log.d(TAG, "DeviceNotificationOrIndicatorEnableFail");
+ public void NotificationEnableFail(BTInfo arg0, String sErrorMessage) {
+     Log.d(TAG, "NotificationEnableFail");
  }
 
  @Override
- public void DeviceNotificationOrIndicatorEnableSuccess(BTInfo aBTInfo, String sReaderUUID) {
-    Log.d(TAG, "DeviceNotificationEnableSuccess sReaderUUID=" + sReaderUUID);
+ public void NotificationEnabled(BTInfo aBTInfo, String sReaderUUID) {
+    Log.d(TAG, "NotificationEnabled sReaderUUID=" + sReaderUUID);
  }
 ~~~~
 
 * Section 3
-  Send "BTCommands" to Device and receive responsed data
+  Send "BTCommands" to Device and receive response data
   
   In Section 2, Device connected will trigger callback method "DeviceNotificationOrIndicatorEnableSuccess" , we can send "BTCommands" to device.    
-  If device response data , callback method "handleCommandResponsedMessage()" will be triggered.    
+  If device response data , callback method "handleCommandResponseMessage()" will be triggered.    
 
 ~~~~
   BTCommands aBTCommands = new MyBTCommands(aBTInfo);
@@ -134,10 +134,10 @@ There are 3 Sections
   Toast.makeText(activity, "send BT commands to device", Toast.LENGTH_SHORT).show();
   aBlueToothDeviceConnection.sendBTCommand(aBTCommands);
   
-  public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.BlueToothCommandCallbackHandler {   
+  public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.CommandCallbackHandler {   
   
     @Override
-    public void handleCommandResponsedMessage(Message msg) {
+    public void handleCommandResponseMessage(Message msg) {
       switch(msg.what){
          <MyBTCommands's msg.what>:  // see BTCommands example below 
          break;

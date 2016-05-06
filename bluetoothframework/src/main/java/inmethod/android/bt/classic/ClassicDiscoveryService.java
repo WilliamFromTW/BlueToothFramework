@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Set;
 
-import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,20 +11,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-import inmethod.android.bt.BTInfo;
-import inmethod.android.bt.BlueToothGlobalSetting;
-import inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler;
-import inmethod.android.bt.interfaces.IBlueToothDiscoveryService;
 
-public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
+import inmethod.android.bt.BTInfo;
+import inmethod.android.bt.GlobalSetting;
+import inmethod.android.bt.handler.DiscoveryServiceCallbackHandler;
+import inmethod.android.bt.interfaces.IDiscoveryService;
+
+public class ClassicDiscoveryService implements IDiscoveryService {
 	// Debugging
-	public final String TAG = BlueToothGlobalSetting.TAG + "/" + getClass().getSimpleName();
+	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 	protected Context aContext = null;
-	private BlueToothDiscoveryServiceCallbackHandler mHandler;
+	private DiscoveryServiceCallbackHandler mHandler;
 	protected static final boolean D = true;
 	protected boolean bRun = false;
 	protected static BluetoothAdapter mBluetoothAdapter = null;
@@ -39,10 +37,10 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 
 	protected boolean bAutoPair = false;
 	protected boolean bDeviceFound = false;
-	public static BlueToothDiscoveryService aBlueToothDiscoveryService = null;
+	public static ClassicDiscoveryService aClassicDiscoveryService = null;
 	private boolean isDiscovering = false;
-	public final static int DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY = IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
-	public final static int DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY = IBlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY;
+	public final static int DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY = IDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
+	public final static int DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY = IDiscoveryService.DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY;
 
 	private int iDefaultDiscoveryMode = DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
 	private Vector<String> aFilter = null;
@@ -54,12 +52,12 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	private boolean bUseBLEonly = false;
 
 	/**
-	 * default is BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE.
+	 * default is ClassicDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE.
 	 * 
 	 * @param iDiscoverFilter
-	 *            BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_ONLY: find
+	 *            ClassicDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_ONLY: find
 	 *            classic bluetooth only ,
-	 *            BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE: find
+	 *            ClassicDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE: find
 	 *            classic bluetooth and low energy device both
 	 */
 	public void setDiscoverFilter(int iDiscoverFilter) {
@@ -67,9 +65,9 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	}
 
 	/**
-	 * BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_ONLY: find classic
+	 * ClassicDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_ONLY: find classic
 	 * bluetooth only ,
-	 * BlueToothDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE: find classic
+	 * ClassicDiscoveryService.DISCOVER_BLUETOOTH_CLASSIC_AND_LE: find classic
 	 * bluetooth and low energy device both.
 	 * 
 	 * @return
@@ -78,7 +76,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 		return this.iDiscoverFilter;
 	}
 
-	private BlueToothDiscoveryService() {
+	private ClassicDiscoveryService() {
 	};
 
 	/**
@@ -86,10 +84,10 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	 * 
 	 * @return
 	 */
-	public static BlueToothDiscoveryService getInstance() {
-		if (aBlueToothDiscoveryService == null)
-			aBlueToothDiscoveryService = new BlueToothDiscoveryService();
-		return aBlueToothDiscoveryService;
+	public static ClassicDiscoveryService getInstance() {
+		if (aClassicDiscoveryService == null)
+			aClassicDiscoveryService = new ClassicDiscoveryService();
+		return aClassicDiscoveryService;
 	}
 
 	/**
@@ -107,18 +105,18 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	 * 
 	 * @param mHandler
 	 */
-	public void setCallBackHandler(BlueToothDiscoveryServiceCallbackHandler mHandler) {
+	public void setCallBackHandler(DiscoveryServiceCallbackHandler mHandler) {
 		this.mHandler = mHandler;
 	}
 
 	@Override
-	public BlueToothDiscoveryServiceCallbackHandler getCallBackHandler() {
+	public DiscoveryServiceCallbackHandler getCallBackHandler() {
 		return mHandler;
 	}
 
 	/**
-	 * default is false (BlueToothDiscoveryService can discover classic , dual and ble
-	 * device). true: BlueToothDiscoveryService can discover ble device only.
+	 * default is false (ClassicDiscoveryService can discover classic , dual and ble
+	 * device). true: ClassicDiscoveryService can discover ble device only.
 	 * 
 	 * @param bBLE
 	 */
@@ -159,7 +157,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 		}
 		// If the adapter is null, then Bluetooth is not supported
 		if (mBluetoothAdapter == null) {
-			mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_NO_BLUETOOTH_MODULE).sendToTarget();
+			mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_NO_BLUETOOTH_MODULE).sendToTarget();
 			return false;
 		}
 		aPairedBT = mBluetoothAdapter.getBondedDevices();
@@ -214,7 +212,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	}
 
 	/**
-	 * check this BlueToothDiscoveryService is running
+	 * check this ClassicDiscoveryService is running
 	 * 
 	 * @return true : running , false not running
 	 */
@@ -234,7 +232,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 			}
 			clearData();
 			if (mHandler != null)
-				mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STOP_DISCOVERY_SERVICE).sendToTarget();
+				mHandler.obtainMessage(GlobalSetting.MESSAGE_STOP_DISCOVERY_SERVICE).sendToTarget();
 			bRun = false;
 			bCancelDiscovery = false;
 			try {
@@ -246,8 +244,8 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	}
 
 	/**
-	 * start service , if bluetooth is not enable , BlueToothDiscoveryService will
-	 * stop if context or handler is null , BlueToothDiscoveryService will stop
+	 * start service , if bluetooth is not enable , ClassicDiscoveryService will
+	 * stop if context or handler is null , ClassicDiscoveryService will stop
 	 */
 	public void startService() throws Exception {
 		if (!bRun) {
@@ -260,11 +258,11 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 				this.stopService();
 			else {
 				if (!mBluetoothAdapter.isEnabled()) {
-					mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE).sendToTarget();
+					mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE).sendToTarget();
 					mBluetoothAdapter.enable();
 
 				} else {
-					mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
+					mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
 				}
 			}
 		}
@@ -284,11 +282,11 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 
 	/***
 	 * default is
-	 * BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 * ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 * 
 	 * @param iMode
-	 *            one of BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
-	 *            ,BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *            one of ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *            ,ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 */
 	public void setDiscoveryMode(int iMode) {
 		iDefaultDiscoveryMode = iMode;
@@ -298,7 +296,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	 * get discovery mode
 	 * 
 	 * @return one of
-	 *         BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY,BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
+	 *         ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY,ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_CANCEL_DISCOVERY
 	 */
 	public int getDiscoveryMode() {
 		return iDefaultDiscoveryMode;
@@ -354,7 +352,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 	}
 
 	/**
-	 * set bluetooth deivce name , BlueToothDiscoveryService will avoid to get bluetooth
+	 * set bluetooth deivce name , ClassicDiscoveryService will avoid to get bluetooth
 	 * device that are not in filter list. Name is case-sensitive
 	 * 
 	 * @param aVector
@@ -397,9 +395,9 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 
 			if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
 				Log.i(TAG, "device is going to disconnect!");
-				Message aMessage = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_DISCONNECT_REQUESTED, 1, -1);
+				Message aMessage = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DISCONNECT_REQUESTED, 1, -1);
 				Bundle aBundle = new Bundle();
-				aBundle.putParcelable(BlueToothGlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+				aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
 				aMessage.setData(aBundle);
 				mHandler.sendMessage(aMessage);
 				return;
@@ -418,7 +416,7 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 
 				Log.i(TAG, "check bt device name = " + device.getName() + ",Mac Address=" + device.getAddress());
 				if (device != null && filterFoundBTDevice(device.getName())) {
-					if (iDefaultDiscoveryMode == BlueToothDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY) {
+					if (iDefaultDiscoveryMode == ClassicDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY) {
 						if (mBluetoothAdapter.isDiscovering())
 							mBluetoothAdapter.cancelDiscovery();
 						isDiscovering = false;
@@ -459,9 +457,9 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 					aOnlineDeviceList = null;
 					aOnlineDeviceList = new ArrayList<BTInfo>();
 					aOnlineDeviceList.add(aBTInfo);
-					Message msg = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
+					Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
 					Bundle bundle = new Bundle();
-					bundle.putParcelableArrayList(BlueToothGlobalSetting.BUNDLE_ONLINE_DEVICE_LIST, aOnlineDeviceList);
+					bundle.putParcelableArrayList(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST, aOnlineDeviceList);
 					msg.setData(bundle);
 					mHandler.sendMessage(msg);
 
@@ -476,11 +474,11 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 				}
 				Log.d(TAG, "ACTION_DISCOVERY_FINISHED");
 				if (!bDeviceFound) {
-					mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND).sendToTarget();
+					mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND).sendToTarget();
 					bDeviceFound = false;
 				}
 				
-				mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
+				mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
 
 				try {
 					Thread.sleep(100);
@@ -497,11 +495,11 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 				switch (state) {
 				case BluetoothAdapter.STATE_OFF:
 					Log.i(TAG, "Bluetooth off!");
-					Message msg = mHandler.obtainMessage(BlueToothGlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF);
+					Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF);
 					mHandler.sendMessage(msg);
 
-					if (BlueToothDiscoveryService.this.isRunning()) {
-						BlueToothDiscoveryService.this.stopService();
+					if (ClassicDiscoveryService.this.isRunning()) {
+						ClassicDiscoveryService.this.stopService();
 					}
 					try {
 						if (aContext != null && mReceiver != null)
@@ -515,8 +513,8 @@ public class BlueToothDiscoveryService implements IBlueToothDiscoveryService {
 				case BluetoothAdapter.STATE_ON:
 					Log.i(TAG, "Bluetooth on!");
 					try {
-						BlueToothDiscoveryService.this.stopService();
-						BlueToothDiscoveryService.this.startService();
+						ClassicDiscoveryService.this.stopService();
+						ClassicDiscoveryService.this.startService();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
