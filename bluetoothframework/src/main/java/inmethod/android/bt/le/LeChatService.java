@@ -63,7 +63,7 @@ public class LeChatService implements IChatService {
 	private ArrayList<String> aSetNotifyOrIndicatorCharacteristicListenerUUID = null;
 	private HashMap<String,BluetoothGattCharacteristic> allCharacteristic = null;
 	private boolean bIsWrite = false;
-	private static final Queue<Object> sWriteQueue = new ConcurrentLinkedQueue<Object>();
+	private   Queue<Object> sWriteQueue = new ConcurrentLinkedQueue<Object>();
 
 	/**
 	 * 
@@ -184,7 +184,6 @@ public class LeChatService implements IChatService {
 	 *            aWriterUUIDString is UUID string that used to get
 	 *            BluetoothGattCharacteristic writer object.
 	 * @param out
-	 * @see getBluetoothGatt()
 	 */
 	public void write(byte[] out, Object aWriterUUIDString) throws NoWriterException {
 		Log.d(TAG, "write(byte[] out, Object aWriterUUIDString), aWriterUUIDString= "+aWriterUUIDString+",out="+HexAndStringConverter.convertHexByteToHexString(out) );

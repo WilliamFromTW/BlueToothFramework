@@ -87,7 +87,7 @@ public class DeviceConnection {
 	 * connect to bluetooth device.
 	 */
 	public void connect() {
-
+		bStopWatchDog = false;
 		// Attempt to connect to the device
 		mBTChat.connect(aBTInfo.getDeviceAddress());
 
@@ -205,6 +205,9 @@ public class DeviceConnection {
 					}
 
 				}
+				if(bStopWatchDog){
+					Log.d(TAG,"stop watchdog");
+				}
 			};
 		};
 	}
@@ -228,16 +231,17 @@ public class DeviceConnection {
 		Log.i(TAG, "stop connection!");
 		bStopWatchDog = true;
 		bIsConnected = false;
+		bFirstBTCommands = true;
 		mHandler.removeCallbacksAndMessages(null);
 		if (mBTChat != null) {
 			mBTChat.stop();
-			mBTChat = null;
+			//mBTChat = null;
 		}
 		if (aBTCommandsList != null && aBTCommandsList.size() > 0)
 			aBTCommandsList.clear();
-		aWatchDogThread = null;
+		//aWatchDogThread = null;
 		// aBTCommandsList = null;
-		aBluetoothAdapter = null;
+		//aBluetoothAdapter = null;
 	}
 
 	/**
@@ -247,6 +251,30 @@ public class DeviceConnection {
 		if (aCommands != null && aCommands.getCommandList() != null)
 			aCommands.getCommandList().clear();
 	}
+
+	/**
+	 * force current BTCommands timeout Immediately
+	 */
+	public void forceBTCommandsTimeout(){
+		if( aCommands!=null && !aCommands.isFinished()) {
+			mHandler.removeCallbacksAndMessages(null);
+			try {
+				aCommands.handleTimeout();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	/**
+	 *  remove CallBack and Messages
+	 */
+	public void removeCallbacksAndMessages(){
+
+			mHandler.removeCallbacksAndMessages(null);
+
+	}
+
 
 	/**
 	 * get connection status.
