@@ -2990,7 +2990,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "«constructor»-BlueToothDeviceConnection()",
+											"text": "«constructor»-DeviceConnection()",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -3018,7 +3018,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "«constructor»+BlueToothDeviceConnection(aBtInfo: BTInfo, context: Context, aBTChat: IChatService, aCallBackHandler: ConnectionCallbackHandler)",
+											"text": "«constructor»+DeviceConnection(aBtInfo: BTInfo, context: Context, aBTChat: IChatService, aCallBackHandler: ConnectionCallbackHandler)",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -19696,7 +19696,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+clearBTCommand()",
+											"text": "+clearBTCommands()",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -19752,7 +19752,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+sendBTCommand(aCmds)",
+											"text": "+sendBTCommands(aCmds)",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										}
@@ -25799,12 +25799,6 @@
 												{
 													"_type": "EdgeLabelView",
 													"_id": "AAAAAAFUhCpnnuwbKlE=",
-													"_parent": {
-														"$ref": "AAAAAAFUhCpnnuwa4D4="
-													},
-													"model": {
-														"$ref": "AAAAAAFUhCpnnewZAvc="
-													},
 													"visible": true,
 													"enabled": true,
 													"lineColor": "#000000",
@@ -25821,9 +25815,6 @@
 													"autoResize": false,
 													"alpha": 2.76108484544302,
 													"distance": 21.540659228538015,
-													"hostEdge": {
-														"$ref": "AAAAAAFUhCpnnuwa4D4="
-													},
 													"edgePosition": 1,
 													"underline": false,
 													"text": "2 : sendBTCommand(aCmds: BTCommands)",
@@ -26300,12 +26291,6 @@
 												{
 													"_type": "EdgeLabelView",
 													"_id": "AAAAAAFUgPXSz0Sd4oc=",
-													"_parent": {
-														"$ref": "AAAAAAFUgPXSz0SchY0="
-													},
-													"model": {
-														"$ref": "AAAAAAFUgPXSz0SbocM="
-													},
 													"visible": true,
 													"enabled": true,
 													"lineColor": "#000000",
@@ -26322,9 +26307,6 @@
 													"autoResize": false,
 													"alpha": 0.09232932623108975,
 													"distance": 108.46197490364999,
-													"hostEdge": {
-														"$ref": "AAAAAAFUgPXSz0SchY0="
-													},
 													"edgePosition": 1,
 													"underline": false,
 													"text": "5 : getData(byteData: byte, aNotificationUUID: Object)",
@@ -26990,31 +26972,6 @@
 					"visible": true,
 					"defaultDiagram": false,
 					"ownedViews": [
-						{
-							"_type": "EdgeLabelView",
-							"_id": "AAAAAAFUgSRhSEZ/8xU=",
-							"visible": true,
-							"enabled": true,
-							"lineColor": "#000000",
-							"fillColor": "#ffffff",
-							"fontColor": "#000000",
-							"font": "Arial;13;0",
-							"showShadow": true,
-							"containerChangeable": false,
-							"containerExtending": false,
-							"left": 862,
-							"top": 149,
-							"width": 130.990234375,
-							"height": 13,
-							"autoResize": false,
-							"alpha": 3.5431888862777843,
-							"distance": 104.92378186092989,
-							"edgePosition": 0,
-							"underline": false,
-							"text": "{collection=\"ArrayList\"}",
-							"horizontalAlignment": 2,
-							"verticalAlignment": 5
-						},
 						{
 							"_type": "UMLClassView",
 							"_id": "AAAAAAFUgQkg0UVGoFw=",
@@ -28912,421 +28869,6 @@
 							},
 							"headQualifiersCompartment": {
 								"$ref": "AAAAAAFUgSRhRkZ2L64="
-							}
-						},
-						{
-							"_type": "UMLAssociationView",
-							"_id": "AAAAAAFUgSRhR0Z3kbU=",
-							"_parent": {
-								"$ref": "AAAAAAFUgQUSh0Uv+Gc="
-							},
-							"model": {
-								"$ref": "AAAAAAFUTLpb+J3xRd0="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhR0Z4deA=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3xRd0="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 740,
-									"top": 207,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 1,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhR0Z58oA=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3xRd0="
-									},
-									"visible": null,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 738,
-									"top": 192,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 1,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhR0Z6g10=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3xRd0="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 745,
-									"top": 236,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 1,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhR0Z71No=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3y33I="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 671,
-									"top": 218,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 0.5235987755982988,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 2,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhSEZ8QTo=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3y33I="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 671,
-									"top": 205,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 0.7853981633974483,
-									"distance": 40,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 2,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhSEZ9CFM=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3y33I="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 671,
-									"top": 246,
-									"width": 0,
-									"height": 13,
-									"autoResize": false,
-									"alpha": -0.5235987755982988,
-									"distance": 25,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 2,
-									"underline": false,
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhSEZ+PqM=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3zW6w="
-									},
-									"visible": true,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 904,
-									"top": 247,
-									"width": 139.45166015625,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 2.671860606867833,
-									"distance": 140.42791745233566,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 0,
-									"underline": false,
-									"text": "#aOriginalCommandList",
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhSEZ/8xU=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3zW6w="
-									},
-									"visible": true,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 862,
-									"top": 149,
-									"width": 130.990234375,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 3.5431888862777843,
-									"distance": 104.92378186092989,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 0,
-									"underline": false,
-									"text": "{collection=\"ArrayList\"}",
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFUgSRhSEaA/2s=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3zW6w="
-									},
-									"visible": true,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 817,
-									"top": 221,
-									"width": 5.05908203125,
-									"height": 13,
-									"autoResize": false,
-									"alpha": 0.5235987755982988,
-									"distance": 25,
-									"hostEdge": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"edgePosition": 0,
-									"underline": false,
-									"text": "*",
-									"horizontalAlignment": 2,
-									"verticalAlignment": 5
-								},
-								{
-									"_type": "UMLQualifierCompartmentView",
-									"_id": "AAAAAAFUgSRhSEaBuFE=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3y33I="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 0,
-									"top": 0,
-									"width": 10,
-									"height": 10,
-									"autoResize": false
-								},
-								{
-									"_type": "UMLQualifierCompartmentView",
-									"_id": "AAAAAAFUgSRhSEaClOg=",
-									"_parent": {
-										"$ref": "AAAAAAFUgSRhR0Z3kbU="
-									},
-									"model": {
-										"$ref": "AAAAAAFUTLpb+J3zW6w="
-									},
-									"visible": false,
-									"enabled": true,
-									"lineColor": "#000000",
-									"fillColor": "#ffffff",
-									"fontColor": "#000000",
-									"font": "Arial;13;0",
-									"showShadow": true,
-									"containerChangeable": false,
-									"containerExtending": false,
-									"left": 0,
-									"top": 0,
-									"width": 10,
-									"height": 10,
-									"autoResize": false
-								}
-							],
-							"visible": true,
-							"enabled": true,
-							"lineColor": "#000000",
-							"fillColor": "#ffffff",
-							"fontColor": "#000000",
-							"font": "Arial;13;0",
-							"showShadow": true,
-							"containerChangeable": false,
-							"containerExtending": false,
-							"head": {
-								"$ref": "AAAAAAFUgSRhQEZhSOk="
-							},
-							"tail": {
-								"$ref": "AAAAAAFUgQkg0UVGoFw="
-							},
-							"lineStyle": 1,
-							"points": "648:244;839:212",
-							"stereotypeDisplay": "label",
-							"showVisibility": true,
-							"showProperty": true,
-							"nameLabel": {
-								"$ref": "AAAAAAFUgSRhR0Z4deA="
-							},
-							"stereotypeLabel": {
-								"$ref": "AAAAAAFUgSRhR0Z58oA="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAFUgSRhR0Z6g10="
-							},
-							"showMultiplicity": true,
-							"showType": true,
-							"tailRoleNameLabel": {
-								"$ref": "AAAAAAFUgSRhR0Z71No="
-							},
-							"tailPropertyLabel": {
-								"$ref": "AAAAAAFUgSRhSEZ8QTo="
-							},
-							"tailMultiplicityLabel": {
-								"$ref": "AAAAAAFUgSRhSEZ9CFM="
-							},
-							"headRoleNameLabel": {
-								"$ref": "AAAAAAFUgSRhSEZ+PqM="
-							},
-							"headPropertyLabel": {
-								"$ref": "AAAAAAFUgSRhSEZ/8xU="
-							},
-							"headMultiplicityLabel": {
-								"$ref": "AAAAAAFUgSRhSEaA/2s="
-							},
-							"tailQualifiersCompartment": {
-								"$ref": "AAAAAAFUgSRhSEaBuFE="
-							},
-							"headQualifiersCompartment": {
-								"$ref": "AAAAAAFUgSRhSEaClOg="
 							}
 						},
 						{
@@ -32240,7 +31782,7 @@
 													"_parent": {
 														"$ref": "AAAAAAFUTLpUe5uIBpg="
 													},
-													"name": "clearBTCommand",
+													"name": "clearBTCommands",
 													"documentation": "clear bluetooth command.",
 													"visibility": "public",
 													"isStatic": false,
@@ -32304,7 +31846,7 @@
 													"_parent": {
 														"$ref": "AAAAAAFUTLpUe5uIBpg="
 													},
-													"name": "sendBTCommand",
+													"name": "sendBTCommands",
 													"documentation": "send bluetooth command to device.\n@param aCmds\n@see BTCommands",
 													"visibility": "public",
 													"isStatic": false,
@@ -37312,7 +36854,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothChatService",
+																			"text": "ClassicChatService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -38636,7 +38178,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothDiscoveryService",
+																			"text": "ClassicDiscoveryService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -38807,7 +38349,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "-mHandler: BlueToothDiscoveryServiceCallbackHandler",
+																			"text": "-mHandler: DiscoveryServiceCallbackHandler",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -41991,7 +41533,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "-mCallBackHandler: BlueToothCommandCallbackHandler = null",
+																			"text": "-mCallBackHandler: CommandCallbackHandler = null",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		}
@@ -42045,7 +41587,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+setBTChat(mBTChat: IBlueToothChatService): void",
+																			"text": "+setBTChat(mBTChat: IChatService): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42073,7 +41615,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+getBTChat(): IBlueToothChatService",
+																			"text": "+getBTChat(): IChatService",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42101,7 +41643,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+getCallBackHandler(): BlueToothCommandCallbackHandler",
+																			"text": "+getCallBackHandler(): CommandCallbackHandler",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42213,7 +41755,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+setCurrentConnection(aBlueToothDeviceConnection: BlueToothDeviceConnection): void",
+																			"text": "+setCurrentConnection(aBlueToothDeviceConnection: DeviceConnection): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42241,7 +41783,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+getCurrentConnection(): BlueToothDeviceConnection",
+																			"text": "+getCurrentConnection(): DeviceConnection",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42521,7 +42063,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+setCallBackHandler(aCallBack: BlueToothCommandCallbackHandler): void",
+																			"text": "+setCallBackHandler(aCallBack: CommandCallbackHandler): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -42545,11 +42087,11 @@
 																			"containerExtending": false,
 																			"left": 0,
 																			"top": 0,
-																			"width": 284.35595703125,
+																			"width": 332.01416015625,
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+getData(byteData: byte, aChannel: Object): void",
+																			"text": "+getData(byteData: byte, aNotificationUUID: Object): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -43582,7 +43124,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "ReadBTCommand",
+																			"text": "BTReadCommand",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -47480,7 +47022,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothCommandCallbackHandler",
+																			"text": "CommandCallbackHandler",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -47761,7 +47303,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+handleCommandResponsedMessage(msg: Message): void",
+																			"text": "+handleCommandResponseMessage(msg: Message): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		}
@@ -47936,7 +47478,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothConnectionCallbackHandler",
+																			"text": "ConnectionCallbackHandler",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -48420,7 +47962,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothDiscoveryServiceCallbackHandler",
+																			"text": "DiscoveryServiceCallbackHandler",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -48813,7 +48355,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+StartDiscoveryServiceSuccess()",
+																			"text": "+StartServiceSuccess()",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		}
@@ -50256,7 +49798,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "IBlueToothChatService",
+																			"text": "IChatService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -50965,7 +50507,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "IBlueToothDiscoveryService",
+																			"text": "IDiscoveryService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -51190,7 +50732,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+setCallBackHandler(mHandler: BlueToothDiscoveryServiceCallbackHandler): void",
+																			"text": "+setCallBackHandler(mHandler: DiscoveryServiceCallbackHandler): void",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -51218,7 +50760,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "+getCallBackHandler(): BlueToothDiscoveryServiceCallbackHandler",
+																			"text": "+getCallBackHandler(): DiscoveryServiceCallbackHandler",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -52978,7 +52520,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothLeChatService",
+																			"text": "LeChatService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -53966,7 +53508,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "BlueToothLeDiscoveryService",
+																			"text": "LeDiscoveryService",
 																			"horizontalAlignment": 2,
 																			"verticalAlignment": 5
 																		},
@@ -54137,7 +53679,7 @@
 																			"height": 13,
 																			"autoResize": false,
 																			"underline": false,
-																			"text": "-mHandler: BlueToothDiscoveryServiceCallbackHandler",
+																			"text": "-mHandler: DiscoveryServiceCallbackHandler",
 																			"horizontalAlignment": 0,
 																			"verticalAlignment": 5
 																		},
@@ -54661,7 +54203,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "BlueToothDeviceConnection",
+																	"text": "DeviceConnection",
 																	"horizontalAlignment": 2,
 																	"verticalAlignment": 5
 																},
@@ -55056,7 +54598,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "-aConnectionHandler: BlueToothConnectionCallbackHandler = null",
+																	"text": "-aConnectionHandler: ConnectionCallbackHandler = null",
 																	"horizontalAlignment": 0,
 																	"verticalAlignment": 5
 																},
@@ -55138,7 +54680,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "«constructor»-BlueToothDeviceConnection()",
+																	"text": "«constructor»-DeviceConnection()",
 																	"horizontalAlignment": 0,
 																	"verticalAlignment": 5
 																},
@@ -55166,7 +54708,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "«constructor»+BlueToothDeviceConnection(aBtInfo: BTInfo, context: Context, aBTChat: IBlueToothChatService, aCallBackHandler: BlueToothConnectionCallbackHandler)",
+																	"text": "«constructor»+DeviceConnection(aBtInfo: BTInfo, context: Context, aBTChat: IChatService, aCallBackHandler: ConnectionCallbackHandler)",
 																	"horizontalAlignment": 0,
 																	"verticalAlignment": 5
 																},
@@ -55194,7 +54736,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "+setCallBackHandler(aHandler: BlueToothConnectionCallbackHandler): void",
+																	"text": "+setCallBackHandler(aHandler: ConnectionCallbackHandler): void",
 																	"horizontalAlignment": 0,
 																	"verticalAlignment": 5
 																},
@@ -55222,7 +54764,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "+getCallBackHandler(): BlueToothConnectionCallbackHandler",
+																	"text": "+getCallBackHandler(): ConnectionCallbackHandler",
 																	"horizontalAlignment": 0,
 																	"verticalAlignment": 5
 																},
@@ -55593,7 +55135,7 @@
 																	"height": 13,
 																	"autoResize": false,
 																	"underline": false,
-																	"text": "BlueToothGlobalSetting",
+																	"text": "GlobalSetting",
 																	"horizontalAlignment": 2,
 																	"verticalAlignment": 5
 																},
@@ -66010,7 +65552,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothChatService",
+											"text": "ClassicChatService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -66075,7 +65617,7 @@
 									"containerExtending": false,
 									"left": 373.854736328125,
 									"top": 682,
-									"width": 149.41357421875,
+									"width": 130.681640625,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -67359,7 +66901,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from BlueToothChatService)",
+											"text": "(from ClassicChatService)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -67399,7 +66941,7 @@
 									"containerExtending": false,
 									"left": 359.3916015625,
 									"top": 320,
-									"width": 178.33984375,
+									"width": 160.97265625,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -67787,7 +67329,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from BlueToothChatService)",
+											"text": "(from ClassicChatService)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -67827,7 +67369,7 @@
 									"containerExtending": false,
 									"left": 359.3916015625,
 									"top": 370,
-									"width": 178.33984375,
+									"width": 160.97265625,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -68243,7 +67785,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "(from BlueToothChatService)",
+											"text": "(from ClassicChatService)",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -68283,7 +67825,7 @@
 									"containerExtending": false,
 									"left": 359.3916015625,
 									"top": 420,
-									"width": 178.33984375,
+									"width": 160.97265625,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -68702,7 +68244,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothDiscoveryService",
+											"text": "ClassicDiscoveryService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -68767,7 +68309,7 @@
 									"containerExtending": false,
 									"left": 357.223876953125,
 									"top": 782,
-									"width": 182.67529296875,
+									"width": 163.943359375,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -68873,7 +68415,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-mHandler: BlueToothDiscoveryServiceCallbackHandler",
+											"text": "-mHandler: DiscoveryServiceCallbackHandler",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -70146,7 +69688,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "ReadBTCommand",
+											"text": "BTReadCommand",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -70481,7 +70023,7 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 255,
+									"left": 254,
 									"top": 48,
 									"width": 0,
 									"height": 13,
@@ -70514,7 +70056,7 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 255,
+									"left": 252,
 									"top": 63,
 									"width": 0,
 									"height": 13,
@@ -70547,7 +70089,7 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 256,
+									"left": 257,
 									"top": 19,
 									"width": 0,
 									"height": 13,
@@ -72340,7 +71882,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothCommandCallbackHandler",
+											"text": "CommandCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -72405,7 +71947,7 @@
 									"containerExtending": false,
 									"left": 328.71337890625,
 									"top": 470,
-									"width": 239.6962890625,
+									"width": 175.4326171875,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -72621,7 +72163,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+handleCommandResponsedMessage(msg: Message): void",
+											"text": "+handleCommandResponseMessage(msg: Message): void",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										}
@@ -72796,7 +72338,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothConnectionCallbackHandler",
+											"text": "ConnectionCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -72861,7 +72403,7 @@
 									"containerExtending": false,
 									"left": 324.74609375,
 									"top": 520,
-									"width": 247.630859375,
+									"width": 183.3671875,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -73280,7 +72822,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothDiscoveryServiceCallbackHandler",
+											"text": "DiscoveryServiceCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -73345,7 +72887,7 @@
 									"containerExtending": false,
 									"left": 306.287109375,
 									"top": 570,
-									"width": 284.548828125,
+									"width": 220.28515625,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -73673,7 +73215,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+StartDiscoveryServiceSuccess()",
+											"text": "+StartServiceSuccess()",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										}
@@ -73848,7 +73390,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothLeChatService",
+											"text": "LeChatService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -73913,7 +73455,7 @@
 									"containerExtending": false,
 									"left": 366.269287109375,
 									"top": 732,
-									"width": 164.58447265625,
+									"width": 100.32080078125,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -74836,7 +74378,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothLeDiscoveryService",
+											"text": "LeDiscoveryService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -74901,7 +74443,7 @@
 									"containerExtending": false,
 									"left": 349.638427734375,
 									"top": 832,
-									"width": 197.84619140625,
+									"width": 133.58251953125,
 									"height": 40,
 									"autoResize": false,
 									"stereotypeLabel": {
@@ -75007,7 +74549,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-mHandler: BlueToothDiscoveryServiceCallbackHandler",
+											"text": "-mHandler: DiscoveryServiceCallbackHandler",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -76247,8 +75789,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 268,
-									"top": 92,
+									"left": 261,
+									"top": 98,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76280,8 +75822,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 280,
-									"top": 101,
+									"left": 266,
+									"top": 112,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76313,8 +75855,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 243,
-									"top": 75,
+									"left": 250,
+									"top": 69,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76387,8 +75929,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 146,
+									"left": 258,
+									"top": 148,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76420,8 +75962,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 273,
-									"top": 158,
+									"left": 260,
+									"top": 163,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76453,8 +75995,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 121,
+									"left": 253,
+									"top": 119,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76527,8 +76069,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 354,
-									"top": 198,
+									"left": 218,
+									"top": 178,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76560,8 +76102,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 354,
-									"top": 213,
+									"left": 218,
+									"top": 193,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76593,8 +76135,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 355,
-									"top": 168,
+									"left": 219,
+									"top": 148,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76667,8 +76209,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 246,
+									"left": 251,
+									"top": 248,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76700,8 +76242,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 238,
-									"top": 258,
+									"left": 246,
+									"top": 262,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76733,8 +76275,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 221,
+									"left": 260,
+									"top": 219,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76807,8 +76349,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 243,
-									"top": 292,
+									"left": 248,
+									"top": 296,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76840,8 +76382,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 231,
-									"top": 300,
+									"left": 240,
+									"top": 309,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -76873,8 +76415,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 268,
-									"top": 275,
+									"left": 263,
+									"top": 271,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77231,8 +76773,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 346,
+									"left": 258,
+									"top": 348,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77264,8 +76806,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 273,
-									"top": 358,
+									"left": 260,
+									"top": 363,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77297,8 +76839,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 321,
+									"left": 253,
+									"top": 319,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77371,8 +76913,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 339,
-									"top": 398,
+									"left": 203,
+									"top": 378,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77404,8 +76946,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 339,
-									"top": 413,
+									"left": 203,
+									"top": 393,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77437,8 +76979,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 340,
-									"top": 368,
+									"left": 204,
+									"top": 348,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77511,8 +77053,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 446,
+									"left": 251,
+									"top": 448,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77544,8 +77086,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 238,
-									"top": 458,
+									"left": 246,
+									"top": 462,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77577,8 +77119,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 421,
+									"left": 260,
+									"top": 419,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77935,8 +77477,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 496,
+									"left": 258,
+									"top": 498,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -77968,8 +77510,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 273,
-									"top": 508,
+									"left": 260,
+									"top": 513,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78001,8 +77543,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 471,
+									"left": 253,
+									"top": 469,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78075,8 +77617,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 323,
-									"top": 518,
+									"left": 186,
+									"top": 528,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78108,8 +77650,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 323,
-									"top": 503,
+									"left": 186,
+									"top": 543,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78141,8 +77683,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 323,
-									"top": 548,
+									"left": 187,
+									"top": 498,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78215,8 +77757,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 247,
-									"top": 596,
+									"left": 251,
+									"top": 598,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78248,8 +77790,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 238,
-									"top": 608,
+									"left": 246,
+									"top": 612,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78281,8 +77823,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 264,
-									"top": 571,
+									"left": 260,
+									"top": 569,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78640,8 +78182,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 305,
-									"top": 637,
+									"left": 232,
+									"top": 611,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78673,8 +78215,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 304,
-									"top": 652,
+									"left": 231,
+									"top": 626,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78706,8 +78248,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 308,
-									"top": 608,
+									"left": 235,
+									"top": 582,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -78818,7 +78360,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "IBlueToothChatService",
+											"text": "IChatService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -79065,8 +78607,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 277,
-									"top": 715,
+									"left": 204,
+									"top": 685,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79098,8 +78640,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 277,
-									"top": 730,
+									"left": 204,
+									"top": 700,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79131,8 +78673,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 278,
-									"top": 686,
+									"left": 205,
+									"top": 656,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79205,8 +78747,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 271,
-									"top": 734,
+									"left": 198,
+									"top": 711,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79238,8 +78780,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 268,
-									"top": 749,
+									"left": 195,
+									"top": 726,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79271,8 +78813,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 276,
-									"top": 705,
+									"left": 203,
+									"top": 682,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79383,7 +78925,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "IBlueToothDiscoveryService",
+											"text": "IDiscoveryService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -79630,8 +79172,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 260,
-									"top": 815,
+									"left": 187,
+									"top": 785,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79663,8 +79205,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 260,
-									"top": 830,
+									"left": 187,
+									"top": 800,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79696,8 +79238,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 261,
-									"top": 786,
+									"left": 188,
+									"top": 756,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79770,8 +79312,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 254,
-									"top": 833,
+									"left": 181,
+									"top": 810,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79803,8 +79345,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 251,
-									"top": 848,
+									"left": 178,
+									"top": 825,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -79836,8 +79378,8 @@
 									"showShadow": true,
 									"containerChangeable": false,
 									"containerExtending": false,
-									"left": 259,
-									"top": 804,
+									"left": 186,
+									"top": 781,
 									"width": 0,
 									"height": 13,
 									"autoResize": false,
@@ -81268,7 +80810,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "IBlueToothChatService",
+											"text": "IChatService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -81553,7 +81095,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "IBlueToothDiscoveryService",
+											"text": "IDiscoveryService",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -82689,7 +82231,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothConnectionCallbackHandler",
+											"text": "ConnectionCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -85245,7 +84787,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothCommandCallbackHandler",
+											"text": "CommandCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},
@@ -86097,7 +85639,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "BlueToothDiscoveryServiceCallbackHandler",
+											"text": "DiscoveryServiceCallbackHandler",
 											"horizontalAlignment": 2,
 											"verticalAlignment": 5
 										},

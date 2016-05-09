@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v3.1p1 Released (20160509) #
+# Android Bluetooth Framework v4.0 Released (20160509) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
@@ -7,7 +7,7 @@ Note:
 > It send one BTCommands at one time , other BTCommands will be queued and wait to execute!
 
 # Simple sequence diagram
-![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/103990795-SimpleFramework.png)
+![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3752253336-SimpleFramework.png)
 
 # System Requirement #
 * Android 4.3 or above
@@ -132,7 +132,7 @@ There are 3 Sections
   BTCommands aBTCommands = new MyBTCommands(aBTInfo);
   aBTCommands.setCallBackHandler(new MyBlueToothCommandCallbackHandler());
   Toast.makeText(activity, "send BT commands to device", Toast.LENGTH_SHORT).show();
-  aBlueToothDeviceConnection.sendBTCommand(aBTCommands);
+  aBlueToothDeviceConnection.sendBTCommands(aBTCommands);
   
   public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.CommandCallbackHandler {   
   

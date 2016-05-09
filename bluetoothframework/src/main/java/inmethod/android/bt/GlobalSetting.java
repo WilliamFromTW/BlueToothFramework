@@ -2,6 +2,8 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
+	public static final String VERSION = "4.0";
+
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
 	public static final int MESSAGE_WRITE = 3;
@@ -17,7 +19,6 @@ public class GlobalSetting {
 	public static final int MESSAGE_DELAY_SEND_BT_COMMAND = 13;
 	public static final int MESSAGE_READ_BUT_NO_COMMNAND_HANDLE = 14;
 
-	public static final String VERSION = "1.0";
 
 	public static final String DEVICE_NAME = "device_name";
 	public static final String DEVICE_ADRESS = "device_adress";
@@ -86,5 +87,6 @@ public class GlobalSetting {
 	 * characteristic uuid is 0x2A49
 	 */
 	public static final String STANDARD_BLOOD_PRESSURE_SERVICE_BPF_UUID = "00002a49-0000-1000-8000-00805f9b34fb";
+
 
 }

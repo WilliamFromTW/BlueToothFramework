@@ -247,7 +247,7 @@ public class DeviceConnection {
 	/**
 	 * clear bluetooth command.
 	 */
-	public void clearBTCommand() {
+	public void clearBTCommands() {
 		if (aCommands != null && aCommands.getCommandList() != null)
 			aCommands.getCommandList().clear();
 	}
@@ -291,7 +291,7 @@ public class DeviceConnection {
 	 * @param aCmds
 	 * @see BTCommands
 	 */
-	public void sendBTCommand(BTCommands aCmds) {
+	public void sendBTCommands(BTCommands aCmds) {
 		aCmds.setBTChat(mBTChat);
 		aCmds.setCurrentConnection(this);
 		aCmds.setBTInfo(aBTInfo);
