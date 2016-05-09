@@ -130,10 +130,15 @@ public class BTInfo implements Parcelable {
 		arg0.writeString(sDeviceName);
 		arg0.writeString(sDeviceAddress);
 		arg0.writeInt(iDeviceBlueToothType);
-		if( broadcast!=null && broadcast.length>0)
-		  arg0.writeByteArray(broadcast);
-		else
-		  arg0.writeByteArray(new byte[]{0});
+		System.out.println("broadcast.length="+broadcast.length);
+		if( broadcast!=null && broadcast.length>0) {
+			arg0.writeInt(broadcast.length);
+			arg0.writeByteArray(broadcast);
+		}
+		else {
+			arg0.writeInt(1);
+			arg0.writeByteArray(new byte[]{0});
+		}
 		
 	}
 
@@ -141,6 +146,7 @@ public class BTInfo implements Parcelable {
 		sDeviceName = in.readString();
 		sDeviceAddress = in.readString();
 		iDeviceBlueToothType = in.readInt();
+		broadcast = new byte[in.readInt()];
 		in.readByteArray(broadcast);
 	}
 
