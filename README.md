@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v3.0 Released (20160506) #
+# Android Bluetooth Framework v3.1p1 Released (20160509) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
