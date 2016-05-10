@@ -1,10 +1,11 @@
-# Android Bluetooth Framework v4.0 Released (20160509) #
+# Android Bluetooth Framework v5.0 Released (20160510) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
 Note:
->  This framework can not  send multiple BTCommands to slave bluetooth device  concurrently!    
-> It send one BTCommands at one time , other BTCommands will be queued and wait to execute!
+> This framework can not  send multiple BTCommands to slave bluetooth device  concurrently!    
+> It send one BTCommands at one time , other BTCommands will be queued and wait to execute!    
+
 
 # Simple sequence diagram
 ![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3752253336-SimpleFramework.png)
@@ -159,14 +160,13 @@ public class MyBTCommands extends BTCommands {
 
   public MyBTCommands(BTInfo aBTInfo) {
         super(aBTInfo);
-        BTCommand aCmd = new BTCommand();
-        aCmd.setWriterChannelUUID(MY_WRITER_UUID);  
         byte[] byteCmd = new byte[4];
         byteCmd[0] = (byte) 0x6F;
         byteCmd[1] = (byte) 0x53;
         byteCmd[2] = (byte) 0x01;
         byteCmd[3] = (byte) 0x35;
-        aCmd.setCommandString(byteCmd);
+
+        BTCommand aCmd = new BTCommand(MY_WRITER_UUID,byteCmd);
         addCommand(aCmd);
         setTimeout(800);
   }

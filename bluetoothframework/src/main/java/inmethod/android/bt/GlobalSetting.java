@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "4.0";
+	public static final String VERSION = "5.0";
 
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
@@ -35,7 +35,6 @@ public class GlobalSetting {
 	// notification UUID
 	public static final String Client_Characteristic_Configuration = "00002902-0000-1000-8000-00805f9b34fb";
 
-	public static final String DEVICE_INFORMATION_FIRMWARE_REVISION_UUID = "00002A26-0000-1000-8000-00805f9b34fb";
 
 	// for BlueToothWatcher
 	public static final int MESSAGE_START_DISCOVERY_SERVICE_SUCCESS = 10001;
@@ -87,6 +86,11 @@ public class GlobalSetting {
 	 * characteristic uuid is 0x2A49
 	 */
 	public static final String STANDARD_BLOOD_PRESSURE_SERVICE_BPF_UUID = "00002a49-0000-1000-8000-00805f9b34fb";
+
+	/**
+	 * device information under service 0x180a
+	 */
+	public static final String DEVICE_INFORMATION_FIRMWARE_REVISION_UUID = "00002a26-0000-1000-8000-00805f9b34fb";
 
 
 }

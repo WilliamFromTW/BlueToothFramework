@@ -15,7 +15,7 @@ public class BTInfo implements Parcelable {
 	protected int iDeviceBlueToothType;
 	protected String sDeviceName;
 	protected String sDeviceAddress;
-	protected byte[] broadcast;
+	protected byte[] byteAdvertisement;
 
 	/**
 	 * reference to BluetoothDevice.DEVICE_TYPE_CLASSIC
@@ -109,19 +109,18 @@ public class BTInfo implements Parcelable {
 	/**
 	 * ble broadcase
 	 */
-	public void setBroadcastData(byte[] broadcast){
-		this.broadcast = broadcast;
+	public void setAdvertisementData(byte[] byteAdvertisement){
+		this.byteAdvertisement = byteAdvertisement;
 	}
 
 	/**
 	 * 
 	 */
-	public byte[] getBroadcastData(){
-		return broadcast;
+	public byte[] getAdvertisementData(){
+		return byteAdvertisement;
 	}
 	
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -130,10 +129,10 @@ public class BTInfo implements Parcelable {
 		arg0.writeString(sDeviceName);
 		arg0.writeString(sDeviceAddress);
 		arg0.writeInt(iDeviceBlueToothType);
-		System.out.println("broadcast.length="+broadcast.length);
-		if( broadcast!=null && broadcast.length>0) {
-			arg0.writeInt(broadcast.length);
-			arg0.writeByteArray(broadcast);
+		//System.out.println("broadcast.length="+byteAdvertisement.length);
+		if( byteAdvertisement!=null && byteAdvertisement.length>0) {
+			arg0.writeInt(byteAdvertisement.length);
+			arg0.writeByteArray(byteAdvertisement);
 		}
 		else {
 			arg0.writeInt(1);
@@ -146,8 +145,8 @@ public class BTInfo implements Parcelable {
 		sDeviceName = in.readString();
 		sDeviceAddress = in.readString();
 		iDeviceBlueToothType = in.readInt();
-		broadcast = new byte[in.readInt()];
-		in.readByteArray(broadcast);
+		byteAdvertisement = new byte[in.readInt()];
+		in.readByteArray(byteAdvertisement);
 	}
 
 	public static final Parcelable.Creator<BTInfo> CREATOR = new Parcelable.Creator<BTInfo>() {

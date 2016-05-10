@@ -12,19 +12,21 @@ public class BTCommand {
 	private int iDelayTime;
 	private String sWriterCharacteristicUUID;
 	// channel id
-
-	public BTCommand() {
+    private BTCommand(){}
+	public BTCommand(String sWriterCharacteristicUUID,byte[] byteCmd) {
 		iDelayTime = 0;
+		this.sWriterCharacteristicUUID = sWriterCharacteristicUUID;
+		this.byteCmd = byteCmd;
 	}
 
 	/**
 	 * Classic BLUETOOTH is not required (always use 0x1101) or BLUETOOTH low
 	 * energy can be customized (Characteristic UUID) .
 	 * 
-	 * @param sUUID
+	 * @param sWriterCharacteristicUUID
 	 */
-	public void setWriterChannelUUID(String sUUID) {
-		sWriterCharacteristicUUID = sUUID;
+	public void setWriterChannelUUID(String sWriterCharacteristicUUID) {
+		this.sWriterCharacteristicUUID = sWriterCharacteristicUUID;
 	}
 
 	/**

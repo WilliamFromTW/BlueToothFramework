@@ -196,7 +196,7 @@ public class LeChatService implements IChatService {
 			((BluetoothGattCharacteristic) aWriterUUIDString).setValue(out);
 			mBluetoothGatt.writeCharacteristic(((BluetoothGattCharacteristic) aWriterUUIDString));
 		} else if (aWriterUUIDString != null && aWriterUUIDString instanceof String) {
-			BluetoothGattCharacteristic aCustomWriter = allCharacteristic.get(aWriterUUIDString);
+			BluetoothGattCharacteristic aCustomWriter = allCharacteristic.get(((String) aWriterUUIDString).toUpperCase());
 			if (aCustomWriter != null) {
 				aCustomWriter.setValue(out);
 				mBluetoothGatt.writeCharacteristic(aCustomWriter);
@@ -276,7 +276,7 @@ public class LeChatService implements IChatService {
                          
 						for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
 							Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
-							allCharacteristic.put(characteristic.getUuid().toString() , characteristic);
+							allCharacteristic.put(characteristic.getUuid().toString().toUpperCase() , characteristic);
 							if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
 									&& aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
 								for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
@@ -462,7 +462,7 @@ public class LeChatService implements IChatService {
 		if (objReaderChannel != null && objReaderChannel instanceof BluetoothGattCharacteristic) {
 			mBluetoothGatt.readCharacteristic(((BluetoothGattCharacteristic) objReaderChannel));
 		} else if (objReaderChannel != null && objReaderChannel instanceof String) {
-			BluetoothGattCharacteristic aCustomReader = allCharacteristic.get(objReaderChannel);
+			BluetoothGattCharacteristic aCustomReader = allCharacteristic.get(((String) objReaderChannel).toUpperCase());
 			if (aCustomReader != null) {
 				mBluetoothGatt.readCharacteristic(aCustomReader);
 			}
