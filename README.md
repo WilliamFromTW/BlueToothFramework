@@ -12,8 +12,41 @@ Note:
 
 # System Requirement #
 * Android 4.3 or above
+* Android Wear 5.0 or above
 * Support Classic Bluetooth and Bluetooth Low Energy
 * Android Studio 2.0 or above
+
+# Premission Requirement #
+~~~~ 
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+~~~~
+ACCESS_COARSE_LOCATION is run-time permission (android M or above)
+APP should implement this run-time permission
+#### For example  ####
+
+~~~~
+
+    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("This app needs location access");
+                builder.setMessage("Please grant location access so this app can detect beacons.");
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                    }
+
+                    ;
+                });
+                builder.show();
+            }
+            ;
+        }
+~~~~
 
 ## How To Use This  Framework ##
 
@@ -204,3 +237,4 @@ public class MyBTCommands extends BTCommands {
 	
 }
 ~~~~
+
