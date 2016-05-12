@@ -41,7 +41,6 @@ public class LeDiscoveryService implements IDiscoveryService {
     private boolean isDiscovering = false;
     private boolean bCancelDiscovery = false;
     private Vector<String> aFilter = null;
-    private BluetoothManager bluetoothManager = null;
 
     private int iDefaultDiscoveryMode = DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
 
@@ -70,7 +69,7 @@ public class LeDiscoveryService implements IDiscoveryService {
      */
     public void setContext(Context aC) {
         aContext = aC;
-        bluetoothManager = (BluetoothManager) aContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     /**
@@ -95,7 +94,7 @@ public class LeDiscoveryService implements IDiscoveryService {
     public boolean isBlueToothReady() {
         if (mBluetoothAdapter == null) {
             try {
-                mBluetoothAdapter = bluetoothManager.getAdapter();
+                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
@@ -113,7 +112,7 @@ public class LeDiscoveryService implements IDiscoveryService {
         Log.d(TAG, "prepareBluetoothAdapter");
         if (mBluetoothAdapter == null) {
             try {
-                mBluetoothAdapter = bluetoothManager.getAdapter();
+                mBluetoothAdapter =BluetoothAdapter.getDefaultAdapter();
                 Log.d(TAG, "prepareBLEAdapter");
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -128,7 +127,7 @@ public class LeDiscoveryService implements IDiscoveryService {
             Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
             aContext.unregisterReceiver(mReceiver);
         } catch (Exception ex) {
-            // ex.printStackTrace();
+           ex.printStackTrace();
         }
         IntentFilter state_change_filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         try {
@@ -150,7 +149,8 @@ public class LeDiscoveryService implements IDiscoveryService {
 									+ HexAndStringConverter.convertHexByteToHexString(record.getType()) + ",Data="
 									+ new String(record.getData()) + "(HEX:"
 									+ HexAndStringConverter.convertHexByteToHexString(record.getData()) + ")");
-				}
+
+                Log.i(TAG, "device address =" + device.getAddress() + ",device name =" + device.getName());		}
 */
                 if (filterFoundBTDevice(device.getName())) {
                     BTInfo aBTInfo = new BTInfo();
@@ -262,6 +262,12 @@ public class LeDiscoveryService implements IDiscoveryService {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         isDiscovering = false;
         bCancelDiscovery = true;
+        try {
+            Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
+            aContext.unregisterReceiver(mReceiver);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 
