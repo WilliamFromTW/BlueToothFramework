@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.0 Released (20160510) #
+# Android Bluetooth Framework v5.0 Released (20160512) #
 
 This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
 
@@ -10,10 +10,14 @@ Note:
 # Simple sequence diagram
 ![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3752253336-SimpleFramework.png)
 
-# System Requirement #
+# Operation System Requirement #
 * Android 4.3 or above
 * Android Wear 5.0 or above
-* Support Classic Bluetooth and Bluetooth Low Energy
+
+# Feature
+* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
+
+## Develop Environment
 * Android Studio 2.0 or above
 
 # Premission Requirement #
