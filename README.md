@@ -18,38 +18,54 @@ Note:
 * Support Classic Bluetooth(SPP) and Bluetooth Low Energy
 
 ## Develop Environment
-* Android Studio 2.0 or above
+* Android Studio 2.0 or above    
 
 # Premission Requirement #
-~~~~ 
+
+~~~~
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 ~~~~
-ACCESS_COARSE_LOCATION is run-time permission (android M or above)
-APP should implement this run-time permission
+
+ACCESS_COARSE_LOCATION is run-time permission (android M or above)     
+NOTE:
+> Android device should enable Location Service or it won't work even grant ACCESS_COARSE_LOCATION permission    
+
 #### For example  ####
 
 ~~~~
 
-    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("This app needs location access");
-                builder.setMessage("Please grant location access so this app can detect beacons.");
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    public void onDismiss(DialogInterface dialog) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
-                    }
+ private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+ protected void onCreate(Bundle savedInstanceState) {
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+   }
+ }
 
-                    ;
-                });
-                builder.show();
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_COARSE_LOCATION: {
+                if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("TAG", "coarse location permission granted");
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+
+                    });
+                    builder.show();
+                }
+                return;
             }
-            ;
         }
+    }   
 ~~~~
 
 ## How To Use This  Framework ##
