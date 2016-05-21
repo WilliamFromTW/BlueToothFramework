@@ -1,6 +1,12 @@
-# Android Bluetooth Framework v5.0 Released (20160512) #
+# Android Bluetooth Framework v5.0 Released (20160521) #
 
-This project "Android Bluetooth Framework" is designed for helping APP to communicate with slave Bluetooth device easily.
+This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
+
+# Example
+* https://bitbucket.org/inmethod/simpleblehrbandmonitor    
+  Very Simple example support standard BLE Heart Rate Band    
+* https://bitbucket.org/inmethod/blehrbandmonitor    
+  Support MinBand1s , standard BLE heart Rate Band    
 
 Note:
 > This framework can not  send multiple BTCommands to slave bluetooth device  concurrently!    
@@ -257,4 +263,3 @@ public class MyBTCommands extends BTCommands {
 	
 }
 ~~~~
-
