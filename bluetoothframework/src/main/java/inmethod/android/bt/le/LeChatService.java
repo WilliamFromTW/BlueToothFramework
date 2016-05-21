@@ -186,7 +186,7 @@ public class LeChatService implements IChatService {
 	 * @param out
 	 */
 	public void write(byte[] out, Object aWriterUUIDString) throws NoWriterException {
-		Log.d(TAG, "write(byte[] out, Object aWriterUUIDString), aWriterUUIDString= "+aWriterUUIDString+",out="+HexAndStringConverter.convertHexByteToHexString(out) );
+	//	Log.d(TAG, "write(byte[] out, Object aWriterUUIDString), aWriterUUIDString= "+aWriterUUIDString+",out="+HexAndStringConverter.convertHexByteToHexString(out) );
 		
 		if (mBluetoothAdapter == null || mBluetoothGatt == null) {
 			Log.e(TAG, "BluetoothAdapter not initialized");
@@ -212,9 +212,9 @@ public class LeChatService implements IChatService {
 		return new BluetoothGattCallback() {
 			@Override
 			public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-				Log.i(TAG, "BluetoothGattCallback connection state=" + newState);
+			//	Log.i(TAG, "BluetoothGattCallback connection state=" + newState);
 				// this means try to connect but failed!
-				Log.i(TAG, "Connected to GATT server. status=" + status);
+			//	Log.i(TAG, "Connected to GATT server. status=" + status);
 				if (status != BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_CONNECTED) {
 					mState = STATE_DISCONNECTED;
 					setState(mState);
@@ -231,8 +231,7 @@ public class LeChatService implements IChatService {
 					mState = STATE_CONNECTED;
 					setState(STATE_CONNECTED);
 
-					Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:"
-							+ gatt.discoverServices());
+					Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:" + gatt.discoverServices());
 				} else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 					mState = STATE_DISCONNECTED;
 					setState(mState);
@@ -260,7 +259,7 @@ public class LeChatService implements IChatService {
 				// InnerHandler innerHandler = new InnerHandler();
 				if( allCharacteristic ==null ) allCharacteristic = new HashMap<String,BluetoothGattCharacteristic>() ;
 				else allCharacteristic.clear();
-				Log.e(TAG, "onServicesDiscovered gatt=" + gatt + ",status=" + status);
+		//		Log.e(TAG, "onServicesDiscovered gatt=" + gatt + ",status=" + status);
 				if (status == BluetoothGatt.GATT_SUCCESS) {
 					if (gatt == null) {
 						Log.e(TAG, "gatt is null");
@@ -272,10 +271,10 @@ public class LeChatService implements IChatService {
 				
 					
 					for (BluetoothGattService service : mBluetoothGatt.getServices()) {
-						Log.d(TAG, "=>service uuid = " + service.getUuid());
+					//	Log.d(TAG, "=>service uuid = " + service.getUuid());
                          
 						for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-							Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
+				//			Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
 							allCharacteristic.put(characteristic.getUuid().toString().toUpperCase() , characteristic);
 							if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
 									&& aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
@@ -301,8 +300,6 @@ public class LeChatService implements IChatService {
 			@Override
 			public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic,
 					int status) {
-				Log.i(TAG, "characteristic uuid = " + characteristic.getUuid() + ",onCharacteristicWrite , status = "
-						+ status);
 				bIsWrite = false;
 			}
 

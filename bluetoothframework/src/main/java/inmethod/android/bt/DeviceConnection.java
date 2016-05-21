@@ -26,7 +26,6 @@ public class DeviceConnection {
 
 	private boolean bIsConnected = false;
 	private BTCommands aCommands = null;
-	private int iCommandSize = 0;
 	private boolean bTriggerConnectedAndThenSendCommand = false;
 	private boolean bStopWatchDog = false;
 	private boolean bFirstBTCommands = true;
@@ -96,21 +95,10 @@ public class DeviceConnection {
 
 
 			public void run() {
-				try {
-					sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
 				while (!bStopWatchDog) {
 
-					if (!bFirstBTCommands && !aCommands.isFinished()) {
-					//	Log.d(TAG, "current running cmds=" + aCommands.toString());
-						try {
-							sleep(500);
-						} catch (InterruptedException e) {
-						}
-					}
+
 
 					if (mBTChat != null && mBTChat.getState() != ClassicChatService.STATE_CONNECTED) {
 						aBTCommandsList.clear();
@@ -123,16 +111,14 @@ public class DeviceConnection {
 						 * return; } else continue;
 						 */
 						try {
-							// Log.d(TAG, "no bt command , so let me sleep about
-							// 60s , thanks");
+							Log.d(TAG, "no bt command , sleep 60s");
 							sleep(60000);
 						} catch (InterruptedException e) {
 							Log.d(TAG, "got bt command , stop sleep");
-							;// Thread.currentThread ().interrupt ();
-							;// break;
+
 						}
 					}
-
+					if(aCommands==null && aBTCommandsList.size()==0) continue;
 					// Log.i(TAG, "connect status =
 					// "+isConnected()+"!,aBTCommandsList.size()="+aBTCommandsList.size()+",aCommands.getFinished()="+aCommands.getFinished());
 					if (!isConnected() && aBTCommandsList != null && aBTCommandsList.size() > 0) {
@@ -147,8 +133,13 @@ public class DeviceConnection {
 						}
 						bFirstBTCommands = false;
 						aCommands = aBTCommandsList.poll();
-						aCommands.setBTInfo(aBTInfo);
-						iCommandSize = aCommands.getCommandList().size();
+						try{
+							Log.i(TAG,"BTCommands must sleep 0.5s prevent Slave Bluetooth from ignoring command!");
+							Thread.sleep(500);
+						}catch(Exception ee){
+							ee.printStackTrace();
+						}
+						if( aCommands==null) continue;
 						Log.d(TAG,"aCommands from poll is "+ aCommands);
 						if (aCommands.getCommandList().size() >= 1) {
 
@@ -298,11 +289,9 @@ public class DeviceConnection {
 	public void sendBTCommands(BTCommands aCmds) {
 		aCmds.setBTChat(mBTChat);
 		aCmds.setCurrentConnection(this);
-		aCmds.setBTInfo(aBTInfo);
 		aBTCommandsList.offer(aCmds);
 		if (bFirstBTCommands) {
 			aCommands = aCmds;
-			aCommands.setBTInfo(aBTInfo);
 		}
 		try {
 			// if(aWatchDogThread!=null && !aWatchDogThread.isAlive() )
