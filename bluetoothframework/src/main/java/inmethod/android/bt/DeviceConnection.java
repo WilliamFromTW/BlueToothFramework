@@ -37,7 +37,7 @@ public class DeviceConnection {
 	private ConnectionCallbackHandler aConnectionHandler = null;
 	private Thread aWatchDogThread = null;
 	private Context aContext = null;
-
+	private Runnable rTimeout = null;
 	private DeviceConnection() {
 	}
 
@@ -93,7 +93,7 @@ public class DeviceConnection {
 
 		// watch dog to check new command and execute command.
 		aWatchDogThread = new Thread() {
-			Runnable r = null;
+
 
 			public void run() {
 				try {
@@ -107,7 +107,7 @@ public class DeviceConnection {
 					if (!bFirstBTCommands && !aCommands.isFinished()) {
 					//	Log.d(TAG, "current running cmds=" + aCommands.toString());
 						try {
-							sleep(800);
+							sleep(500);
 						} catch (InterruptedException e) {
 						}
 					}
@@ -142,12 +142,14 @@ public class DeviceConnection {
 					if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
 						if (aCommands.isFinished()) {
 							Log.i(TAG, "remove timeout thread because command is finished!");
-							mHandler.removeCallbacksAndMessages(null);
+							if( rTimeout!=null)
+						 	  mHandler.removeCallbacks(rTimeout);
 						}
 						bFirstBTCommands = false;
 						aCommands = aBTCommandsList.poll();
 						aCommands.setBTInfo(aBTInfo);
 						iCommandSize = aCommands.getCommandList().size();
+						Log.d(TAG,"aCommands from poll is "+ aCommands);
 						if (aCommands.getCommandList().size() >= 1) {
 
 							try {
@@ -192,13 +194,13 @@ public class DeviceConnection {
 						if (aCommands.getTimeout() > 0) {
 							if (D)
 								Log.i(TAG, "set command timeout = " + aCommands.getTimeout());
-							r = new Runnable() {
+							rTimeout = new Runnable() {
 								public void run() {
 									mHandler.sendMessage(
 											mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1));
 								}
 							};
-							mHandler.postDelayed(r, aCommands.getTimeout());
+							mHandler.postDelayed(rTimeout, aCommands.getTimeout());
 
 						}
 
@@ -248,16 +250,18 @@ public class DeviceConnection {
 	 * clear bluetooth command.
 	 */
 	public void clearBTCommands() {
-		if (aCommands != null && aCommands.getCommandList() != null)
-			aCommands.getCommandList().clear();
+		if (aBTCommandsList != null && aBTCommandsList.size()>0)
+			aBTCommandsList.clear();
 	}
 
 	/**
 	 * force current BTCommands timeout Immediately
 	 */
 	public void forceBTCommandsTimeout(){
+
 		if( aCommands!=null && !aCommands.isFinished()) {
-			mHandler.removeCallbacksAndMessages(null);
+			if( (!aCommands.isFinished()) && rTimeout!=null)
+			mHandler.removeCallbacks(rTimeout);
 			try {
 				aCommands.handleTimeout();
 			} catch (Exception e) {
@@ -373,7 +377,7 @@ public class DeviceConnection {
 						aMessage.setData(aBundle);
 						aConnectionHandler.sendMessage(aMessage);
 					}
-					if (iCommandSize == 1) {
+					if (aCommands.getCommandList().size() == 1) {
 						aCommands.getCommandList().clear();
 					}
 					break;
@@ -408,7 +412,7 @@ public class DeviceConnection {
 								aConnectionHandler.sendMessage(aMessage);
 							}
 						}
-						if (iCommandSize == 2) {
+						if (aCommands.getCommandList().size() == 2) {
 							aCommands.getCommandList().clear();
 						}
 					} catch (Exception ee) {
@@ -455,7 +459,7 @@ public class DeviceConnection {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (iCommandSize == 3) {
+					if (aCommands.getCommandList().size() == 3) {
 						aCommands.getCommandList().clear();
 					}
 					break;
@@ -498,15 +502,15 @@ public class DeviceConnection {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (iCommandSize == 4) {
+					if (aCommands.getCommandList().size() == 4) {
 						aCommands.getCommandList().clear();
 					}
 					break;
 				case 5:
-					for (BTCommand cmd : aCommands.getOriginallCommandList()) {
-						Log.i(TAG, "Cmd=" + cmd.getCommandString().toString() + "(Hex:"
-								+ HexAndStringConverter.convertHexByteToHexString(cmd.getCommandString()) + ")");
-					}
+				//	for (BTCommand cmd : aCommands.getOriginallCommandList()) {
+				//		Log.i(TAG, "Cmd=" + cmd.getCommandString().toString() + "(Hex:"
+				//				+ HexAndStringConverter.convertHexByteToHexString(cmd.getCommandString()) + ")");
+				//	}
 					try {
 						if (!aCommands.isFinished()) {
 							Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
