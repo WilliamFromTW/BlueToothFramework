@@ -152,7 +152,7 @@ public class LeDiscoveryService implements IDiscoveryService {
 
                 Log.i(TAG, "device address =" + device.getAddress() + ",device name =" + device.getName());		}
 */
-                if (filterFoundBTDevice(device.getName())) {
+                if (filterFoundBTDevice(device.getName())||filterFoundBTDevice(device.getAddress())) {
                     BTInfo aBTInfo = new BTInfo();
                     aBTInfo.setDeviceAddress(device.getAddress());
                     aBTInfo.setDeviceName(device.getName());
@@ -362,7 +362,7 @@ public class LeDiscoveryService implements IDiscoveryService {
         if (sBTName != null) {
             if (aFilter != null) {
                 for (String sName : aFilter) {
-                    if (sBTName.indexOf(sName) != -1)
+                    if (sBTName.toUpperCase().indexOf(sName.toUpperCase()) != -1)
                         return true;
                 }
             }
