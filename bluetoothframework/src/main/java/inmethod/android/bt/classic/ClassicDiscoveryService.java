@@ -362,19 +362,19 @@ public class ClassicDiscoveryService implements IDiscoveryService {
 	}
 
 	/**
-	 * find which bluetooth device we need to connect
-	 * 
+	 * Find which bluetooth device we need to connect.
+	 * String maybe Device name or Mac Address(Mac Address will remove ":" character.
+	 *
 	 * @param sBTName
 	 * @return
 	 */
 	private boolean filterFoundBTDevice(String sBTName) {
-		if (sBTName != null) {
-			// if( sBTName.length()>=4 && ( sBTName.indexOf("ISSC")!=-1 ||
-			// sBTName.indexOf("BT-BPM")!=-1 || sBTName.indexOf("BT-BGM")!=-1) )
-			// return true;
+		String sLocalBTName = sBTName.replace(":","");
+
+		if (sLocalBTName != null) {
 			if (aFilter != null) {
 				for (String sName : aFilter) {
-					if (sBTName.indexOf(sName) != -1)
+					if (sLocalBTName.toUpperCase().indexOf(sName.toUpperCase()) != -1)
 						return true;
 				}
 			}

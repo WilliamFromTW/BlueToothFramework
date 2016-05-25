@@ -353,16 +353,19 @@ public class LeDiscoveryService implements IDiscoveryService {
     }
 
     /**
-     * find which bluetooth device we need to connect
+     * Find which bluetooth device we need to connect.
+     * String maybe Device name or Mac Address(Mac Address will remove ":" character.
      *
      * @param sBTName
      * @return
      */
     private boolean filterFoundBTDevice(String sBTName) {
-        if (sBTName != null) {
+        String sLocalBTName = sBTName.replace(":","");
+
+        if (sLocalBTName != null) {
             if (aFilter != null) {
                 for (String sName : aFilter) {
-                    if (sBTName.toUpperCase().indexOf(sName.toUpperCase()) != -1)
+                    if (sLocalBTName.toUpperCase().indexOf(sName.toUpperCase()) != -1)
                         return true;
                 }
             }
