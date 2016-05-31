@@ -6,7 +6,7 @@ import android.os.Message;
 import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.GlobalSetting;
 
-public abstract class CommandCallbackHandler extends Handler {
+public class CommandCallbackHandler extends Handler {
 	public final String TAG = GlobalSetting.TAG + "/" + getClass().getSimpleName();
 
 	Bundle aBundle = null;
@@ -27,6 +27,6 @@ public abstract class CommandCallbackHandler extends Handler {
 	 * 
 	 * @param msg
 	 */
-	public abstract void handleCommandResponseMessage(Message msg);
+	public  void handleCommandResponseMessage(Message msg){}
 
 }
