@@ -18,7 +18,7 @@ public abstract class BTCommands {
 
 	protected ArrayList<BTCommand> aCommandList = new ArrayList<BTCommand>();
 	protected ArrayList<BTCommand> aOriginalCommandList = new ArrayList<BTCommand>();
-	private BTInfo aBTInfo = null;
+
 	private boolean bFinished = false;
 
 	private int iTimeout = 8;
@@ -38,12 +38,6 @@ public abstract class BTCommands {
 			return this.mCallBackHandler;
 	}
 
-	public BTCommands(BTInfo aBTInfo){
-	   setBTInfo(aBTInfo);
-	}
-	public void setBTInfo(BTInfo aInfo){ this.aBTInfo = aInfo; }
-
-	public BTInfo getBTInfo(){return aBTInfo;}
 
 	/**
 	 * send extra message to remote device.

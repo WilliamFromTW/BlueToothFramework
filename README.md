@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.0 Released (20160521) #
+# Android Bluetooth Framework v5.0 Released (20160607) #
 
 This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
 
