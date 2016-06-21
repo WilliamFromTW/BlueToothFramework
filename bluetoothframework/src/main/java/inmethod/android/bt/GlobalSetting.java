@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "5.0";
+	public static final String VERSION = "5.01";
 
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;

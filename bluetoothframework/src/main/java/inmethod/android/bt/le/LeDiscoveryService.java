@@ -360,6 +360,7 @@ public class LeDiscoveryService implements IDiscoveryService {
      * @return
      */
     private boolean filterFoundBTDevice(String sBTName) {
+        if( sBTName==null) return false;
         String sLocalBTName = sBTName.replace(":","");
 
         if (sLocalBTName != null) {

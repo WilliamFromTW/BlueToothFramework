@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.0 Released (20160607) #
+# Android Bluetooth Framework v5.01 Released (20160621) #
 
 This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
 
@@ -41,37 +41,41 @@ NOTE:
 #### For example  ####
 
 ~~~~
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("This app needs location access");
+					builder.setMessage("Please grant location access");
+					builder.setPositiveButton(android.R.string.ok, null);
+					builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+						public void onDismiss(DialogInterface dialog) {
+							requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+						};
+					});
+					builder.show();
+				};
+				LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+				if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+					// show open gps message
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("Info");
+					builder.setMessage("Please enable Location service(android 6)");
+					builder.setPositiveButton("OK", new
+							android.content.DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// jump to setting
+									Intent enableGPSIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+									startActivity(enableGPSIntent);
+								}
+							});
+					builder.show();
+				}
 
- private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
- protected void onCreate(Bundle savedInstanceState) {
-   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
-   }
- }
-
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_COARSE_LOCATION: {
-                if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("TAG", "coarse location permission granted");
-                } else {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Functionality limited");
-                    builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons when in the background.");
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                        }
-
-                    });
-                    builder.show();
-                }
-                return;
-            }
-        }
-    }   
+    }
+  }  
 ~~~~
 
 ## How To Use This  Framework ##
