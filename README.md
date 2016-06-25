@@ -44,36 +44,33 @@ NOTE:
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-					final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setTitle("This app needs location access");
-					builder.setMessage("Please grant location access");
-					builder.setPositiveButton(android.R.string.ok, null);
-					builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-						public void onDismiss(DialogInterface dialog) {
-							requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-						};
-					});
-					builder.show();
-				};
-				LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-				if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-					// show open gps message
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setTitle("Info");
-					builder.setMessage("Please enable Location service(android 6)");
-					builder.setPositiveButton("OK", new
-							android.content.DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// jump to setting
-									Intent enableGPSIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-									startActivity(enableGPSIntent);
-								}
-							});
-					builder.show();
-				}
-
+      if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("This app needs location access");
+        builder.setMessage("Please grant location access");
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+          public void onDismiss(DialogInterface dialog) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+          };
+        });
+        builder.show();
+      };
+      LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+      if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        // show open gps message
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Info");
+        builder.setMessage("Please enable Location service(android 6)");
+        builder.setPositiveButton("OK", new android.content.DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Intent enableGPSIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		    startActivity(enableGPSIntent);
+          }
+        });
+        builder.show();
+      }
     }
   }  
 ~~~~
@@ -193,20 +190,20 @@ There are 3 Sections
   If device response data , callback method "handleCommandResponseMessage()" will be triggered.    
 
 ~~~~
-  BTCommands aBTCommands = new MyBTCommands(aBTInfo);
+  BTCommands aBTCommands = new MyBTCommands();
   aBTCommands.setCallBackHandler(new MyBlueToothCommandCallbackHandler());
   Toast.makeText(activity, "send BT commands to device", Toast.LENGTH_SHORT).show();
   aBlueToothDeviceConnection.sendBTCommands(aBTCommands);
   
   public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.CommandCallbackHandler {   
   
-    @Override
-    public void handleCommandResponseMessage(Message msg) {
-      switch(msg.what){
-         <MyBTCommands's msg.what>:  // see BTCommands example below 
-         break;
-      }
-	}
+      @Override
+      public void handleCommandResponseMessage(Message msg) {
+        switch(msg.what){
+          <MyBTCommands's msg.what>:  // see BTCommands example below 
+          break;
+        }
+     }
 	
   }
 ~~~~
@@ -221,8 +218,8 @@ public class MyBTCommands extends BTCommands {
   private final static int MY_CALLBACK_SUCCESS = "10000";
   private final static int MY_CALLBACK_TIMEOUT = "10001";
 
-  public MyBTCommands(BTInfo aBTInfo) {
-        super(aBTInfo);
+  public MyBTCommands() {
+       
         byte[] byteCmd = new byte[4];
         byteCmd[0] = (byte) 0x6F;
         byteCmd[1] = (byte) 0x53;
@@ -262,7 +259,7 @@ public class MyBTCommands extends BTCommands {
 	  // callback method will be triggered 
 	  getCallBackHandler().sendMessage(aMessage);
 	  setFinished(true);
-	}
+    }
   }
 	
 }
