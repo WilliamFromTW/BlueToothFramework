@@ -126,7 +126,7 @@ public class HexAndStringConverter {
 	 *            target Check MAC Address
 	 * @param sStartMac
 	 *            start MAC Address
-	 * @param sEndMan
+	 * @param sEndMac
 	 *            End MAC Address
 	 * @return
 	 */

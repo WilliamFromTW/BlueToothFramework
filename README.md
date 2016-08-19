@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.01 Released (20160621) #
+# Android Bluetooth Framework v5.02 beta (20160819) #
 
 This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
 
@@ -22,6 +22,7 @@ Note:
 
 # Feature
 * Support Classic Bluetooth(SPP) and Bluetooth Low Energy
+* Simulation Mode
 
 ## Develop Environment
 * Android Studio 2.0 or above    
@@ -263,4 +264,15 @@ public class MyBTCommands extends BTCommands {
   }
 	
 }
-~~~~
+~~~~    
+
+
+## How To Run In Simulation Mode ##    
+*  First enable simulation   
+inmethod.android.bt.GlobalSetting.setSimulation(true);    
+or 
+inmethod.android.bt.GlobalSetting.setSimulation(true,"bluetooth advertisement data");    
+
+* set BTCommands responsed data & uuid from remote device    
+aBTCommands.setSimulationResponsedData(new byte[]{'a','b'});    
+aBTCommands.setSimulationResponsedUUID("0000fff4-0000-1000-8000-00805f9b34fb");    

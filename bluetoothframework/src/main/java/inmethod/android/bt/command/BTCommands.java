@@ -25,6 +25,8 @@ public abstract class BTCommands {
 	private IChatService aBTChat = null;
 	private CommandCallbackHandler mCallBackHandler = null;
 	private DeviceConnection aDeviceConnection = null;
+    private byte[] byteSimulationData = null;
+	private String sSimulationUUID = null;
 
 	public void setBTChat(IChatService mBTChat) {
 		aBTChat = mBTChat;
@@ -34,11 +36,43 @@ public abstract class BTCommands {
 		return aBTChat;
 	}
 
+
 	public CommandCallbackHandler getCallBackHandler()  {
 			return this.mCallBackHandler;
 	}
 
 
+	/**
+	 * set simulation data if inmethod.android.bt.GlobalSetting.setSimulation(true);
+	 * @param data
+     */
+	public void setSimulationResponsedData(byte[] data){
+		byteSimulationData = data;
+	}
+
+	/**
+	 *  get simulation data
+	 * @return
+     */
+	public byte[] getSimulationResponsedData(){
+		return byteSimulationData;
+	}
+
+	/**
+	 * set simulation responsed UUID string
+	 * @param sUUID
+     */
+	public void setSimulationResponsedUUID(String sUUID){
+		sSimulationUUID = sUUID;
+	}
+
+	/**
+	 * get simulation responsed UUID String
+	 * @return
+     */
+	public String getSimulationResponsedUUID(){
+		return sSimulationUUID;
+	}
 	/**
 	 * send extra message to remote device.
 	 * 

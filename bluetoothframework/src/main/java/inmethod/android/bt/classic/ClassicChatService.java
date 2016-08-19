@@ -653,4 +653,21 @@ public class ClassicChatService implements IChatService {
 		// TODO Auto-generated method stub
 
 	}
+
+	/**
+	 * Not Support Simulation mode
+	 * @param data
+	 */
+	@Override
+	public void setSimulationResponsedData(byte[] data) {
+
+	}
+	/**
+	 * Not Support Simulation mode
+	 * @param sUUID
+	 */
+	@Override
+	public void setSimulationResponsedUUID(String sUUID) {
+
+	}
 }

@@ -79,5 +79,6 @@ public interface IChatService {
 	 * @throws NoBTReaderException
 	 */
 	public void read(Object objReaderChannel) throws NoBTReaderException;
-
+	public void setSimulationResponsedData(byte[] data);
+	public void setSimulationResponsedUUID(String sUUID);
 }
