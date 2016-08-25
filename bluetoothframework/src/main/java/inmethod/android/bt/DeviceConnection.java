@@ -106,7 +106,7 @@ public class DeviceConnection {
                     if (aCommands == null || aBTCommandsList == null || aBTCommandsList.size() == 0) {
                         // continue;
                         /*
-						 * if( aCommands.getFinished()){ bStopWatchDog = true;
+                         * if( aCommands.getFinished()){ bStopWatchDog = true;
 						 * return; } else continue;
 						 */
                         try {
@@ -132,6 +132,7 @@ public class DeviceConnection {
                         }
                         bFirstBTCommands = false;
                         aCommands = aBTCommandsList.poll();
+                        int iTotalDelayTime = 0;
                         if (aCommands == null) continue;
                         try {
                             Log.i(TAG, "BTCommands must sleep 0.5s prevent Slave Bluetooth from ignoring command!");
@@ -140,8 +141,6 @@ public class DeviceConnection {
                             ee.printStackTrace();
                         }
                         Log.d(TAG, "aCommands from poll is " + aCommands);
-                        mBTChat.setSimulationResponsedData(aCommands.getSimulationResponsedData());
-                        mBTChat.setSimulationResponsedUUID(aCommands.getSimulationResponsedUUID());
                         if (aCommands.getCommandList().size() >= 1) {
 
                             try {
@@ -153,9 +152,10 @@ public class DeviceConnection {
 
                         if (aCommands.getCommandList().size() >= 2) {
                             try {
+                                iTotalDelayTime += ((BTCommand) aCommands.getCommandList().get(0)).getDelayTime();
                                 mHandler.sendMessageDelayed(
                                         mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 2, -1),
-                                        ((BTCommand) aCommands.getCommandList().get(0)).getDelayTime());
+                                        iTotalDelayTime);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -163,29 +163,35 @@ public class DeviceConnection {
 
                         if (aCommands.getCommandList().size() >= 3) {
                             try {
+                                iTotalDelayTime += ((BTCommand) aCommands.getCommandList().get(1)).getDelayTime();
                                 mHandler.sendMessageDelayed(
                                         mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 3, -1),
-                                        ((BTCommand) aCommands.getCommandList().get(0)).getDelayTime()
-                                                + ((BTCommand) aCommands.getCommandList().get(1)).getDelayTime());
+                                        iTotalDelayTime);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
                         if (aCommands.getCommandList().size() >= 4) {
                             try {
+                                iTotalDelayTime += ((BTCommand) aCommands.getCommandList().get(2)).getDelayTime();
                                 mHandler.sendMessageDelayed(
                                         mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 4, -1),
-                                        ((BTCommand) aCommands.getCommandList().get(0)).getDelayTime()
-                                                + ((BTCommand) aCommands.getCommandList().get(1)).getDelayTime()
-                                                + ((BTCommand) aCommands.getCommandList().get(2)).getDelayTime());
+                                        iTotalDelayTime);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                         }
+                        if (GlobalSetting.getSimulation()) {
+                            rTimeout = new Runnable() {
+                                public void run() {
+                                    mHandler.sendMessage(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 6, -1));
+                                }
+                            };
+                            mHandler.postDelayed(rTimeout, iTotalDelayTime + 1000);
 
-                        if (aCommands.getTimeout() > 0) {
-                            if (D)
-                                Log.i(TAG, "set command timeout = " + aCommands.getTimeout());
+
+                        } else if (aCommands.getTimeout() > 0) {
+                            Log.i(TAG, "set command timeout = " + aCommands.getTimeout());
                             rTimeout = new Runnable() {
                                 public void run() {
                                     mHandler.sendMessage(
@@ -345,6 +351,9 @@ public class DeviceConnection {
                                     mBTChat.write(aCmd1.getCommandString(), null);
                                 } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
                                     if (aCmd1.getWriterChannelUUID() != null) {
+                                        if (GlobalSetting.getSimulation()) {
+                                            aCommands.getSimulationResponsedData().handleBTCommandsData(1, aCmd1.getCommandString());
+                                        }
                                         mBTChat.write(aCmd1.getCommandString(), aCmd1.getWriterChannelUUID());
                                     } else {
                                         aMessage = aConnectionHandler
@@ -395,6 +404,9 @@ public class DeviceConnection {
                                     mBTChat.write(aCmd2.getCommandString(), null);
                                 } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
                                     if (aCmd2.getWriterChannelUUID() != null) {
+                                        if (GlobalSetting.getSimulation()) {
+                                            aCommands.getSimulationResponsedData().handleBTCommandsData(2, aCmd2.getCommandString());
+                                        }
                                         mBTChat.write(aCmd2.getCommandString(), aCmd2.getWriterChannelUUID());
                                     } else {
                                         aMessage = aConnectionHandler
@@ -435,6 +447,9 @@ public class DeviceConnection {
                                     mBTChat.write(aCmd3.getCommandString(), null);
                                 } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
                                     if (aCmd3.getWriterChannelUUID() != null) {
+                                        if (GlobalSetting.getSimulation()) {
+                                            aCommands.getSimulationResponsedData().handleBTCommandsData(3, aCmd3.getCommandString());
+                                        }
                                         mBTChat.write(aCmd3.getCommandString(), aCmd3.getWriterChannelUUID());
                                     } else {
                                         aMessage = aConnectionHandler
@@ -446,10 +461,8 @@ public class DeviceConnection {
                                     }
                                 }
                             } catch (NoWriterException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             } catch (NoBTReaderException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                             if (aCommands.getCommandList().size() == 3) {
@@ -478,6 +491,9 @@ public class DeviceConnection {
                                     mBTChat.write(aCmd4.getCommandString(), null);
                                 } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
                                     if (aCmd4.getWriterChannelUUID() != null) {
+                                        if (GlobalSetting.getSimulation()) {
+                                            aCommands.getSimulationResponsedData().handleBTCommandsData(4, aCmd4.getCommandString());
+                                        }
                                         mBTChat.write(aCmd4.getCommandString(), aCmd4.getWriterChannelUUID());
                                     } else {
                                         aMessage = aConnectionHandler
@@ -489,10 +505,8 @@ public class DeviceConnection {
                                     }
                                 }
                             } catch (NoWriterException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             } catch (NoBTReaderException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                             if (aCommands.getCommandList().size() == 4) {
@@ -500,10 +514,6 @@ public class DeviceConnection {
                             }
                             break;
                         case 5:
-                            //	for (BTCommand cmd : aCommands.getOriginallCommandList()) {
-                            //		Log.i(TAG, "Cmd=" + cmd.getCommandString().toString() + "(Hex:"
-                            //				+ HexAndStringConverter.convertHexByteToHexString(cmd.getCommandString()) + ")");
-                            //	}
                             try {
                                 if (!aCommands.isFinished()) {
                                     Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
@@ -516,13 +526,19 @@ public class DeviceConnection {
                                 aCommands.getCommandList().clear();
                                 aCommands.setFinished(true);
                             }
-
                             break;
+                        case 6:
+                            if (GlobalSetting.getSimulation()) {
+                                for (byte bytes : aCommands.getSimulationResponsedData().getResponsedData())
+                                    mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, aCommands.getSimulationResponsedUUID()).sendToTarget();
+                            }
 
+                            mHandler.sendMessageDelayed(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1),1000);
+                            break;
                     }
                     break;
                 case GlobalSetting.MESSAGE_STATE_CHANGE:
-                    if (D)
+
                         Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case ClassicChatService.STATE_CONNECTED:

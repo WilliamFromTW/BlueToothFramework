@@ -67,8 +67,18 @@ public abstract class ConnectionCallbackHandler extends Handler {
 			aInfo = aBundle.getParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
 			NotificationEnableFail(aInfo,aBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 			break;
+			default:
+				handleExtraMessage(msg);
+				break;
 		}
 	}
+
+	/**
+	 * handler extra message
+	 *
+	 * @param msg
+	 */
+	public  void handleExtraMessage(Message msg){}
 
 	/**
 	 * command can't send to device.

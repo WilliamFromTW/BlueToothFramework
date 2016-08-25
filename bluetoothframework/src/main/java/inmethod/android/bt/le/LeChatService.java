@@ -64,7 +64,6 @@ public class LeChatService implements IChatService {
     private HashMap<String, BluetoothGattCharacteristic> allCharacteristic = null;
     private boolean bIsWrite = false;
     private Queue<Object> sWriteQueue = new ConcurrentLinkedQueue<Object>();
-    private byte[] byteSimulationResponsedData = null;
     private boolean bSimulationBluetoothGattObject = true;
     private String sSimulationResponsedUUID = null;
     /**
@@ -213,10 +212,6 @@ public class LeChatService implements IChatService {
                 return;
             }
         }else{
-            if(byteSimulationResponsedData!=null ) {
-                for (byte bytes : byteSimulationResponsedData)
-                    mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, sSimulationResponsedUUID).sendToTarget();
-            }
             return;
         }
         if (aWriterUUIDString != null && aWriterUUIDString instanceof BluetoothGattCharacteristic) {
@@ -483,9 +478,6 @@ public class LeChatService implements IChatService {
                 return;
             }
         }else{
-            if(byteSimulationResponsedData!=null )
-            for (byte bytes : byteSimulationResponsedData )
-                mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1,objReaderChannel)                   .sendToTarget();
             return;
         }
         if (objReaderChannel != null && objReaderChannel instanceof BluetoothGattCharacteristic) {
@@ -501,13 +493,4 @@ public class LeChatService implements IChatService {
 
     }
 
-    @Override
-    public void setSimulationResponsedData(byte[] data){
-        byteSimulationResponsedData = data;
-    }
-
-    @Override
-    public void setSimulationResponsedUUID(String sUUID){
-        sSimulationResponsedUUID = sUUID;
-    }
 }

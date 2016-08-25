@@ -6,6 +6,7 @@ import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.DeviceConnection;
 import inmethod.android.bt.handler.CommandCallbackHandler;
 import inmethod.android.bt.interfaces.IChatService;
+import inmethod.android.bt.simulation.ResponsedData;
 import inmethod.commons.util.HexAndStringConverter;
 
 /**
@@ -27,6 +28,7 @@ public abstract class BTCommands {
 	private DeviceConnection aDeviceConnection = null;
     private byte[] byteSimulationData = null;
 	private String sSimulationUUID = null;
+	private ResponsedData aResponsedData = null;
 
 	public void setBTChat(IChatService mBTChat) {
 		aBTChat = mBTChat;
@@ -51,12 +53,31 @@ public abstract class BTCommands {
 	}
 
 	/**
-	 *  get simulation data
+	 * set simulation data if inmethod.android.bt.GlobalSetting.setSimulation(true);
+	 * @param aResponsedData
+	 */
+	public void setSimulationResponsedData(ResponsedData aResponsedData){
+		this.aResponsedData = aResponsedData;
+	}
+
+	/**
+	 *  get simulation data .
+	 *  note: if setSimulationResponsedData(byte[] data) called , will return the parameter byte data in class ResponsedData or setSimulationResponsedData(ResponsedData aResponsedData) called will return aResponsedData;
 	 * @return
      */
-	public byte[] getSimulationResponsedData(){
-		return byteSimulationData;
+	public ResponsedData getSimulationResponsedData(){
+		if( byteSimulationData!=null) {
+			aResponsedData = new ResponsedData(byteSimulationData);
+		}
+		if(aResponsedData!=null  ){
+			return aResponsedData;
+		}
+		else{
+			aResponsedData = new ResponsedData(new byte[]{'n','o',' ','r','e','s','p','o','s','e','d',' ','d','a','t','a'});
+			return aResponsedData;
+		}
 	}
+
 
 	/**
 	 * set simulation responsed UUID string
@@ -73,6 +94,7 @@ public abstract class BTCommands {
 	public String getSimulationResponsedUUID(){
 		return sSimulationUUID;
 	}
+
 	/**
 	 * send extra message to remote device.
 	 * 
