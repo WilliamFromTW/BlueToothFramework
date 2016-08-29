@@ -12,6 +12,7 @@ import android.util.Log;
 import inmethod.android.bt.classic.ClassicChatService;
 import inmethod.android.bt.command.BTCommand;
 import inmethod.android.bt.command.BTCommands;
+import inmethod.android.bt.command.BTNotificationCommand;
 import inmethod.android.bt.command.BTReadCommand;
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
@@ -356,12 +357,15 @@ public class DeviceConnection {
                                         }
                                         mBTChat.write(aCmd1.getCommandString(), aCmd1.getWriterChannelUUID());
                                     } else {
-                                        aMessage = aConnectionHandler
-                                                .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
-                                        aBundle = new Bundle();
-                                        aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-                                        aMessage.setData(aBundle);
-                                        aConnectionHandler.sendMessage(aMessage);
+                                        if (aCmd1 instanceof BTNotificationCommand) ; // do nothing
+                                        else {
+                                            aMessage = aConnectionHandler
+                                                    .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+                                            aBundle = new Bundle();
+                                            aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+                                            aMessage.setData(aBundle);
+                                            aConnectionHandler.sendMessage(aMessage);
+                                        }
                                     }
                                 }
                             } catch (NoWriterException e) {
@@ -409,12 +413,15 @@ public class DeviceConnection {
                                         }
                                         mBTChat.write(aCmd2.getCommandString(), aCmd2.getWriterChannelUUID());
                                     } else {
-                                        aMessage = aConnectionHandler
-                                                .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
-                                        aBundle = new Bundle();
-                                        aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-                                        aMessage.setData(aBundle);
-                                        aConnectionHandler.sendMessage(aMessage);
+                                        if (aCmd2 instanceof BTNotificationCommand) ; // do nothing
+                                        else {
+                                            aMessage = aConnectionHandler
+                                                    .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+                                            aBundle = new Bundle();
+                                            aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+                                            aMessage.setData(aBundle);
+                                            aConnectionHandler.sendMessage(aMessage);
+                                        }
                                     }
                                 }
                                 if (aCommands.getCommandList().size() == 2) {
@@ -452,12 +459,15 @@ public class DeviceConnection {
                                         }
                                         mBTChat.write(aCmd3.getCommandString(), aCmd3.getWriterChannelUUID());
                                     } else {
-                                        aMessage = aConnectionHandler
-                                                .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
-                                        aBundle = new Bundle();
-                                        aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-                                        aMessage.setData(aBundle);
-                                        aConnectionHandler.sendMessage(aMessage);
+                                        if (aCmd3 instanceof BTNotificationCommand) ; // do nothing
+                                        else {
+                                            aMessage = aConnectionHandler
+                                                    .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+                                            aBundle = new Bundle();
+                                            aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+                                            aMessage.setData(aBundle);
+                                            aConnectionHandler.sendMessage(aMessage);
+                                        }
                                     }
                                 }
                             } catch (NoWriterException e) {
@@ -496,12 +506,15 @@ public class DeviceConnection {
                                         }
                                         mBTChat.write(aCmd4.getCommandString(), aCmd4.getWriterChannelUUID());
                                     } else {
-                                        aMessage = aConnectionHandler
-                                                .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
-                                        aBundle = new Bundle();
-                                        aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
-                                        aMessage.setData(aBundle);
-                                        aConnectionHandler.sendMessage(aMessage);
+                                        if (aCmd4 instanceof BTNotificationCommand) ; // do nothing
+                                        else {
+                                            aMessage = aConnectionHandler
+                                                    .obtainMessage(GlobalSetting.MESSAGE_EXCEPTION_NO_WRITER_UUID, 1, -1);
+                                            aBundle = new Bundle();
+                                            aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+                                            aMessage.setData(aBundle);
+                                            aConnectionHandler.sendMessage(aMessage);
+                                        }
                                     }
                                 }
                             } catch (NoWriterException e) {
@@ -533,13 +546,13 @@ public class DeviceConnection {
                                     mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, aCommands.getSimulationResponsedUUID()).sendToTarget();
                             }
 
-                            mHandler.sendMessageDelayed(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1),1000);
+                            mHandler.sendMessageDelayed(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1), 1000);
                             break;
                     }
                     break;
                 case GlobalSetting.MESSAGE_STATE_CHANGE:
 
-                        Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case ClassicChatService.STATE_CONNECTED:
                             if (bTriggerConnectedAndThenSendCommand) {

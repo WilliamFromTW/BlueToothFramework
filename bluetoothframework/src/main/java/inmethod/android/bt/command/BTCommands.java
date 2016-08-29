@@ -22,7 +22,7 @@ public abstract class BTCommands {
 
 	private boolean bFinished = false;
 
-	private int iTimeout = 8;
+	private int iTimeout = 8000;
 	private IChatService aBTChat = null;
 	private CommandCallbackHandler mCallBackHandler = null;
 	private DeviceConnection aDeviceConnection = null;
