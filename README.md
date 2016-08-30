@@ -1,16 +1,17 @@
-# Android Bluetooth Framework v5.01 Released (20160621) #  
+# Android Bluetooth Framework v5.02 (20160830) #
 
-[link test](#markdown-header-testtest)    
-This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
+This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
+
+# Feature
+* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
+* [Simulation Mode](#markdown-header-how-to-start-in-simulation-mode)   
 
 # Example
 * https://bitbucket.org/inmethod/simpleblehrbandmonitor    
   Very Simple example support standard BLE Heart Rate Band    
-* https://bitbucket.org/inmethod/blehrbandmonitor    
-  Support MinBand1s , standard BLE heart Rate Band    
 
 Note:
-> This framework can not  send multiple BTCommands to slave bluetooth device  concurrently!    
+> This framework can not  send multiple BTCommands to remote bluetooth device  concurrently!    
 > It send one BTCommands at one time , other BTCommands will be queued and wait to execute!    
 
 
@@ -19,10 +20,7 @@ Note:
 
 # Operation System Requirement #
 * Android 4.3 or above
-* Android Wear 5.0 or above
-
-# Feature
-* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
+* Android Wear 5.0 or above    
 
 ## Develop Environment
 * Android Studio 2.0 or above    
@@ -264,7 +262,19 @@ public class MyBTCommands extends BTCommands {
   }
 	
 }
+<<<<<<< HEAD
 ~~~~       
-# testtest
-asdfasdf
-asdfasdf
+
+    
+    
+## How To Start In Simulation Mode ##
+*  First enable simulation   
+inmethod.android.bt.GlobalSetting.setSimulation(true);    
+or 
+inmethod.android.bt.GlobalSetting.setSimulation(true,"bluetooth advertisement data");    
+
+* set BTCommands responsed data & uuid from remote device    
+aBTCommands.setSimulationResponsedData(new byte[]{'a','b'});    
+aBTCommands.setSimulationResponsedUUID("0000fff4-0000-1000-8000-00805f9b34fb");    
+
+![SimulationMode.png](https://bitbucket.org/repo/jagqny/images/3545893162-SimulationMode.png)

@@ -6,6 +6,7 @@ import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.DeviceConnection;
 import inmethod.android.bt.handler.CommandCallbackHandler;
 import inmethod.android.bt.interfaces.IChatService;
+import inmethod.android.bt.simulation.ResponsedData;
 import inmethod.commons.util.HexAndStringConverter;
 
 /**
@@ -21,10 +22,13 @@ public abstract class BTCommands {
 
 	private boolean bFinished = false;
 
-	private int iTimeout = 8;
+	private int iTimeout = 8000;
 	private IChatService aBTChat = null;
 	private CommandCallbackHandler mCallBackHandler = null;
 	private DeviceConnection aDeviceConnection = null;
+    private byte[] byteSimulationData = null;
+	private String sSimulationUUID = null;
+	private ResponsedData aResponsedData = null;
 
 	public void setBTChat(IChatService mBTChat) {
 		aBTChat = mBTChat;
@@ -34,10 +38,62 @@ public abstract class BTCommands {
 		return aBTChat;
 	}
 
+
 	public CommandCallbackHandler getCallBackHandler()  {
 			return this.mCallBackHandler;
 	}
 
+
+	/**
+	 * set simulation data if inmethod.android.bt.GlobalSetting.setSimulation(true);
+	 * @param data
+     */
+	public void setSimulationResponsedData(byte[] data){
+		byteSimulationData = data;
+	}
+
+	/**
+	 * set simulation data if inmethod.android.bt.GlobalSetting.setSimulation(true);
+	 * @param aResponsedData
+	 */
+	public void setSimulationResponsedData(ResponsedData aResponsedData){
+		this.aResponsedData = aResponsedData;
+	}
+
+	/**
+	 *  get simulation data .
+	 *  note: if setSimulationResponsedData(byte[] data) called , will return the parameter byte data in class ResponsedData or setSimulationResponsedData(ResponsedData aResponsedData) called will return aResponsedData;
+	 * @return
+     */
+	public ResponsedData getSimulationResponsedData(){
+		if( byteSimulationData!=null) {
+			aResponsedData = new ResponsedData(byteSimulationData);
+		}
+		if(aResponsedData!=null  ){
+			return aResponsedData;
+		}
+		else{
+			aResponsedData = new ResponsedData(new byte[]{'n','o',' ','r','e','s','p','o','s','e','d',' ','d','a','t','a'});
+			return aResponsedData;
+		}
+	}
+
+
+	/**
+	 * set simulation responsed UUID string
+	 * @param sUUID
+     */
+	public void setSimulationResponsedUUID(String sUUID){
+		sSimulationUUID = sUUID;
+	}
+
+	/**
+	 * get simulation responsed UUID String
+	 * @return
+     */
+	public String getSimulationResponsedUUID(){
+		return sSimulationUUID;
+	}
 
 	/**
 	 * send extra message to remote device.

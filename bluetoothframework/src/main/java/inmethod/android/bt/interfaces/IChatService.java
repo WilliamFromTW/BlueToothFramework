@@ -79,5 +79,4 @@ public interface IChatService {
 	 * @throws NoBTReaderException
 	 */
 	public void read(Object objReaderChannel) throws NoBTReaderException;
-
 }

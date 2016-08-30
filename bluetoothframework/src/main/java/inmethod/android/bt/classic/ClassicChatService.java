@@ -653,4 +653,5 @@ public class ClassicChatService implements IChatService {
 		// TODO Auto-generated method stub
 
 	}
+
 }

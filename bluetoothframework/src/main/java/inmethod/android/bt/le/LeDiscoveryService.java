@@ -112,7 +112,7 @@ public class LeDiscoveryService implements IDiscoveryService {
         Log.d(TAG, "prepareBluetoothAdapter");
         if (mBluetoothAdapter == null) {
             try {
-                mBluetoothAdapter =BluetoothAdapter.getDefaultAdapter();
+                mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 Log.d(TAG, "prepareBLEAdapter");
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -127,7 +127,7 @@ public class LeDiscoveryService implements IDiscoveryService {
             Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
             aContext.unregisterReceiver(mReceiver);
         } catch (Exception ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
         IntentFilter state_change_filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         try {
@@ -142,7 +142,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                 if (device == null || !isRunning())
                     return;
                 /*
-				List<ScanRecord> aScanRecord = ScanRecord.parseScanRecord(scanRecord);
+                List<ScanRecord> aScanRecord = ScanRecord.parseScanRecord(scanRecord);
 				for (ScanRecord record : aScanRecord) {
 					Log.i(TAG,
 							"scan Record Length=" + record.getLength() + ",Type=0x"
@@ -152,7 +152,7 @@ public class LeDiscoveryService implements IDiscoveryService {
 
                 Log.i(TAG, "device address =" + device.getAddress() + ",device name =" + device.getName());		}
 */
-                if (filterFoundBTDevice(device.getName())||filterFoundBTDevice(device.getAddress())) {
+                if (filterFoundBTDevice(device.getName()) || filterFoundBTDevice(device.getAddress())) {
                     BTInfo aBTInfo = new BTInfo();
                     aBTInfo.setDeviceAddress(device.getAddress());
                     aBTInfo.setDeviceName(device.getName());
@@ -238,6 +238,10 @@ public class LeDiscoveryService implements IDiscoveryService {
 
         Log.d(TAG, "startDiscoveryService()");
         bRun = true;
+        if( GlobalSetting.getSimulation()){
+            mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
+            return;
+        }
         if (!prepareBluetoothAdapter()) {
             this.stopService();
         } else {
@@ -258,10 +262,13 @@ public class LeDiscoveryService implements IDiscoveryService {
         bDeviceFound = false;
         if (aOnlineDeviceList != null)
             aOnlineDeviceList.clear();
-        if (isDiscovering)
+        if (isDiscovering & !GlobalSetting.getSimulation())
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         isDiscovering = false;
         bCancelDiscovery = true;
+        if( GlobalSetting.getSimulation()){
+            return;
+        }
         try {
             Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
             aContext.unregisterReceiver(mReceiver);
@@ -281,6 +288,11 @@ public class LeDiscoveryService implements IDiscoveryService {
     }
 
     public void cancelDiscovery() {
+        if (GlobalSetting.getSimulation()) {
+            isDiscovering = false;
+            return;
+        }
+
         if (!isRunning()) return;
         if (mBluetoothAdapter != null) {
             bCancelDiscovery = true;
@@ -303,6 +315,31 @@ public class LeDiscoveryService implements IDiscoveryService {
      * discovery manually
      */
     public void doDiscovery() {
+        if (GlobalSetting.getSimulation()) {
+            bDeviceFound = false;
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    BTInfo aBTInfo = new BTInfo();
+                    aBTInfo.setDeviceAddress("A1:A2:A3:A4:A5:A6");
+                    aBTInfo.setDeviceName("BleSimulation");
+                    aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE);
+                    aBTInfo.setAdvertisementData(GlobalSetting.getSimulationAdvertisement());
+                    boolean bFound = true;
+                    aOnlineDeviceList.add(aBTInfo);
+                    bDeviceFound = true;
+                    Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
+                    Bundle bundle = new Bundle();
+                    aOneOnlineDeviceList.clear();
+                    aOneOnlineDeviceList.add(aBTInfo);
+                    bundle.putParcelableArrayList(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST,  aOneOnlineDeviceList);
+                    msg.setData(bundle);
+                    mHandler.sendMessage(msg);
+                    mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
+                }
+            }, 1000);
+            return;
+        }
         bDeviceFound = false;
         aOnlineDeviceList.clear();
         if (mBluetoothAdapter != null) {
@@ -360,8 +397,8 @@ public class LeDiscoveryService implements IDiscoveryService {
      * @return
      */
     private boolean filterFoundBTDevice(String sBTName) {
-        if( sBTName==null) return false;
-        String sLocalBTName = sBTName.replace(":","");
+        if (sBTName == null) return false;
+        String sLocalBTName = sBTName.replace(":", "");
 
         if (sLocalBTName != null) {
             if (aFilter != null) {

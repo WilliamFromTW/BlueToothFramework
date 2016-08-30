@@ -2,8 +2,10 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "5.01";
+	public static final String VERSION = "5.0.2";
 
+	private static boolean enable_simulation = false;
+	private static byte[] byteAdvertisementData = null;
 	public static final int MESSAGE_STATE_CHANGE = 1;
 	public static final int MESSAGE_READ = 2;
 	public static final int MESSAGE_WRITE = 3;
@@ -93,4 +95,25 @@ public class GlobalSetting {
 	public static final String DEVICE_INFORMATION_FIRMWARE_REVISION_UUID = "00002a26-0000-1000-8000-00805f9b34fb";
 
 
+	/**
+	 *   Note: only for ble device
+	 *  IDiscoveryService , IChatService , DeviceConnection become simulation mode.
+	 *  allway found & connecti success
+	 * @param status
+     */
+	public static void setSimulation(boolean status){
+		setSimulation(status,null);
+	}
+
+	public static void setSimulation(boolean status,byte[] advertisementData){
+		enable_simulation = status;
+		byteAdvertisementData = advertisementData;
+	}
+
+	public static boolean getSimulation(){
+		return enable_simulation;
+	}
+	public static byte[] getSimulationAdvertisement(){
+		return byteAdvertisementData;
+	}
 }
