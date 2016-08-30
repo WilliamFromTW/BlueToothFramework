@@ -1,5 +1,6 @@
-# Android Bluetooth Framework v5.01 Released (20160621) #
+# Android Bluetooth Framework v5.01 Released (20160621) #  
 
+[link test](#test-test)    
 This Framework is designed for Handheld APP to communicate with slave Bluetooth device easily.
 
 # Example
@@ -263,4 +264,7 @@ public class MyBTCommands extends BTCommands {
   }
 	
 }
-~~~~
+~~~~    
+#test test
+asdfasdf
+asdfasdf
