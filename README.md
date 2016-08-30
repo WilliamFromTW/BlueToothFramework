@@ -4,7 +4,7 @@ This Framework is designed for Handheld APP to communicate with Bluetooth device
 
 # Feature
 * Support Classic Bluetooth(SPP) and Bluetooth Low Energy
-* [Simulation Mode](#markdown-header-How-To-Start-In-Simulation-Mode)   
+* [Simulation Mode](#markdown-header-how-to-start-in-simulation-mode)   
 
 # Example
 * https://bitbucket.org/inmethod/simpleblehrbandmonitor    
@@ -264,8 +264,9 @@ public class MyBTCommands extends BTCommands {
 }
 ~~~~    
 
-
-## How To Start In Simulation Mode ##    
+    
+    
+## How To Start In Simulation Mode ##
 *  First enable simulation   
 inmethod.android.bt.GlobalSetting.setSimulation(true);    
 or 
