@@ -1,6 +1,10 @@
-# Android Bluetooth Framework v5.02 beta (20160825) #
+# Android Bluetooth Framework v5.02 (20160830) #
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
+
+# Feature
+* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
+* [Simulation Mode](#markdown-header-How-To-Start-In-Simulation-Mode)   
 
 # Example
 * https://bitbucket.org/inmethod/simpleblehrbandmonitor    
@@ -16,11 +20,7 @@ Note:
 
 # Operation System Requirement #
 * Android 4.3 or above
-* Android Wear 5.0 or above
-
-# Feature
-* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
-* Simulation Mode   
+* Android Wear 5.0 or above    
 
 ## Develop Environment
 * Android Studio 2.0 or above    
