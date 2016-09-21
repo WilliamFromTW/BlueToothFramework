@@ -17,16 +17,16 @@ public class CommandCallbackHandler extends Handler {
 	public void handleMessage(Message msg) {
 		switch (msg.what) {
 		default:
-			handleCommandResponseMessage(msg);
+			handleCommandResponsedMessage(msg);
 			break;
 		}
 	}
 
 	/**
 	 * handler extra message
-	 * 
+	 *
 	 * @param msg
 	 */
-	public  void handleCommandResponseMessage(Message msg){}
+	public  void handleCommandResponsedMessage(Message msg){}
 
 }

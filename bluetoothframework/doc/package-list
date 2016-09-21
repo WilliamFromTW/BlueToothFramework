@@ -1,0 +1,9 @@
+inmethod.android.bt
+inmethod.android.bt.classic
+inmethod.android.bt.command
+inmethod.android.bt.exception
+inmethod.android.bt.handler
+inmethod.android.bt.interfaces
+inmethod.android.bt.le
+inmethod.android.bt.simulation
+inmethod.commons.util

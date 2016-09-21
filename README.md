@@ -1,31 +1,31 @@
-# Android Bluetooth Framework v5.02 (20160830) #
+# Android Bluetooth Framework v5.1.0 (20160921)   
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
-# Feature
-* Support Classic Bluetooth(SPP) and Bluetooth Low Energy
-* [Simulation Mode](#markdown-header-how-to-start-in-simulation-mode)   
+# Feature    
+* Support Classic Bluetooth(SPP) and Bluetooth Low Energy    
+* [Simulation Mode](#markdown-header-how-to-start-in-simulation-mode)       
 
-# Example
+# Example    
 * https://bitbucket.org/inmethod/simpleblehrbandmonitor    
-  Very Simple example support standard BLE Heart Rate Band    
+  Very Simple example support standard BLE Heart Rate Band       
 
 Note:
 > This framework can not  send multiple BTCommands to remote bluetooth device  concurrently!    
 > It send one BTCommands at one time , other BTCommands will be queued and wait to execute!    
 
 
-# Simple sequence diagram
-![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3752253336-SimpleFramework.png)
+# Simple sequence diagram    
+![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3941352110-SimpleFramework.png)
 
-# Operation System Requirement #
-* Android 4.3 or above
-* Android Wear 5.0 or above    
+# Operation System Requirement    
+* Android 4.3 or above    
+* Android Wear 5.0 or above      
 
-## Develop Environment
-* Android Studio 2.0 or above    
+## Develop Environment    
+* Android Studio 2.2 or above      
 
-# Premission Requirement #
+# Premission Requirement     
 
 ~~~~
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -34,10 +34,10 @@ Note:
 ~~~~
 
 ACCESS_COARSE_LOCATION is run-time permission (android M or above)     
-NOTE:
+NOTE:    
 > Android device should enable Location Service or it won't work even grant ACCESS_COARSE_LOCATION permission    
 
-#### For example  ####
+#### For example    
 
 ~~~~
   public void onCreate(Bundle savedInstanceState) {
@@ -74,12 +74,13 @@ NOTE:
   }  
 ~~~~
 
-## How To Use This  Framework ##
+## How To Implement This  Framework        
+1.  [Discovery BlueTooth Device](#markdown-header-discovery-blueTooth-device)            
+2.  [Connect device](#markdown-header-connect-device)        
+3.  [Send your costomized BTCommands](#markdown-header-send-your-costomized-btcommands)      
 
-There are 3 Sections
 
-* Section 1
- Discovery Slave BlueTooth Device    
+#### Discovery BlueTooth Device        
 
 ~~~~
    // Get discovery service instance
@@ -87,7 +88,7 @@ There are 3 Sections
 
    // Set discovery filter
    Vector<String> aBlueToothDeviceNameFilter = new Vector<String>();
-   aBlueToothDeviceNameFilter.add(<SLAVE DEVICE NAME>);
+   aBlueToothDeviceNameFilter.add(< DEVICE NAME>);
    aIBlueToothDiscoveryService.setBlueToothDeviceNameFilter(aBlueToothDeviceNameFilter);
 
    // Set CallBack handler
@@ -139,10 +140,9 @@ There are 3 Sections
 
 ~~~~
 
-* Section 2   
-  Connect to slave device.    
+#### Connect device        
      
-  When slave bluetooth device found in Section 1 , app can get device information (BTInfo) and try to connect device.
+  When bluetooth device found in Step 1 , app can get device information (BTInfo) and try to connect device.
 
 ~~~~
  // Set Device Notification or Indicator UUID ()
@@ -161,32 +161,33 @@ There are 3 Sections
 
  public static class MyBlueToothConnectionCallbackHandler extends ConnectionCallbackHandler {
 
- @Override
- public void DeviceConnected(BTInfo aBTInfo) {
+   @Override
+   public void DeviceConnected(BTInfo aBTInfo) {
     Toast.makeText(activity, "Device Connected", Toast.LENGTH_SHORT).show();
- }
+   }
 
- @Override
- public void DeviceConnectionLost(BTInfo aBTInfo) {
+   @Override
+   public void DeviceConnectionLost(BTInfo aBTInfo) {
      Toast.makeText(activity, "Connection lost!", Toast.LENGTH_SHORT).show();
   }
 
- @Override
- public void NotificationEnableFail(BTInfo arg0, String sErrorMessage) {
+   @Override
+   public void NotificationEnableFail(BTInfo arg0, String sErrorMessage) {
      Log.d(TAG, "NotificationEnableFail");
- }
+   }
 
- @Override
- public void NotificationEnabled(BTInfo aBTInfo, String sReaderUUID) {
+   @Override
+   public void NotificationEnabled(BTInfo aBTInfo, String sReaderUUID) {
     Log.d(TAG, "NotificationEnabled sReaderUUID=" + sReaderUUID);
- }
+   }
+ }  
 ~~~~
 
-* Section 3
-  Send "BTCommands" to Device and receive response data
+#### Send your costomized BTCommands    
+  Send Your costomized BTCommands to Device and receive responsed data
   
-  In Section 2, Device connected will trigger callback method "DeviceNotificationOrIndicatorEnableSuccess" , we can send "BTCommands" to device.    
-  If device response data , callback method "handleCommandResponseMessage()" will be triggered.    
+  In Step 2, Device connected will trigger callback method "DeviceNotificationOrIndicatorEnableSuccess" , we can send our costomized "BTCommands" to device.    
+  If device responsed data , callback method "handleCommandResponsedMessage()" will be triggered.    
 
 ~~~~
   BTCommands aBTCommands = new MyBTCommands();
@@ -197,7 +198,7 @@ There are 3 Sections
   public class MyBlueToothCommandCallbackHandler extends inmethod.android.bt.handler.CommandCallbackHandler {   
   
       @Override
-      public void handleCommandResponseMessage(Message msg) {
+      public void handleCommandResponsedMessage(Message msg) {
         switch(msg.what){
           <MyBTCommands's msg.what>:  // see BTCommands example below 
           break;
@@ -207,7 +208,7 @@ There are 3 Sections
   }
 ~~~~
 
-* BTCommands example
+#### How to create your customized BTCommands    
 
 ~~~~
 
@@ -262,19 +263,18 @@ public class MyBTCommands extends BTCommands {
   }
 	
 }
-<<<<<<< HEAD
 ~~~~       
 
     
     
-## How To Start In Simulation Mode ##
-*  First enable simulation   
+## How To Start In Simulation Mode         
+*  To enable simulation   
 inmethod.android.bt.GlobalSetting.setSimulation(true);    
-or 
-inmethod.android.bt.GlobalSetting.setSimulation(true,"bluetooth advertisement data");    
+or     
+inmethod.android.bt.GlobalSetting.setSimulation(true,"bluetooth advertisement data");        
 
-* set BTCommands responsed data & uuid from remote device    
+* Setup BTCommands responsed data & notification uuid from remote device     
+aBTCommands.setSimulationNotificationUUID("0000xxxx-0000-1000-8000-00805f9b34fb");    
 aBTCommands.setSimulationResponsedData(new byte[]{'a','b'});    
-aBTCommands.setSimulationResponsedUUID("0000fff4-0000-1000-8000-00805f9b34fb");    
 
-![SimulationMode.png](https://bitbucket.org/repo/jagqny/images/3545893162-SimulationMode.png)
+![SimulationMode.png](https://bitbucket.org/repo/jagqny/images/1533568211-BTCommands2.png)

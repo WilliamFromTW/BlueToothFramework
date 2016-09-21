@@ -80,21 +80,39 @@ public abstract class BTCommands {
 
 
 	/**
-	 * set simulation responsed UUID string
+	 * set simulation notification UUID string
+	 * @deprecated  use setSimulationNotificationUUID instead of setSimulationResponsedUUID
 	 * @param sUUID
      */
 	public void setSimulationResponsedUUID(String sUUID){
-		sSimulationUUID = sUUID;
+		setSimulationNotificationUUID(sUUID);
 	}
 
 	/**
-	 * get simulation responsed UUID String
+	 * set simulation notification UUID string
+	 * @param sUUID
+	 */
+	public void setSimulationNotificationUUID(String sUUID){
+		sSimulationUUID = sUUID;
+	}
+
+
+	/**
+	 * get simulation notification UUID
+	 * @deprecated  use getsSimulationNotificationUUID instead of getSimulationResponsedUUID
 	 * @return
      */
 	public String getSimulationResponsedUUID(){
-		return sSimulationUUID;
+		return getsSimulationNotificationUUID();
 	}
 
+	/**
+	 * get simulation notification UUID
+	 * @return
+	 */
+	public String getsSimulationNotificationUUID(){
+		return sSimulationUUID;
+	}
 	/**
 	 * send extra message to remote device.
 	 * 
