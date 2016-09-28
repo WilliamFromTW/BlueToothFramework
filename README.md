@@ -277,4 +277,4 @@ inmethod.android.bt.GlobalSetting.setSimulation(true,"bluetooth advertisement da
 aBTCommands.setSimulationNotificationUUID("0000xxxx-0000-1000-8000-00805f9b34fb");    
 aBTCommands.setSimulationResponsedData(new byte[]{'a','b'});    
 
-![SimulationMode.png](https://bitbucket.org/repo/jagqny/images/1533568211-BTCommands2.png)
+![SimulationMode.png](https://bitbucket.org/repo/jagqny/images/1273069560-SimulationMode.png)
