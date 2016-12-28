@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.1.0 (20160921)   
+# Android Bluetooth Framework v5.1.1 (20161228)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -94,6 +94,9 @@ NOTE:
    // Set CallBack handler
    aIBlueToothDiscoveryService.setCallBackHandler(new MyBlueToothDiscoveryServiceCallbackHandler());
 
+ // set scan time out , default is 12000 milliseconds
+ aIBlueToothDiscoveryService.setScanTimeout(12000);
+
    try {
      // start service will trigger method "StartDiscoveryServiceSuccess()" in BlueToothDiscoveryServiceCallbackHandler
      aIBlueToothDiscoveryService.startService();
@@ -155,6 +158,9 @@ NOTE:
 
  // Create connection object and setup connection call back handler
  DeviceConnection aBlueToothDeviceConnection = new DeviceConnection(aBTInfo, activity, aIBlueToothChatService, new MyBlueToothConnectionCallbackHandler());
+
+//  set nofity or indicator after  specify delay time when device connected (default delay time is 200 milliseconds)
+aBlueToothDeviceConnection.setNotifyOrIndicatorDelayTime(200);
 
  // connect to device
  aBlueToothDeviceConnection.connect();
