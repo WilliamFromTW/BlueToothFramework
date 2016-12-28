@@ -39,7 +39,7 @@ public class DeviceConnection {
     private Thread aWatchDogThread = null;
     private Context aContext = null;
     private Runnable rTimeout = null;
-
+    private boolean bEnableGetAllResponsedData = false;
     private DeviceConnection() {
     }
 
@@ -59,6 +59,15 @@ public class DeviceConnection {
         mBTChat = aBTChat;
         mBTChat.setHandler(mHandler);
         mBTChat.start();
+    }
+
+    /**
+     *  if enable will trigger  ConnectionCallbackHandler.responsedData(BTInfo aBTInfo, byte rawData, String sUUID)  to sniffer all responsed data.
+     *  default is disabled
+     * @param bEnable
+     */
+    public void enableGetAllResponsedData(boolean bEnable){
+        bEnableGetAllResponsedData = bEnable;
     }
 
     /**
@@ -606,12 +615,14 @@ public class DeviceConnection {
                         aMessage.setData(aBundle);
                         aConnectionHandler.sendMessage(aMessage);
                     }
-                    aRawMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_RAW_DATA, msg.arg1, -1);
-                    aBundle = new Bundle();
-                    if (msg.obj != null)
-                        aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
-                    aRawMessage.setData(aBundle);
-                    aConnectionHandler.sendMessage(aRawMessage);
+                    if( bEnableGetAllResponsedData) {
+                        aRawMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_RAW_DATA, msg.arg1, -1);
+                        aBundle = new Bundle();
+                        if (msg.obj != null)
+                            aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING, msg.obj.toString());
+                        aRawMessage.setData(aBundle);
+                        aConnectionHandler.sendMessage(aRawMessage);
+                    }
                     break;
                 case GlobalSetting.MESSAGE_DEVICE_NAME:
                     break;
@@ -672,4 +683,11 @@ public class DeviceConnection {
         }
     };
 
+    /**
+     * set nofity or indicator after  specify delay time when device connected
+     * @param iMilliseconds
+     */
+    public void setNotifyOrIndicatorDelayTime(int iMilliseconds){
+        mBTChat.setNotifyOrIndicatorDelayTime(iMilliseconds);
+    }
 }

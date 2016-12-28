@@ -125,6 +125,24 @@ public class ClassicDiscoveryService implements IDiscoveryService {
 	}
 
 	/**
+	 * no use in classic bluetooth.
+	 * @param iMilliseconds
+     */
+	@Override
+	public void setScanTimeout(int iMilliseconds) {
+
+	}
+
+	/**
+	 *  no use in classic bluetooth
+	 * @return
+     */
+	@Override
+	public int getScanTimeout() {
+		return 0;
+	}
+
+	/**
 	 * check bluetooth device is enable or disable.
 	 * 
 	 * @return

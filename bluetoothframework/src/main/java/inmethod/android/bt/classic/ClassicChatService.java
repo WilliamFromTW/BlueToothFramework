@@ -654,4 +654,22 @@ public class ClassicChatService implements IChatService {
 
 	}
 
+	/**
+	 *  no use for classic bluetooth.
+	 * @param iMilliseconds
+     */
+	@Override
+	public void setNotifyOrIndicatorDelayTime(int iMilliseconds) {
+
+	}
+
+	/**
+	 * *  no use for classic bluetooth
+	 * @return
+     */
+	@Override
+	public int getNotifyOrIndicatorDelayTime() {
+		return 0;
+	}
+
 }

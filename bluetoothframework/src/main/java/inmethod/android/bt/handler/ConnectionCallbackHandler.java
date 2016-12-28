@@ -105,7 +105,7 @@ public abstract class ConnectionCallbackHandler extends Handler {
 
 
 	/**
-	 * All responseNotification or indicator data
+	 * All responsed data from Notification or indicator characteristic
 	 *
 	 * @param aBTInfo
 	 * @param rawData byte data

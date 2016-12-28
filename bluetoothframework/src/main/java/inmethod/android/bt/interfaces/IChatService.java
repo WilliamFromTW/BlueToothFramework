@@ -79,4 +79,17 @@ public interface IChatService {
 	 * @throws NoBTReaderException
 	 */
 	public void read(Object objReaderChannel) throws NoBTReaderException;
+
+	/**
+	 * set nofity or indicator after  specify delay time when device connected
+	 * only for BLE.
+	 * @param iMilliseconds
+     */
+	public void setNotifyOrIndicatorDelayTime(int iMilliseconds);
+
+	/**
+	 * only for BLE
+	 * @return
+     */
+	public int getNotifyOrIndicatorDelayTime();
 }

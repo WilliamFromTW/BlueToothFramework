@@ -35,8 +35,11 @@ public class LeDiscoveryService implements IDiscoveryService {
     protected ArrayList<BTInfo> aOneOnlineDeviceList = new ArrayList<BTInfo>();
     protected BTInfo aBTInfo = null;
 
+
+    private static int iScanTimeoutMilliseconds = 12000;
+
     protected boolean bDeviceFound = false;
-    public static LeDiscoveryService aLeDiscoveryService = null;
+    private static LeDiscoveryService aLeDiscoveryService = null;
 
     private boolean isDiscovering = false;
     private boolean bCancelDiscovery = false;
@@ -47,7 +50,21 @@ public class LeDiscoveryService implements IDiscoveryService {
     private LeDiscoveryService() {
     }
 
-    ;
+    /**
+     * Discovery timeout default is 12000.
+     * @param iMilliseconds
+     */
+    public void setScanTimeout(int iMilliseconds){
+       iScanTimeoutMilliseconds = iMilliseconds;
+    }
+
+    /**
+     * get discovery timeout milliseconds , default is 12000.
+     * @return
+     */
+    public int getScanTimeout(){
+      return iScanTimeoutMilliseconds;
+    };
 
     /**
      * Singleton Class
@@ -373,7 +390,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                     }
                     mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
                 }
-            }, 12000);
+            }, iScanTimeoutMilliseconds);
         } catch (Exception ee) {
             ee.printStackTrace();
         }

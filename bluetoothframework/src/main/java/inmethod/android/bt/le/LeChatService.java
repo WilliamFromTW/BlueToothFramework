@@ -18,6 +18,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -25,7 +26,6 @@ import inmethod.android.bt.GlobalSetting;
 import inmethod.android.bt.exception.NoBTReaderException;
 import inmethod.android.bt.exception.NoWriterException;
 import inmethod.android.bt.interfaces.IChatService;
-import inmethod.commons.util.HexAndStringConverter;
 
 /**
  *
@@ -66,6 +66,25 @@ public class LeChatService implements IChatService {
     private Queue<Object> sWriteQueue = new ConcurrentLinkedQueue<Object>();
     private boolean bSimulationBluetoothGattObject = true;
     private String sSimulationResponsedUUID = null;
+
+    private static int iNotifyOrIndicatorDelayMilliseconds = 200;
+
+    private class NotifyOrIndicatorDelayRunnable implements Runnable {
+        private BluetoothGattCharacteristic temp;
+        public void run() {
+            if (isCharacterisiticNotifiable(temp)) {
+            setCharacteristicNotification(temp, true);
+        }
+            if (isCharacterisiticIndicator(temp))
+                setCharacteristicIndicator(temp, true);
+        }
+
+        public NotifyOrIndicatorDelayRunnable(BluetoothGattCharacteristic a){
+            temp = a;
+        }
+
+    }
+
     /**
      * @param adapter
      * @param context
@@ -244,15 +263,15 @@ public class LeChatService implements IChatService {
                         ex.printStackTrace();
                     }
                     Log.i(TAG, "Disconnected from GATT server.");
-                } else if (newState == BluetoothProfile.STATE_CONNECTED && mState != STATE_CONNECTED) {
+                } else if ( status == BluetoothGatt.GATT_SUCCESS  && newState == BluetoothProfile.STATE_CONNECTED && mState != STATE_CONNECTED) {
                     // Attempts to discover services after successful
                     // connection.
                     mBluetoothAdapter.cancelDiscovery();
                     mState = STATE_CONNECTED;
                     setState(STATE_CONNECTED);
 
-                    Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:" + gatt.discoverServices());
-                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                     Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:" + gatt.discoverServices());
+                } else if ( status == BluetoothGatt.GATT_SUCCESS  && newState == BluetoothProfile.STATE_DISCONNECTED) {
                     mState = STATE_DISCONNECTED;
                     setState(mState);
                     try {
@@ -295,15 +314,14 @@ public class LeChatService implements IChatService {
 
                         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
                             //			Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
-                            allCharacteristic.put(characteristic.getUuid().toString().toUpperCase(), characteristic);
+                            allCharacteristic.put(characteristic.getUuid().toString().toUpperCase(), characteristic );
                             if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
                                     && aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
                                 for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
                                     if (characteristic.getUuid().toString().equalsIgnoreCase(sUUID)) {
-                                        if (isCharacterisiticNotifiable(characteristic))
-                                            setCharacteristicNotification(characteristic, true);
-                                        if (isCharacterisiticIndicator(characteristic))
-                                            setCharacteristicIndicator(characteristic, true);
+
+                                        Handler aHandler  = new Handler(Looper.getMainLooper());
+                                        aHandler.postDelayed( new  NotifyOrIndicatorDelayRunnable(characteristic), iNotifyOrIndicatorDelayMilliseconds);
                                     }
                                 }
                             }
@@ -491,6 +509,20 @@ public class LeChatService implements IChatService {
             throw new NoBTReaderException("writer is null or unexpected error! =" + objReaderChannel);
         }
 
+    }
+
+    /**
+     * set nofity or indicator after  specify delay time when device connected , default is 200 milliseconds.
+     * @param iMilliseconds
+     */
+    @Override
+    public void setNotifyOrIndicatorDelayTime(int iMilliseconds) {
+        iNotifyOrIndicatorDelayMilliseconds = iMilliseconds;
+    }
+
+    @Override
+    public int getNotifyOrIndicatorDelayTime() {
+        return iNotifyOrIndicatorDelayMilliseconds;
     }
 
 }

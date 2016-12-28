@@ -107,4 +107,16 @@ public interface IDiscoveryService {
 	 */
 	public void useBLEonly(boolean bBLE);
 
+	/**
+	 * for ble only.
+	 * @param iMilliseconds
+     */
+	public void setScanTimeout(int iMilliseconds);
+
+	/**
+	 *  for ble only
+	 * @return
+     */
+	public int getScanTimeout();
+
 }
