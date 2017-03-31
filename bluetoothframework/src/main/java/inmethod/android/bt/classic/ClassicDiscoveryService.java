@@ -276,9 +276,8 @@ public class ClassicDiscoveryService implements IDiscoveryService {
 				this.stopService();
 			else {
 				if (!mBluetoothAdapter.isEnabled()) {
+					clearData();
 					mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE).sendToTarget();
-					mBluetoothAdapter.enable();
-
 				} else {
 					mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
 				}

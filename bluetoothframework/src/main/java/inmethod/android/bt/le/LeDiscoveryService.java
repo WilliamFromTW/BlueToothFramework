@@ -263,8 +263,8 @@ public class LeDiscoveryService implements IDiscoveryService {
             this.stopService();
         } else {
             if (!mBluetoothAdapter.isEnabled()) {
+                clearData();
                 mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE).sendToTarget();
-                mBluetoothAdapter.enable();
             } else {
                 mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
             }
@@ -466,17 +466,21 @@ public class LeDiscoveryService implements IDiscoveryService {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_TURNING_OFF:
-                        Log.i(TAG, "Bluetooth off!");
+                        Log.i(TAG, "Bluetooth Turning off!");
+                        mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF).sendToTarget();
+                        if (LeDiscoveryService.this.isRunning()) {
+                            LeDiscoveryService.this.stopService();
+                        }
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        Log.i(TAG, "Bluetooth on!");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.i(TAG, "Bluetooth Turning on!");
                         try {
                             mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
                         break;
                 }
             }

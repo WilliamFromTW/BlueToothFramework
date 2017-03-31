@@ -19,12 +19,14 @@ public abstract class ConnectionCallbackHandler extends Handler {
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
 			DeviceConnected(aInfo);
+			DeviceConnectionStatus(true,aInfo);
 			break;
 		case GlobalSetting.MESSAGE_CONNECTION_FAIL:
 		case GlobalSetting.MESSAGE_CONNECTION_LOST:
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
 			DeviceConnectionLost(aInfo);
+			DeviceConnectionStatus(false,aInfo);
 			break;
 		case GlobalSetting.MESSAGE_EXCEPTION_NO_READER_UUID:
 			aBundle = msg.getData();
@@ -61,11 +63,13 @@ public abstract class ConnectionCallbackHandler extends Handler {
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
 			NotificationEnabled(aInfo,aBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			NotificationStatus(true,aInfo,aBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 			break;
 		case GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
 			aBundle = msg.getData();
 			aInfo = aBundle.getParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO);
 			NotificationEnableFail(aInfo,aBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
+			NotificationStatus(false,aInfo,aBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
 			break;
 			default:
 				handleExtraMessage(msg);
@@ -117,17 +121,19 @@ public abstract class ConnectionCallbackHandler extends Handler {
 
 	/**
 	 * Device is connected!
-	 * 
+	 * @deprecated  use DeviceConnectionStatus(true,BTInfo aBTInfo) instead of
 	 * @param aBTInfo
 	 */
-	public abstract void DeviceConnected(BTInfo aBTInfo);
+	public void DeviceConnected(BTInfo aBTInfo){};
 
 	/**
 	 * Device connection lost!
-	 * 
+	 * @deprecated  use DeviceConnectionStatus(false,BTInfo aBTInfo) instead of
 	 * @param aBTInfo
 	 */
-	public abstract void DeviceConnectionLost(BTInfo aBTInfo);
+	public void DeviceConnectionLost(BTInfo aBTInfo){};
+
+	public void DeviceConnectionStatus(boolean status,BTInfo aBTInfo){};
 
 	/**
 	 * handle unknown exception
@@ -138,6 +144,7 @@ public abstract class ConnectionCallbackHandler extends Handler {
 
 	/**
 	 * If BLE device set notification or indicator success , than trigger this method
+	 * @deprecated  use NotificationStatus(true,BTInfo aBTInfo, String sUUID) instead of.
 	 * @param aBTInfo
 	 * @param sUUID
      */
@@ -145,8 +152,20 @@ public abstract class ConnectionCallbackHandler extends Handler {
 
 	/**
 	 * If BLE device set notification or indicator fail , than trigger this method
+	 * @deprecated  use NotificationStatus(false,BTInfo aBTInfo, String sUUID) instead of.
 	 * @param aBTInfo
 	 * @param sUUID
      */
 	public void NotificationEnableFail(BTInfo aBTInfo, String sUUID){};
+
+
+	/**
+	 * next big version (6.0.0) must set abstract
+	 * @param Status
+	 * @param aBTInfo
+	 * @param sUUID
+	 */
+	public void NotificationStatus(boolean Status,BTInfo aBTInfo, String sUUID){
+
+	}
 }

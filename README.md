@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v5.1.1 (20161228)
+# Android Bluetooth Framework v5.2.0 (20170331)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -12,7 +12,7 @@ This Framework is designed for Handheld APP to communicate with Bluetooth device
 
 Note:
 > This framework can not  send multiple BTCommands to remote bluetooth device  concurrently!    
-> It send one BTCommands at one time , other BTCommands will be queued and wait to execute!    
+> BTCommands will be queued and wait to be executed!
 
 
 # Simple sequence diagram    
