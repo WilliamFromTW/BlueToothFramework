@@ -94,8 +94,8 @@ NOTE:
    // Set CallBack handler
    aIBlueToothDiscoveryService.setCallBackHandler(new MyBlueToothDiscoveryServiceCallbackHandler());
 
- // set scan time out , default is 12000 milliseconds
- aIBlueToothDiscoveryService.setScanTimeout(12000);
+   // set scan time out , default is 12000 milliseconds
+   aIBlueToothDiscoveryService.setScanTimeout(12000);
 
    try {
      // start service will trigger method "StartDiscoveryServiceSuccess()" in BlueToothDiscoveryServiceCallbackHandler
@@ -106,37 +106,35 @@ NOTE:
 
    public static class MyBlueToothDiscoveryServiceCallbackHandler extends BlueToothDiscoveryServiceCallbackHandler {
 
-        /*
-		 * Online Device Not Found ! After IBlueToothDiscoveryService.doDiscovery()
-		 */
         @Override
-        public void OnlineDeviceNotFound() {
-            Log.d(TAG, "device not found!");
-            Toast.makeText(activity, "device not found!", Toast.LENGTH_SHORT).show();
+        public void StartServiceStatus(boolean bStatus , int iCode) {
+          if(bStatus && iCode==DiscoveryServiceCallbackHandler.START_SERVICE_SUCCESS){
+            Log.d(TAG, "StartDiscoveryServiceSuccess!");
+            if (aIBlueToothDiscoveryService.isRunning())  aIBlueToothDiscoveryService.doDiscovery();
+          }else if(!bStatus && iCode==DiscoveryServiceCallbackHandler.START_SERVICE_BLUETOOTH_NOT_ENABLE){
+            Toast.makeText(activity, "SERVICE_BLUETOOTH_NOT_ENABLE ", Toast.LENGTH_SHORT).show();
+          }
         }
 
-        /*
-		 * Online Device Found ! after IBlueToothDiscoveryService.doDiscovery()
-         * @see IBlueToothDiscoveryService.doDiscovery()
-         */
         @Override
-        public void getOnlineDevice(BTInfo aBTInfo) {
+        public void DeviceDiscoveryStatus(boolean bStatus, BTInfo aBTInfo) {
+          if(bStatus){
             // cancel discovery
             aIBlueToothDiscoveryService.cancelDiscovery();
-            Toast.makeText(activity, "device found ! Name = " + aBTInfo.getDeviceName() + ", Address=" + aBTInfo.getDeviceAddress(), Toast.LENGTH_SHORT).show();
+            // enable notification
+            ArrayList<String> aNotificationUUIDArray = new ArrayList<String>();
+            aNotificationUUIDArray.add("your notification uuid");
+            aIBlueToothChatService = new LeChatService(BluetoothAdapter.getDefaultAdapter(),    activity , aNotificationUUIDArray);
+            // create new connection object and set up call back handler
+            aBlueToothDeviceConnection = new DeviceConnection(aBTInfo, activity, aIBlueToothChatService, new MyBlueToothConnectionCallbackHandler());
+            // Connect to device
+            aBlueToothDeviceConnection.connect();
+            Toast.makeText(activity, "device=" + aBTInfo.getDeviceName() + ",address=" + aBTInfo.getDeviceAddress(), Toast.LENGTH_SHORT).show();
 
-        }
-
-        /*
-         *
-         * @see
-         * inmethod.android.bt.handler.BlueToothDiscoveryServiceCallbackHandler#StartServiceSuccess()
-         */
-        @Override
-        public void StartServiceSuccess() {
-            Log.d(TAG, "StartDiscoveryServiceSuccess!");
-            // doDiscovery will discovery slave device and trigger OnlineDeviceNotFound() or getOnlineDevice(BTInfo)
-            aIBlueToothDiscoveryService.doDiscovery();
+          }else if(!bStatus){
+            Log.d(TAG, "device not found!");
+            Toast.makeText(activity, "device not found!", Toast.LENGTH_SHORT).show();
+          }
         }
 
     }   
@@ -168,23 +166,35 @@ aBlueToothDeviceConnection.setNotifyOrIndicatorDelayTime(200);
  public static class MyBlueToothConnectionCallbackHandler extends ConnectionCallbackHandler {
 
    @Override
-   public void DeviceConnected(BTInfo aBTInfo) {
-    Toast.makeText(activity, "Device Connected", Toast.LENGTH_SHORT).show();
-   }
+   public void DeviceConnectionStatus(boolean bStatus, BTInfo aBTInfo) {
 
-   @Override
-   public void DeviceConnectionLost(BTInfo aBTInfo) {
-     Toast.makeText(activity, "Connection lost!", Toast.LENGTH_SHORT).show();
+     if(bStatus){
+       Toast.makeText(activity, "Device Connected", Toast.LENGTH_SHORT).show();
+     }else{
+       Toast.makeText(activity, "Connection lost!", Toast.LENGTH_SHORT).show();
+       if (aBlueToothDeviceConnection != null && aBlueToothDeviceConnection.isConnected()) {
+         Log.d(TAG, "stop connection!");
+         aBlueToothDeviceConnection.stop();
+       }
+     }
   }
 
-   @Override
-   public void NotificationEnableFail(BTInfo arg0, String sErrorMessage) {
-     Log.d(TAG, "NotificationEnableFail");
-   }
-
-   @Override
-   public void NotificationEnabled(BTInfo aBTInfo, String sReaderUUID) {
-    Log.d(TAG, "NotificationEnabled sReaderUUID=" + sReaderUUID);
+    @Override
+    public void NotificationStatus(boolean bStatus,BTInfo aBTInfo, String sNotificationUUID) {
+      if(bStatus){
+        Toast.makeText(activity, "NotificationEnabled", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "NotificationEnabled sNotificationUUID=" + sNotificationUUID);
+        if (sNotificationUUID != null && sNotificationUUID.equalsIgnoreCase("your notification uuid)) {
+          BTCommands aBTCommands = <your customized BTCommands>
+          aBTCommands.setCallBackHandler(<your Command Handler>);
+          if (aBlueToothDeviceConnection.isConnected()) {
+            Toast.makeText(activity, "send BT commands to device", Toast.LENGTH_SHORT).show();
+            aBlueToothDeviceConnection.sendBTCommands(aBTCommands);
+          }
+        }
+      }else if(!bStatus){
+        Log.d(TAG, "NotificationEnableFail");
+      }
    }
  }  
 ~~~~
