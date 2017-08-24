@@ -173,7 +173,8 @@ public class LeDiscoveryService implements IDiscoveryService {
                     BTInfo aBTInfo = new BTInfo();
                     aBTInfo.setDeviceAddress(device.getAddress());
                     aBTInfo.setDeviceName(device.getName());
-                    aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE);
+                    //aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE );
+                    aBTInfo.setDeviceBlueToothType( device.getType() );
                     aBTInfo.setAdvertisementData(scanRecord.clone());
                     boolean bFound = true;
                     for (BTInfo aInfo : aOnlineDeviceList) {
@@ -185,7 +186,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                     if (bFound) {
 
                         aOnlineDeviceList.add(aBTInfo);
-                        // Log.i(TAG,"name="+aBTInfo.getDeviceName()+",address="+aBTInfo.getDeviceAddress()+",type="+aBTInfo.getType());
+                         Log.i(TAG,"name="+aBTInfo.getDeviceName()+",address="+aBTInfo.getDeviceAddress()+",type="+aBTInfo.getDeviceBlueToothType() );
                         // Log.i(TAG, "LeScanCallback , get device
                         // name="+device.getName()+",address =
                         // "+device.getAddress()+",devicelist

@@ -357,9 +357,9 @@ public class DeviceConnection {
                             try {
                                 if (aCmd1 instanceof BTReadCommand) {
                                     mBTChat.read(((BTReadCommand) aCmd1).getReaderChannelUUID());
-                                } else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_CLASSIC ) {
                                     mBTChat.write(aCmd1.getCommandString(), null);
-                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE || aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_DUAL ) {
                                     if (aCmd1.getWriterChannelUUID() != null) {
                                         if (GlobalSetting.getSimulation()) {
                                             aCommands.getSimulationResponsedData().handleBTCommandsData(1, aCmd1.getCommandString());
@@ -413,9 +413,9 @@ public class DeviceConnection {
 
                                 if (aCmd2 instanceof BTReadCommand) {
                                     mBTChat.read(((BTReadCommand) aCmd2).getReaderChannelUUID());
-                                } else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_CLASSIC) {
                                     mBTChat.write(aCmd2.getCommandString(), null);
-                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE || aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_DUAL) {
                                     if (aCmd2.getWriterChannelUUID() != null) {
                                         if (GlobalSetting.getSimulation()) {
                                             aCommands.getSimulationResponsedData().handleBTCommandsData(2, aCmd2.getCommandString());
@@ -459,9 +459,9 @@ public class DeviceConnection {
                             try {
                                 if (aCmd3 instanceof BTReadCommand) {
                                     mBTChat.read(((BTReadCommand) aCmd3).getReaderChannelUUID());
-                                } else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_CLASSIC) {
                                     mBTChat.write(aCmd3.getCommandString(), null);
-                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE || aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_DUAL) {
                                     if (aCmd3.getWriterChannelUUID() != null) {
                                         if (GlobalSetting.getSimulation()) {
                                             aCommands.getSimulationResponsedData().handleBTCommandsData(3, aCmd3.getCommandString());
@@ -506,9 +506,9 @@ public class DeviceConnection {
                             try {
                                 if (aCmd4 instanceof BTReadCommand) {
                                     mBTChat.read(((BTReadCommand) aCmd4).getReaderChannelUUID());
-                                } else if (aBTInfo.getDeviceBlueToothType() != BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_CLASSIC) {
                                     mBTChat.write(aCmd4.getCommandString(), null);
-                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE) {
+                                } else if (aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_LE || aBTInfo.getDeviceBlueToothType() == BTInfo.DEVICE_TYPE_DUAL) {
                                     if (aCmd4.getWriterChannelUUID() != null) {
                                         if (GlobalSetting.getSimulation()) {
                                             aCommands.getSimulationResponsedData().handleBTCommandsData(4, aCmd4.getCommandString());

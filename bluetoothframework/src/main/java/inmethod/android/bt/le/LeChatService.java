@@ -2,6 +2,7 @@ package inmethod.android.bt.le;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -16,6 +17,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -198,17 +200,19 @@ public class LeChatService implements IChatService {
             if (device == null) {
                 Log.w(TAG, "Device not found.  Unable to connect.");
             }
-            // We want to directly connect to the device, so we are setting the
-            // autoConnect
-            // parameter to false.
+
             mGattCallback = getGattCallback();
             if (mBluetoothGatt != null) {
                 mBluetoothGatt.close();
                 mBluetoothGatt = null;
             }
-            mBluetoothGatt = device.connectGatt(context, false, mGattCallback);
             Log.d(TAG, "Trying to create a new gatt connection.");
-            mState = STATE_CONNECTING;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+              mBluetoothGatt = device.connectGatt(context, false, mGattCallback,BluetoothDevice.TRANSPORT_LE);
+            }else {
+              mBluetoothGatt = device.connectGatt(context, false, mGattCallback);
+            }
+
         } catch (Exception ex) {
             Log.e(TAG, "device.connectGatt failed!");
             mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL).sendToTarget();
@@ -253,7 +257,7 @@ public class LeChatService implements IChatService {
         return new BluetoothGattCallback() {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-
+                Log.i(TAG, "gatt="+gatt+",status="+status+",newState="+newState);
                 if (status != BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_CONNECTED) {
                     mState = STATE_DISCONNECTED;
                     setState(mState);
@@ -280,6 +284,15 @@ public class LeChatService implements IChatService {
                         ex.printStackTrace();
                     }
                     Log.i(TAG, "Disconnected from GATT server.");
+                }else {
+                    mState = STATE_DISCONNECTED;
+                    setState(mState);
+                    try {
+                        LeChatService.this.stop();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Log.e(TAG, "GATT UNKNOWN ERROR , status = "+status );
                 }
             }
 
@@ -308,7 +321,7 @@ public class LeChatService implements IChatService {
                         return;
                     }
 
-
+/*
                     for (BluetoothGattService service : mBluetoothGatt.getServices()) {
                         //	Log.d(TAG, "=>service uuid = " + service.getUuid());
 
@@ -328,6 +341,40 @@ public class LeChatService implements IChatService {
 
                         }
                     }
+*/
+                    List<BluetoothGattService> aServices = mBluetoothGatt.getServices();
+                    boolean bCheck = false;
+                    for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
+                        bCheck = false;
+                    for (BluetoothGattService service : aServices) {
+                        //	Log.d(TAG, "=>service uuid = " + service.getUuid());
+
+                        for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                            //			Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
+                            allCharacteristic.put(characteristic.getUuid().toString().toUpperCase(), characteristic );
+                            if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
+                                    && aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
+
+                                    if (characteristic.getUuid().toString().equalsIgnoreCase(sUUID)) {
+
+                                        Handler aHandler  = new Handler(Looper.getMainLooper());
+                                        aHandler.postDelayed( new  NotifyOrIndicatorDelayRunnable(characteristic), iNotifyOrIndicatorDelayMilliseconds);
+                                        bCheck = true;
+                                    }
+                                }
+                            }
+
+                        }
+                        if( !bCheck) {
+                            Message aMessage = mHandler
+                                    .obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
+                            Bundle aBundle = new Bundle();
+                            aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,sUUID);
+                            aMessage.setData(aBundle);
+                            mHandler.sendMessage(aMessage);
+                        }
+                    }
+
                 } else {
                     Log.w(TAG, "onServicesDiscovered failed! status = " + status);
                     Message msg1 = mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_FAIL);
