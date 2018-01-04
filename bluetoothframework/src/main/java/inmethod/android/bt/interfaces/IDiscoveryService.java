@@ -92,6 +92,11 @@ public interface IDiscoveryService {
 	public void doDiscovery();
 
 	/**
+	 * discovery manually
+	 */
+	public void doDiscovery(int iScanTimeout);
+
+	/**
 	 * set bluetooth deivce name , communication will avoid to get bluetooth
 	 * device that are not in filter list. Name is case-sensitive
 	 * 
@@ -100,23 +105,21 @@ public interface IDiscoveryService {
 	public void setBlueToothDeviceNameFilter(Vector<String> aVector);
 
 	/**
-	 * default is false (communication can discover classic , dual and ble
-	 * device). true: communication can discover ble device only.
-	 * 
-	 * @param bBLE
-	 */
-	public void useBLEonly(boolean bBLE);
-
-	/**
 	 * for ble only.
 	 * @param iMilliseconds
      */
 	public void setScanTimeout(int iMilliseconds);
 
 	/**
-	 *  for ble only
+	 *  for ble only discovery finish
 	 * @return
      */
 	public int getScanTimeout();
+
+	/**
+	 *   default false only call back once if the same device found!
+	 * @param bAlways
+	 */
+	public void alwaysCallBackIfTheSameDeviceDiscovery(boolean bAlways);
 
 }

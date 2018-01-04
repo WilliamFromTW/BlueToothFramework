@@ -6,9 +6,9 @@ import android.os.Parcelable;
 
 /**
  * Get bluetooth device information.
- * 
+ *
  * @author william chen
- * 
+ *
  */
 public class BTInfo implements Parcelable {
 
@@ -39,14 +39,14 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * bluetooth type.
-	 * 
+	 *
 	 * <pre>
 	 * DEVICE_TYPE_CLASSIC
 	 * DEVICE_TYPE_DUAL
 	 * DEVICE_TYPE_LE
 	 * DEVICE_TYPE_UNKNOWN
 	 * </pre>
-	 * 
+	 *
 	 * @param iBluetoothType
 	 */
 	public void setDeviceBlueToothType(int iBluetoothType) {
@@ -55,14 +55,14 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * please reference android.bluetooth.BluetoothDevice.
-	 * 
+	 *
 	 * <pre>
 	 * DEVICE_TYPE_CLASSIC
 	 * DEVICE_TYPE_DUAL
 	 * DEVICE_TYPE_LE
 	 * DEVICE_TYPE_UNKNOWN
 	 * </pre>
-	 * 
+	 *
 	 * @see android.bluetooth.BluetoothDevice
 	 * @return
 	 */
@@ -72,7 +72,7 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * get bluetooth device name
-	 * 
+	 *
 	 * @return
 	 */
 	public String getDeviceName() {
@@ -81,7 +81,7 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * get bluetooth device MAC address
-	 * 
+	 *
 	 * @return
 	 */
 	public String getDeviceAddress() {
@@ -90,7 +90,7 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * set bluetooth device Name
-	 * 
+	 *
 	 * @param sDeviceName
 	 */
 	public void setDeviceName(String sDeviceName) {
@@ -99,13 +99,13 @@ public class BTInfo implements Parcelable {
 
 	/**
 	 * set bluetooth device MAC address name
-	 * 
+	 *
 	 * @param sDeviceAddress
 	 */
 	public void setDeviceAddress(String sDeviceAddress) {
 		this.sDeviceAddress = sDeviceAddress;
 	}
-	
+
 	/**
 	 * ble broadcase
 	 */
@@ -114,12 +114,12 @@ public class BTInfo implements Parcelable {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public byte[] getAdvertisementData(){
 		return byteAdvertisement;
 	}
-	
+
 	public int describeContents() {
 		return 0;
 	}
@@ -129,7 +129,6 @@ public class BTInfo implements Parcelable {
 		arg0.writeString(sDeviceName);
 		arg0.writeString(sDeviceAddress);
 		arg0.writeInt(iDeviceBlueToothType);
-		//System.out.println("broadcast.length="+byteAdvertisement.length);
 		if( byteAdvertisement!=null && byteAdvertisement.length>0) {
 			arg0.writeInt(byteAdvertisement.length);
 			arg0.writeByteArray(byteAdvertisement);
@@ -138,7 +137,7 @@ public class BTInfo implements Parcelable {
 			arg0.writeInt(1);
 			arg0.writeByteArray(new byte[]{0});
 		}
-		
+
 	}
 
 	public void readFromParcel(Parcel in) {

@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.util.Log;
 
 import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.GlobalSetting;
-import inmethod.android.bt.classic.ClassicDiscoveryService;
 import inmethod.android.bt.handler.DiscoveryServiceCallbackHandler;
 import inmethod.android.bt.interfaces.IDiscoveryService;
 
@@ -29,14 +27,14 @@ public class LeDiscoveryService implements IDiscoveryService {
     private Handler stopScanHandler;
     protected boolean bRun = false;
     protected BluetoothAdapter mBluetoothAdapter = null;
-    private BluetoothAdapter.LeScanCallback mLeScanCallback = null;
+    private android.bluetooth.le.ScanCallback mLeScanCallback = null;
     // bluetooth set
     protected ArrayList<BTInfo> aOnlineDeviceList = new ArrayList<BTInfo>();
-    protected ArrayList<BTInfo> aOneOnlineDeviceList = new ArrayList<BTInfo>();
+    protected BTInfo aOnlineDevice = null;
     protected BTInfo aBTInfo = null;
 
-
-    private static int iScanTimeoutMilliseconds = 12000;
+    private boolean alwaysCallBackIfTheSameDeviceDiscovery = false;
+    private static int iScanTimeoutMilliseconds = 6000;
 
     protected boolean bDeviceFound = false;
     private static LeDiscoveryService aLeDiscoveryService = null;
@@ -64,7 +62,14 @@ public class LeDiscoveryService implements IDiscoveryService {
      */
     public int getScanTimeout(){
       return iScanTimeoutMilliseconds;
-    };
+    }
+
+    @Override
+    public void alwaysCallBackIfTheSameDeviceDiscovery(boolean bAlways) {
+        alwaysCallBackIfTheSameDeviceDiscovery = bAlways;
+    }
+
+    ;
 
     /**
      * Singleton Class
@@ -123,7 +128,6 @@ public class LeDiscoveryService implements IDiscoveryService {
             return true;
     }
 
-
     private boolean prepareBluetoothAdapter() {
         // Get local Bluetooth adapter
         Log.d(TAG, "prepareBluetoothAdapter");
@@ -153,72 +157,51 @@ public class LeDiscoveryService implements IDiscoveryService {
             // ex.printStackTrace();
         }
 
-        mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
-            @Override
-            public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord) {
-                if (device == null || !isRunning())
-                    return;
-                /*
-                List<ScanRecord> aScanRecord = ScanRecord.parseScanRecord(scanRecord);
-				for (ScanRecord record : aScanRecord) {
-					Log.i(TAG,
-							"scan Record Length=" + record.getLength() + ",Type=0x"
-									+ HexAndStringConverter.convertHexByteToHexString(record.getType()) + ",Data="
-									+ new String(record.getData()) + "(HEX:"
-									+ HexAndStringConverter.convertHexByteToHexString(record.getData()) + ")");
+        mLeScanCallback = new android.bluetooth.le.ScanCallback() {
 
-                Log.i(TAG, "device address =" + device.getAddress() + ",device name =" + device.getName());		}
-*/
+            @Override
+            public void onScanResult(int callbackType, android.bluetooth.le.ScanResult result) {
+                if ( !isRunning())
+                    return;
+                BluetoothDevice device = result.getDevice();
                 if (filterFoundBTDevice(device.getName()) || filterFoundBTDevice(device.getAddress())) {
                     BTInfo aBTInfo = new BTInfo();
                     aBTInfo.setDeviceAddress(device.getAddress());
                     aBTInfo.setDeviceName(device.getName());
                     //aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE );
                     aBTInfo.setDeviceBlueToothType( device.getType() );
-                    aBTInfo.setAdvertisementData(scanRecord.clone());
-                    boolean bFound = true;
+                    aBTInfo.setAdvertisementData(result.getScanRecord().getBytes());
+                    boolean bTheSameDeviceFound = false;
                     for (BTInfo aInfo : aOnlineDeviceList) {
-                        //Log.i(TAG, "aInfo=" + aInfo.getDeviceAddress() + ",aBTInfo=" + aBTInfo.getDeviceAddress());
-                        if (aInfo.getDeviceAddress().equalsIgnoreCase(aBTInfo.getDeviceAddress())) {
-                            bFound = false;
+                        if (aInfo.getDeviceAddress().equalsIgnoreCase(aBTInfo.getDeviceAddress()) ) {
+                            bTheSameDeviceFound = true;
                         }
                     }
-                    if (bFound) {
-
-                        aOnlineDeviceList.add(aBTInfo);
+                    if( alwaysCallBackIfTheSameDeviceDiscovery == false && bTheSameDeviceFound) return;
+                    else {
+                        if( !bTheSameDeviceFound )  aOnlineDeviceList.add(aBTInfo);
                          Log.i(TAG,"name="+aBTInfo.getDeviceName()+",address="+aBTInfo.getDeviceAddress()+",type="+aBTInfo.getDeviceBlueToothType() );
-                        // Log.i(TAG, "LeScanCallback , get device
-                        // name="+device.getName()+",address =
-                        // "+device.getAddress()+",devicelist
-                        // counter="+aOnlineDeviceList.size());
-                        if (iDefaultDiscoveryMode == LeDiscoveryService.DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY) {
-                            bDeviceFound = true;
-                            Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
-                            Bundle bundle = new Bundle();
-                            aOneOnlineDeviceList.clear();
-                            aOneOnlineDeviceList.add(aBTInfo);
-                            bundle.putParcelableArrayList(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST,
-                                    aOneOnlineDeviceList);
-                            msg.setData(bundle);
-                            mHandler.sendMessage(msg);
-                        } else if (iDefaultDiscoveryMode == LeDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY) {
+                        bDeviceFound = true;
+                        Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_FOUND);
+                        Bundle bundle = new Bundle();
+                        aOnlineDevice = aBTInfo;
+                        bundle.putParcelable (GlobalSetting.BUNDLE_ONLINE_DEVICE, aOnlineDevice);
+                        msg.setData(bundle);
+                        mHandler.sendMessage(msg);
 
-                            if (aOnlineDeviceList.size() == 1) {
-
-                                Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelableArrayList(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST,
-                                        aOnlineDeviceList);
-                                msg.setData(bundle);
-                                mHandler.sendMessage(msg);
-                            }
-                            bDeviceFound = true;
+                        if (iDefaultDiscoveryMode == LeDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY) {
+                            mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
                         }
                     }
                 }
             }
+            @Override
+            public void onScanFailed(int errorCode) {
+                Log.i(TAG, "error code is:" + errorCode);
+            };
 
         };
+
 
         return true;
     }
@@ -280,8 +263,8 @@ public class LeDiscoveryService implements IDiscoveryService {
         bDeviceFound = false;
         if (aOnlineDeviceList != null)
             aOnlineDeviceList.clear();
-        if (isDiscovering & !GlobalSetting.getSimulation())
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        if (mBluetoothAdapter.isDiscovering() & !GlobalSetting.getSimulation())
+            mBluetoothAdapter.getBluetoothLeScanner().stopScan(mLeScanCallback);
         isDiscovering = false;
         bCancelDiscovery = true;
         if( GlobalSetting.getSimulation()){
@@ -320,7 +303,8 @@ public class LeDiscoveryService implements IDiscoveryService {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                if( mBluetoothAdapter.isDiscovering())
+                mBluetoothAdapter.getBluetoothLeScanner().stopScan(mLeScanCallback);
                 Log.d(TAG, "cancelDiscovery()");
 
                 isDiscovering = false;
@@ -329,12 +313,19 @@ public class LeDiscoveryService implements IDiscoveryService {
 
     }
 
+    public void doDiscovery() {
+       doDiscovery(iScanTimeoutMilliseconds) ;
+    }
+
     /**
      * discovery manually
      */
-    public void doDiscovery() {
+    public void doDiscovery(int iScanTimeoutMilliseconds) {
+        if (mBluetoothAdapter != null) {
+            if (isDiscovering())  return;
+        }
+        bDeviceFound = false;
         if (GlobalSetting.getSimulation()) {
-            bDeviceFound = false;
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -346,52 +337,50 @@ public class LeDiscoveryService implements IDiscoveryService {
                     boolean bFound = true;
                     aOnlineDeviceList.add(aBTInfo);
                     bDeviceFound = true;
-                    Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_LIST);
+                    Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_ONLINE_DEVICE_FOUND);
                     Bundle bundle = new Bundle();
-                    aOneOnlineDeviceList.clear();
-                    aOneOnlineDeviceList.add(aBTInfo);
-                    bundle.putParcelableArrayList(GlobalSetting.BUNDLE_ONLINE_DEVICE_LIST,  aOneOnlineDeviceList);
+                    bundle.putParcelable(GlobalSetting.BUNDLE_ONLINE_DEVICE,  aOnlineDevice);
                     msg.setData(bundle);
                     mHandler.sendMessage(msg);
                     mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
+                    aOnlineDeviceList.clear();
+                    aOnlineDevice = null;
                 }
             }, 1000);
             return;
         }
-        bDeviceFound = false;
         aOnlineDeviceList.clear();
-        if (mBluetoothAdapter != null) {
-            if (isDiscovering())
-                cancelDiscovery();
-            try {
-                Thread.sleep(100);
-            } catch (Exception eee) {
-            }
-        }
+
         Log.d(TAG, "is running?" + isRunning());
         if (!isRunning()) return;
         Log.d(TAG, "doDiscovery()");
 
         try {
 
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-            isDiscovering = true;
-
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBluetoothAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
+                    isDiscovering = true;
+                }
+            }, 10);
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     isDiscovering = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    if(    mBluetoothAdapter.isDiscovering() )
+                      mBluetoothAdapter.getBluetoothLeScanner().stopScan(mLeScanCallback);
                     if (!isRunning()) return;
                     Log.i(TAG, "device found?" + bDeviceFound);
 
                     if (!bDeviceFound) {
                         Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND);
-                        mHandler.sendMessageDelayed(msg, 100);
+                        mHandler.sendMessageDelayed(msg, 10);
                     }
                     mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
                 }
             }, iScanTimeoutMilliseconds);
+
         } catch (Exception ee) {
             ee.printStackTrace();
         }
@@ -443,16 +432,6 @@ public class LeDiscoveryService implements IDiscoveryService {
     @Override
     public int getDiscoveryMode() {
         return iDefaultDiscoveryMode;
-    }
-
-    /**
-     * default is false (DiscoveryService can discover classic , dual and ble
-     * device). true: DiscoveryService can discover ble device only.
-     *
-     * @param bBLE
-     */
-    public void useBLEonly(boolean bBLE) {
-        // no use
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

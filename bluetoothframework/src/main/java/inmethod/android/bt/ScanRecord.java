@@ -47,6 +47,7 @@ public class ScanRecord {
 
 	public static List<ScanRecord> parseScanRecord(byte[] scanRecord) {
 		List<ScanRecord> records = new ArrayList<ScanRecord>();
+		if( scanRecord==null) return records;
 
 		int index = 0;
 		while (index < scanRecord.length) {

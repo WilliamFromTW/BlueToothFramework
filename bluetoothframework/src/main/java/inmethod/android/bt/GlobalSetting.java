@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "5.2.1";
+	public static final String VERSION = "6.0.0";
 
 	private static boolean enable_simulation = false;
 	private static byte[] byteAdvertisementData = null;
@@ -41,7 +41,7 @@ public class GlobalSetting {
 	public static final int MESSAGE_START_DISCOVERY_SERVICE_SUCCESS = 10001;
 	public static final int MESSAGE_STOP_DISCOVERY_SERVICE = 10002;
 	public static final int MESSAGE_STATUS_TRY_PAIRING = 10003;
-	public static final int MESSAGE_STATUS_ONLINE_DEVICE_LIST = 10004;
+	public static final int MESSAGE_STATUS_ONLINE_DEVICE_FOUND = 10004;
 	public static final int MESSAGE_STATUS_NO_BLUETOOTH_MODULE = 10005;
 	public static final int MESSAGE_STATUS_BLUETOOTH_NOT_ENABLE = 10006;
 	public static final int MESSAGE_STATUS_DEVICE_NOT_FOUND = 1007;
@@ -57,7 +57,7 @@ public class GlobalSetting {
 	public static final int MESSAGE_RAW_DATA = 20006;
 	public static final int MESSAGE_UNKNOWN_EXCEPTION = 20007;
 
-	public static final String BUNDLE_ONLINE_DEVICE_LIST = "ONLINE_DEVICE_LIST";
+	public static final String BUNDLE_ONLINE_DEVICE = "ONLINE_DEVICE_LIST";
 
 	public static final String BUNDLE_KEY_DATA = "Data";
 	public static final String BUNDLE_KEY_BLUETOOTH_INFO = "BTInfo";
@@ -66,6 +66,14 @@ public class GlobalSetting {
 	public static final String BUNDLE_KEY_READER_UUID_STRING = "BUNDLE_KEY_NOTIFICATION_OR_INDICATOR";
 	public static final String BUNDLE_KEY_UNKNOWN_EXCEPTION_STRING = "BUNDLE_KEY_UNKNOWN_EXCEPTION_STRING";
 
+	public static final int STATE_NONE = 0; // we're doing nothing
+	public static final int STATE_LISTEN = 1; // now listening for incoming
+	// connections
+	public static final int STATE_CONNECTING = 2; // now initiating an outgoing
+	// connection
+	public static final int STATE_CONNECTED = 3; // now connected to a remote
+	// device
+	public static final int STATE_LOST = 6; // now connected to a remote device
 	/**
 	 * standard service uuid is blood pressure service 0x1810.
 	 */

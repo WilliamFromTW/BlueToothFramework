@@ -1,9 +1,8 @@
-# Android Bluetooth Framework v5.2.0 (20170331)
+# Android Bluetooth Framework v6.0.0 (20180104)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
 # Feature    
-* Support Classic Bluetooth(SPP) and Bluetooth Low Energy    
 * [Simulation Mode](#markdown-header-how-to-start-in-simulation-mode)       
 
 # Example    
@@ -13,17 +12,16 @@ This Framework is designed for Handheld APP to communicate with Bluetooth device
 Note:
 > This framework can not  send multiple BTCommands to remote bluetooth device  concurrently!    
 > BTCommands will be queued and wait to be executed!
-
+> Remove many deprecated method descripbe before version 6.0.0 
 
 # Simple sequence diagram    
 ![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3941352110-SimpleFramework.png)
 
 # Operation System Requirement    
-* Android 4.3 or above    
-* Android Wear 5.0 or above      
+* Android API 21 (Anroid 5.0)  or above
 
 ## Develop Environment    
-* Android Studio 2.2 or above      
+* Android Studio 3.0 or above      
 
 # Premission Requirement     
 

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import inmethod.android.bt.classic.ClassicChatService;
 import inmethod.android.bt.command.BTCommand;
 import inmethod.android.bt.command.BTCommands;
 import inmethod.android.bt.command.BTNotificationCommand;
@@ -103,7 +102,6 @@ public class DeviceConnection {
         // watch dog to check new command and execute command.
         aWatchDogThread = new Thread() {
 
-
             public void run() {
 
                 while (!bStopWatchDog) {
@@ -114,11 +112,7 @@ public class DeviceConnection {
                     }
 
                     if (aCommands == null || aBTCommandsList == null || aBTCommandsList.size() == 0) {
-                        // continue;
-                        /*
-                         * if( aCommands.getFinished()){ bStopWatchDog = true;
-						 * return; } else continue;
-						 */
+
                         try {
                             Log.d(TAG, "no bt command , sleep 60s");
                             sleep(60000);
@@ -241,19 +235,17 @@ public class DeviceConnection {
      */
     public void stop() {
         Log.i(TAG, "stop connection!");
-        bStopWatchDog = true;
         bIsConnected = false;
         bFirstBTCommands = true;
         mHandler.removeCallbacksAndMessages(null);
+        bStopWatchDog = true;
+        aWatchDogThread.interrupt();
         if (mBTChat != null) {
-            mBTChat.stop();
-            //mBTChat = null;
+            if( mBTChat.getState()==IChatService.STATE_CONNECTED)
+              mBTChat.stop();
         }
         if (aBTCommandsList != null && aBTCommandsList.size() > 0)
             aBTCommandsList.clear();
-        //aWatchDogThread = null;
-        // aBTCommandsList = null;
-        //aBluetoothAdapter = null;
     }
 
     /**
@@ -563,7 +555,7 @@ public class DeviceConnection {
 
                     Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
-                        case ClassicChatService.STATE_CONNECTED:
+                        case GlobalSetting.STATE_CONNECTED:
                             if (bTriggerConnectedAndThenSendCommand) {
                                 bTriggerConnectedAndThenSendCommand = false;
                             }
@@ -579,12 +571,12 @@ public class DeviceConnection {
                             }
 
                             break;
-                        case ClassicChatService.STATE_CONNECTING:
+                        case GlobalSetting.STATE_CONNECTING:
                             break;
-                        case ClassicChatService.STATE_LISTEN:
-                        case ClassicChatService.STATE_NONE:
+                        case GlobalSetting.STATE_LISTEN:
+                        case GlobalSetting.STATE_NONE:
                             break;
-                        case ClassicChatService.STATE_LOST:
+                        case GlobalSetting.STATE_LOST:
                             bIsConnected = false;
                             break;
                     }
