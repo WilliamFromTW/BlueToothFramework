@@ -351,35 +351,37 @@ public class LeDiscoveryService implements IDiscoveryService {
         }
         aOnlineDeviceList.clear();
 
-        Log.d(TAG, "is running?" + isRunning());
+        Log.d(TAG, "is running?" + isRunning()+",is discovering?"+ mBluetoothAdapter.isDiscovering() );
         if (!isRunning()) return;
         Log.d(TAG, "doDiscovery()");
 
         try {
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mBluetoothAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
-                    isDiscovering = true;
-                }
-            }, 10);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isDiscovering = false;
-                    if(    mBluetoothAdapter.isDiscovering() )
-                      mBluetoothAdapter.getBluetoothLeScanner().stopScan(mLeScanCallback);
-                    if (!isRunning()) return;
-                    Log.i(TAG, "device found?" + bDeviceFound);
-
-                    if (!bDeviceFound) {
-                        Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND);
-                        mHandler.sendMessageDelayed(msg, 10);
+            if( !mBluetoothAdapter.isDiscovering() ) {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBluetoothAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
+                        isDiscovering = true;
                     }
-                    mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
-                }
-            }, iScanTimeoutMilliseconds);
+                }, 10);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDiscovering = false;
+                        if (mBluetoothAdapter.isDiscovering())
+                            mBluetoothAdapter.getBluetoothLeScanner().stopScan(mLeScanCallback);
+                        if (!isRunning()) return;
+                        Log.i(TAG, "device found?" + bDeviceFound);
+
+                        if (!bDeviceFound) {
+                            Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND);
+                            mHandler.sendMessageDelayed(msg, 10);
+                        }
+                        mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
+                    }
+                }, iScanTimeoutMilliseconds);
+            }
 
         } catch (Exception ee) {
             ee.printStackTrace();
