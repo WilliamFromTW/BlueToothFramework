@@ -51,7 +51,7 @@ public class LeChatService implements IChatService {
     public final static String ACTION_DATA_AVAILABLE = "inmethod.android.bt.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA = "inmethod.android.bt.EXTRA_DATA";
 
-    public static final int STATE_DISCONNECTED = 1;
+    public static final int STATE_DISCONNECTED = GlobalSetting.MESSAGE_DISCONNECTED;
     public static final int STATE_CONNECTING = IChatService.STATE_CONNECTING;
     public static final int STATE_CONNECTED = IChatService.STATE_CONNECTED;
     public static final int STATE_GATT_SERVICES_DISCOVERED = 2001;
@@ -69,7 +69,7 @@ public class LeChatService implements IChatService {
     private boolean bSimulationBluetoothGattObject = true;
     private String sSimulationResponsedUUID = null;
 
-    private static int iNotifyOrIndicatorDelayMilliseconds = 200;
+    private static int iNotifyOrIndicatorDelayMilliseconds = 500;
 
     private class NotifyOrIndicatorDelayRunnable implements Runnable {
         private BluetoothGattCharacteristic temp;
@@ -125,7 +125,7 @@ public class LeChatService implements IChatService {
     }
 
     private void initial() {
-        Log.d(TAG, "LeChatService initial");
+        //Log.d(TAG, "LeChatService initial");
     }
 
     private void broadcastUpdate(String action, BluetoothGattCharacteristic characteristic) {
@@ -143,14 +143,14 @@ public class LeChatService implements IChatService {
      * session in listening (server) mode. Called by the Activity onResume()
      */
     public synchronized void start() {
-        Log.d(TAG, "LeChatService start");
+        //Log.d(TAG, "LeChatService start");
         initial();
     }
 
     /**
      * Stop all threads
      */
-    public void stop() {
+    synchronized public void stop() {
 
         Log.d(TAG, "LeChatService synchronized stop");
         setState(STATE_NONE);
@@ -160,13 +160,11 @@ public class LeChatService implements IChatService {
             mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
             return;
         }
-        if (mBluetoothAdapter == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
-        }
+
         if (mBluetoothGatt != null) {
+            mBluetoothGatt.disconnect();
             mBluetoothGatt.close();
             mBluetoothGatt = null;
-            mHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
         }
     }
 
@@ -179,9 +177,9 @@ public class LeChatService implements IChatService {
             if (GlobalSetting.getSimulation()) {
                 setState(STATE_CONNECTED);
                 if( aSetNotifyOrIndicatorCharacteristicListenerUUID!=null) {
-                    Log.d(TAG,"aSetNotifyOrIndicatorCharacteristicListenerUUID size ="+ aSetNotifyOrIndicatorCharacteristicListenerUUID.size());
+                    //Log.d(TAG,"aSetNotifyOrIndicatorCharacteristicListenerUUID size ="+ aSetNotifyOrIndicatorCharacteristicListenerUUID.size());
                     for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
-                        Log.d(TAG, "aSetNotifyOrIndicatorCharacteristicListenerUUID , uuid=" + sUUID);
+                        //Log.d(TAG, "aSetNotifyOrIndicatorCharacteristicListenerUUID , uuid=" + sUUID);
                         Message aMessage = mHandler
                                 .obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);
                         Bundle aBundle = new Bundle();
@@ -203,11 +201,12 @@ public class LeChatService implements IChatService {
 
             mGattCallback = getGattCallback();
             if (mBluetoothGatt != null) {
+                mBluetoothGatt.disconnect();
                 mBluetoothGatt.close();
                 mBluetoothGatt = null;
             }
             Log.d(TAG, "Trying to create a new gatt connection.");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M  && device.getType()==BluetoothDevice.DEVICE_TYPE_DUAL) {
               mBluetoothGatt = device.connectGatt(context, false, mGattCallback,BluetoothDevice.TRANSPORT_LE);
             }else {
               mBluetoothGatt = device.connectGatt(context, false, mGattCallback);
@@ -257,7 +256,7 @@ public class LeChatService implements IChatService {
         return new BluetoothGattCallback() {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                Log.i(TAG, "gatt="+gatt+",status="+status+",newState="+newState);
+                //Log.i(TAG, "gatt="+gatt+",status="+status+",newState="+newState);
                 if (status != BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_CONNECTED) {
                     mState = STATE_DISCONNECTED;
                     setState(mState);
@@ -270,6 +269,7 @@ public class LeChatService implements IChatService {
                 } else if ( status == BluetoothGatt.GATT_SUCCESS  && newState == BluetoothProfile.STATE_CONNECTED && mState != STATE_CONNECTED) {
                     // Attempts to discover services after successful
                     // connection.
+                    if( mBluetoothAdapter.isDiscovering())
                     mBluetoothAdapter.cancelDiscovery();
                     mState = STATE_CONNECTED;
                     setState(STATE_CONNECTED);
@@ -312,7 +312,7 @@ public class LeChatService implements IChatService {
                 if (allCharacteristic == null)
                     allCharacteristic = new HashMap<String, BluetoothGattCharacteristic>();
                 else allCharacteristic.clear();
-                //		Log.e(TAG, "onServicesDiscovered gatt=" + gatt + ",status=" + status);
+                //Log.e(TAG, "onServicesDiscovered gatt=" + gatt + ",status=" + status);
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     if (gatt == null) {
                         Log.e(TAG, "gatt is null");
@@ -321,27 +321,6 @@ public class LeChatService implements IChatService {
                         return;
                     }
 
-/*
-                    for (BluetoothGattService service : mBluetoothGatt.getServices()) {
-                        //	Log.d(TAG, "=>service uuid = " + service.getUuid());
-
-                        for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                            //			Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
-                            allCharacteristic.put(characteristic.getUuid().toString().toUpperCase(), characteristic );
-                            if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
-                                    && aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
-                                for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
-                                    if (characteristic.getUuid().toString().equalsIgnoreCase(sUUID)) {
-
-                                        Handler aHandler  = new Handler(Looper.getMainLooper());
-                                        aHandler.postDelayed( new  NotifyOrIndicatorDelayRunnable(characteristic), iNotifyOrIndicatorDelayMilliseconds);
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-*/
                     List<BluetoothGattService> aServices = mBluetoothGatt.getServices();
                     boolean bCheck = false;
                     for (String sUUID : aSetNotifyOrIndicatorCharacteristicListenerUUID) {
@@ -350,7 +329,7 @@ public class LeChatService implements IChatService {
                         //	Log.d(TAG, "=>service uuid = " + service.getUuid());
 
                         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                            //			Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
+                            //Log.d(TAG, "==>characteristic uuid under service= " + characteristic.getUuid());
                             allCharacteristic.put(characteristic.getUuid().toString().toUpperCase(), characteristic );
                             if (aSetNotifyOrIndicatorCharacteristicListenerUUID != null
                                     && aSetNotifyOrIndicatorCharacteristicListenerUUID.size() > 0) {
@@ -406,10 +385,7 @@ public class LeChatService implements IChatService {
             @Override
             public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
 
-                Log.i(TAG,
-                        "onDescriptorWrite , descriptor's owner characteristic="
-                                + descriptor.getCharacteristic().getUuid() + ", descriptor uuid = "
-                                + descriptor.getUuid() + ",status=" + status);
+                //Log.i(TAG,"onDescriptorWrite , descriptor's owner characteristic=" + descriptor.getCharacteristic().getUuid() + ", descriptor uuid = " + descriptor.getUuid() + ",status=" + status);
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     Message aMessage = mHandler
                             .obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS, 1, -1);

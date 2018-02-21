@@ -117,8 +117,11 @@ public class DeviceConnection {
                             Log.d(TAG, "no bt command , sleep 60s");
                             sleep(60000);
                         } catch (InterruptedException e) {
-                            Log.d(TAG, "got bt command , stop sleep");
-
+                            Log.d(TAG, "InterruptedException  , got bt command , stop sleep");
+                            if (mBTChat != null && mBTChat.getState() != IChatService.STATE_CONNECTED) {
+                                continue;
+                            }
+                            if( bStopWatchDog ) continue;
                         }
                     }
                     if (aCommands == null && aBTCommandsList.size() == 0) continue;
@@ -131,8 +134,13 @@ public class DeviceConnection {
                     if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
                         if (aCommands.isFinished()) {
                             Log.i(TAG, "remove timeout thread because command is finished!");
-                            if (rTimeout != null)
+                            if (rTimeout != null) {
                                 mHandler.removeCallbacks(rTimeout);
+                                if( aCommands!=null && aBTCommandsList.size()==0) {
+                                    aCommands.getCommandList();
+                                    aCommands = null;
+                                }
+                            }
                         }
                         bFirstBTCommands = false;
                         aCommands = aBTCommandsList.poll();
@@ -200,6 +208,7 @@ public class DeviceConnection {
                                 public void run() {
                                     mHandler.sendMessage(
                                             mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1));
+
                                 }
                             };
                             mHandler.postDelayed(rTimeout, aCommands.getTimeout());
@@ -241,11 +250,13 @@ public class DeviceConnection {
         bStopWatchDog = true;
         aWatchDogThread.interrupt();
         if (mBTChat != null) {
-            if( mBTChat.getState()==IChatService.STATE_CONNECTED)
               mBTChat.stop();
         }
         if (aBTCommandsList != null && aBTCommandsList.size() > 0)
             aBTCommandsList.clear();
+        if( aBluetoothAdapter!=null )
+            aBluetoothAdapter = null;
+
     }
 
     /**
@@ -532,11 +543,16 @@ public class DeviceConnection {
                                 if (!aCommands.isFinished()) {
                                     Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
                                     aCommands.handleTimeout();
+                                    if( aCommands!=null && aBTCommandsList.size()==0) {
+                                        aCommands.getCommandList();
+                                        aCommands = null;
+                                    }
                                 } else {
                                     Log.i(TAG, "Before timeout , command had finished!");
                                 }
                             } catch (Exception ee) {
                                 Log.e(TAG, "sleep error", ee);
+
                                 aCommands.getCommandList().clear();
                                 aCommands.setFinished(true);
                             }
@@ -553,7 +569,7 @@ public class DeviceConnection {
                     break;
                 case GlobalSetting.MESSAGE_STATE_CHANGE:
 
-                    Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    //Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case GlobalSetting.STATE_CONNECTED:
                             if (bTriggerConnectedAndThenSendCommand) {
@@ -570,6 +586,19 @@ public class DeviceConnection {
                                 aWatchDogThread.start();
                             }
 
+                            break;
+                        case GlobalSetting.MESSAGE_DISCONNECTED:
+                            stop();
+                            Log.e(TAG, "MESSAGE_CONNECTION_FAIL!");
+                            if (aConnectionHandler == null) {
+                                Log.e(TAG, "No connectionHandler!");
+                                return;
+                            }
+                            aMessage = aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST, 1, -1);
+                            aBundle = new Bundle();
+                            aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
+                            aMessage.setData(aBundle);
+                            aConnectionHandler.sendMessage(aMessage);
                             break;
                         case GlobalSetting.STATE_CONNECTING:
                             break;

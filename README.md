@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v6.0.0 (20180104)
+# Android Bluetooth Framework v6.0.1b1 (20180221)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -15,7 +15,7 @@ Note:
 > Remove many deprecated method descripbe before version 6.0.0 
 
 # Simple sequence diagram    
-![SimpleFramework.png](https://bitbucket.org/repo/jagqny/images/3941352110-SimpleFramework.png)
+![SimpleFramework.png](https://cloud.fromtw.com/index.php/apps/files_sharing/ajax/publicpreview.php?x=1920&y=459&a=true&file=Overall.png&t=LcHZbYzYEyD2kgl&scalingup=0)
 
 # Operation System Requirement    
 * Android API 21 (Anroid 5.0)  or above
@@ -154,9 +154,6 @@ NOTE:
 
  // Create connection object and setup connection call back handler
  DeviceConnection aBlueToothDeviceConnection = new DeviceConnection(aBTInfo, activity, aIBlueToothChatService, new MyBlueToothConnectionCallbackHandler());
-
-//  set nofity or indicator after  specify delay time when device connected (default delay time is 200 milliseconds)
-aBlueToothDeviceConnection.setNotifyOrIndicatorDelayTime(200);
 
  // connect to device
  aBlueToothDeviceConnection.connect();
