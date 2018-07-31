@@ -170,6 +170,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                     aBTInfo.setDeviceName(device.getName());
                     //aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE );
                     aBTInfo.setDeviceBlueToothType( device.getType() );
+                    aBTInfo.setRSSI(result.getRssi());
                     aBTInfo.setAdvertisementData(result.getScanRecord().getBytes());
                     boolean bTheSameDeviceFound = false;
                     for (BTInfo aInfo : aOnlineDeviceList) {

@@ -15,6 +15,7 @@ public class BTInfo implements Parcelable {
 	protected int iDeviceBlueToothType;
 	protected String sDeviceName;
 	protected String sDeviceAddress;
+	protected int iRSSI;
 	protected byte[] byteAdvertisement;
 
 	/**
@@ -89,6 +90,11 @@ public class BTInfo implements Parcelable {
 	}
 
 	/**
+	 * get rssi value
+	 */
+	public int getRSSI(){return iRSSI;}
+
+	/**
 	 * set bluetooth device Name
 	 *
 	 * @param sDeviceName
@@ -114,6 +120,13 @@ public class BTInfo implements Parcelable {
 	}
 
 	/**
+	 * set rssi
+	 */
+	public void setRSSI(int iRSSI){
+		this.iRSSI = iRSSI;
+	}
+
+	/**
 	 *
 	 */
 	public byte[] getAdvertisementData(){
@@ -129,6 +142,7 @@ public class BTInfo implements Parcelable {
 		arg0.writeString(sDeviceName);
 		arg0.writeString(sDeviceAddress);
 		arg0.writeInt(iDeviceBlueToothType);
+		arg0.writeInt(iRSSI);
 		if( byteAdvertisement!=null && byteAdvertisement.length>0) {
 			arg0.writeInt(byteAdvertisement.length);
 			arg0.writeByteArray(byteAdvertisement);
@@ -144,6 +158,7 @@ public class BTInfo implements Parcelable {
 		sDeviceName = in.readString();
 		sDeviceAddress = in.readString();
 		iDeviceBlueToothType = in.readInt();
+		iRSSI = in.readInt();
 		byteAdvertisement = new byte[in.readInt()];
 		in.readByteArray(byteAdvertisement);
 	}
