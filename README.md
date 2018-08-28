@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v6.0.1b1 (20180221)
+# Android Bluetooth Framework v6.1.0b1 (20180828)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -12,16 +12,16 @@ This Framework is designed for Handheld APP to communicate with Bluetooth device
 Note:
 > This framework can not  send multiple BTCommands to remote bluetooth device  concurrently!    
 > BTCommands will be queued and wait to be executed!
-> Remove many deprecated method descripbe before version 6.0.0 
+
 
 # Simple sequence diagram    
 ![SimpleFramework.png](https://cloud.fromtw.com/index.php/apps/files_sharing/ajax/publicpreview.php?x=1920&y=459&a=true&file=Overall.png&t=LcHZbYzYEyD2kgl&scalingup=0)
 
 # Operation System Requirement    
-* Android API 21 (Anroid 5.0)  or above
+* Android API 23 (Anroid 6.0)  or above
 
 ## Develop Environment    
-* Android Studio 3.0 or above      
+* Android Studio 3.1 or above      
 
 # Premission Requirement     
 

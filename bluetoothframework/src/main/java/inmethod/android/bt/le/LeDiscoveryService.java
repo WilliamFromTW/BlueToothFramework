@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.ScanCallback;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -131,6 +132,14 @@ public class LeDiscoveryService implements IDiscoveryService {
     private boolean prepareBluetoothAdapter() {
         // Get local Bluetooth adapter
         Log.d(TAG, "prepareBluetoothAdapter");
+        if( mBluetoothAdapter !=null ){
+            mBluetoothAdapter = null;
+        }
+        try{
+            Thread.sleep(100);
+        }catch (Exception ee){
+
+        }
         if (mBluetoothAdapter == null) {
             try {
                 mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -148,7 +157,7 @@ public class LeDiscoveryService implements IDiscoveryService {
             Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
             aContext.unregisterReceiver(mReceiver);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
         IntentFilter state_change_filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         try {
@@ -156,7 +165,7 @@ public class LeDiscoveryService implements IDiscoveryService {
         } catch (Exception ex) {
             // ex.printStackTrace();
         }
-
+        mLeScanCallback = null;
         mLeScanCallback = new android.bluetooth.le.ScanCallback() {
 
             @Override
@@ -198,7 +207,11 @@ public class LeDiscoveryService implements IDiscoveryService {
             }
             @Override
             public void onScanFailed(int errorCode) {
+
                 Log.i(TAG, "error code is:" + errorCode);
+                if( errorCode == ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED) {
+                   Log.e(TAG,"Scan Statsu  = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED , Please consider disable bluetooth and enable bluetooth power");
+                }
             };
 
         };
@@ -275,7 +288,7 @@ public class LeDiscoveryService implements IDiscoveryService {
             Log.d(TAG, "for safety reason , unregisterReceiver before registerReceiver!");
             aContext.unregisterReceiver(mReceiver);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
 
     }
@@ -379,7 +392,8 @@ public class LeDiscoveryService implements IDiscoveryService {
                             Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_NOT_FOUND);
                             mHandler.sendMessageDelayed(msg, 10);
                         }
-                        mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
+                        Message msg = mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED);
+                        mHandler.sendMessageDelayed(msg, 100);
                     }
                 }, iScanTimeoutMilliseconds);
             }
@@ -448,22 +462,17 @@ public class LeDiscoveryService implements IDiscoveryService {
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        Log.i(TAG, "Bluetooth Turning off!");
+                    case BluetoothAdapter.STATE_OFF:
+                        Log.i(TAG, "Bluetooth Turn off!");
                         mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF).sendToTarget();
-                        if (LeDiscoveryService.this.isRunning()) {
-                            LeDiscoveryService.this.stopService();
-                        }
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
                         break;
                     case BluetoothAdapter.STATE_ON:
+                        Log.i(TAG, "Bluetooth Turn on!");
+                        mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_BLUETOOTH_ON).sendToTarget();
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
-                        Log.i(TAG, "Bluetooth Turning on!");
-                        try {
-                            mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
                         break;
                 }
             }

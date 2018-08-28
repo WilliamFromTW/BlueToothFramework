@@ -2,7 +2,6 @@ package inmethod.android.bt.command;
 
 import java.util.ArrayList;
 
-import inmethod.android.bt.BTInfo;
 import inmethod.android.bt.DeviceConnection;
 import inmethod.android.bt.handler.CommandCallbackHandler;
 import inmethod.android.bt.interfaces.IChatService;
@@ -192,7 +191,7 @@ public abstract class BTCommands {
 	public void addCommand(BTCommand aCmd) {
 		aCommandList.add(aCmd);
 		aOriginalCommandList = null;
-		aOriginalCommandList = (ArrayList<BTCommand>) aCommandList.clone();
+		aOriginalCommandList =new ArrayList<BTCommand> (aCommandList);
 	}
 
 	public ArrayList<BTCommand> getOriginallCommandList() {

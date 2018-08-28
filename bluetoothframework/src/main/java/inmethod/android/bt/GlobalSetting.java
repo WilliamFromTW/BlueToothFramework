@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "6.0.1b1";
+	public static final String VERSION = "6.1.0b1";
 
 	private static boolean enable_simulation = false;
 	private static byte[] byteAdvertisementData = null;
@@ -48,6 +48,7 @@ public class GlobalSetting {
 	public static final int MESSAGE_STATUS_DEVICE_NOT_FOUND = 1007;
 	public static final int MESSAGE_STATUS_DISCONNECT_REQUESTED = 10008;
 	public static final int MESSAGE_STATUS_BLUETOOTH_OFF = 10009;
+	public static final int MESSAGE_STATUS_BLUETOOTH_ON = 10010;
 	public static final int MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED = 10011;
 
 	// for DeviceConnection

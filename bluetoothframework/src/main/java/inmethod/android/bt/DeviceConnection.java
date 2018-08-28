@@ -112,16 +112,18 @@ public class DeviceConnection {
                     }
 
                     if (aCommands == null || aBTCommandsList == null || aBTCommandsList.size() == 0) {
-
-                        try {
-                            Log.d(TAG, "no bt command , sleep 60s");
-                            sleep(60000);
-                        } catch (InterruptedException e) {
-                            Log.d(TAG, "InterruptedException  , got bt command , stop sleep");
-                            if (mBTChat != null && mBTChat.getState() != IChatService.STATE_CONNECTED) {
-                                continue;
+                        synchronized (this) {
+                            try {
+                                Log.d(TAG, "no bt command , sleep 60s");
+                                wait(60000);
+                                //sleep(60000);
+                            } catch (InterruptedException e) {
+                                Log.d(TAG, "InterruptedException  , got bt command , stop sleep");
+                                if (mBTChat != null && mBTChat.getState() != IChatService.STATE_CONNECTED) {
+                                    continue;
+                                }
+                                if (bStopWatchDog) continue;
                             }
-                            if( bStopWatchDog ) continue;
                         }
                     }
                     if (aCommands == null && aBTCommandsList.size() == 0) continue;
@@ -130,7 +132,7 @@ public class DeviceConnection {
                     if (!isConnected() && aBTCommandsList != null && aBTCommandsList.size() > 0) {
                         aBTCommandsList.clear();
                     }
-
+                    if( aBTCommandsList.size() >0 && aCommands==null ) aCommands = aBTCommandsList.poll();
                     if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
                         if (aCommands.isFinished()) {
                             Log.i(TAG, "remove timeout thread because command is finished!");
@@ -248,7 +250,10 @@ public class DeviceConnection {
         bFirstBTCommands = true;
         mHandler.removeCallbacksAndMessages(null);
         bStopWatchDog = true;
-        aWatchDogThread.interrupt();
+        synchronized (aWatchDogThread) {
+            aWatchDogThread.notify();
+        }
+        //aWatchDogThread.interrupt();
         if (mBTChat != null) {
               mBTChat.stop();
         }
@@ -316,13 +321,13 @@ public class DeviceConnection {
         if (bFirstBTCommands) {
             aCommands = aCmds;
         }
-        try {
-            // if(aWatchDogThread!=null && !aWatchDogThread.isAlive() )
-            // bStopWatchDog = false;
-            aWatchDogThread.interrupt();// .run();
-            // aWatchDogThread.start();
-        } catch (Exception ee) {
-            ee.printStackTrace();
+        synchronized (aWatchDogThread) {
+            try {
+                aWatchDogThread.notify();
+                //aWatchDogThread.interrupt()
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
         }
     }
 
@@ -560,7 +565,7 @@ public class DeviceConnection {
                         case 6:
                             if (GlobalSetting.getSimulation()) {
                                 for (byte bytes : aCommands.getSimulationResponsedData().getResponsedData())
-                                    mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, aCommands.getSimulationResponsedUUID()).sendToTarget();
+                                    mHandler.obtainMessage(GlobalSetting.MESSAGE_READ, bytes, -1, aCommands.getsSimulationNotificationUUID()).sendToTarget();
                             }
 
                             mHandler.sendMessageDelayed(mHandler.obtainMessage(GlobalSetting.MESSAGE_SEND_DATA, 5, -1), 1000);
