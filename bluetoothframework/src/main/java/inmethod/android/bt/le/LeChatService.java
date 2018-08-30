@@ -69,7 +69,7 @@ public class LeChatService implements IChatService {
     private boolean bSimulationBluetoothGattObject = true;
     private String sSimulationResponsedUUID = null;
 
-    private static int iNotifyOrIndicatorDelayMilliseconds = 500;
+    private static int iNotifyOrIndicatorDelayMilliseconds = 800;
 
     private class NotifyOrIndicatorDelayRunnable implements Runnable {
         private BluetoothGattCharacteristic temp;
@@ -269,12 +269,23 @@ public class LeChatService implements IChatService {
                 } else if ( status == BluetoothGatt.GATT_SUCCESS  && newState == BluetoothProfile.STATE_CONNECTED && mState != STATE_CONNECTED) {
                     // Attempts to discover services after successful
                     // connection.
-                    if( mBluetoothAdapter.isDiscovering())
-                    mBluetoothAdapter.cancelDiscovery();
+                    if( mBluetoothAdapter.isDiscovering()) {
+                        mBluetoothAdapter.cancelDiscovery();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     mState = STATE_CONNECTED;
                     setState(STATE_CONNECTED);
-
-                     Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:" + gatt.discoverServices());
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i(TAG, "Attempting to start service discovery and enable all notifications or indicators:" + gatt.discoverServices());
                 } else if ( status == BluetoothGatt.GATT_SUCCESS  && newState == BluetoothProfile.STATE_DISCONNECTED) {
                     mState = STATE_DISCONNECTED;
                     setState(mState);
@@ -343,7 +354,7 @@ public class LeChatService implements IChatService {
                                 }
                             }
 
-                        }
+                    }
                         if( !bCheck) {
                             Message aMessage = mHandler
                                     .obtainMessage(GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL, 1, -1);
