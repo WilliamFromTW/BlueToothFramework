@@ -1,11 +1,14 @@
 package inmethod.android.bt.le;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -370,12 +373,18 @@ public class LeDiscoveryService implements IDiscoveryService {
         Log.d(TAG, "doDiscovery()");
 
         try {
+            final List<ScanFilter> filters = new ArrayList<>();
+            ScanFilter filter = new ScanFilter.Builder().build();
+            filters.add(filter);
+
+            final ScanSettings scanSettings =
+                    new ScanSettings.Builder() .setNumOfMatches(ScanSettings.MATCH_NUM_MAX_ADVERTISEMENT).setMatchMode(ScanSettings.MATCH_MODE_STICKY).setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES).setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
 
             if( !mBluetoothAdapter.isDiscovering() ) {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mBluetoothAdapter.getBluetoothLeScanner().startScan(mLeScanCallback);
+                        mBluetoothAdapter.getBluetoothLeScanner().startScan(filters,scanSettings,mLeScanCallback);
                         isDiscovering = true;
                     }
                 }, 10);

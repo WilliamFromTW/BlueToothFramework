@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v6.1.0b1 (20180830)
+# Android Bluetooth Framework v6.1.0b2 (20190510)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -21,7 +21,7 @@ Note:
 * Android API 23 (Anroid 6.0)  or above
 
 ## Develop Environment    
-* Android Studio 3.1 or above      
+* Android Studio 3.3 or above      
 
 # Premission Requirement     
 
