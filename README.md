@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v6.1.0b2 (20190510)
+# Android Bluetooth Framework v6.1.0b4 (20190625)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 

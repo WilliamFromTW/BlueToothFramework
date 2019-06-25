@@ -164,7 +164,7 @@ public class LeChatService implements IChatService {
         if (mBluetoothGatt != null) {
             mBluetoothGatt.disconnect();
             mBluetoothGatt.close();
-            mBluetoothGatt = null;
+         //   mBluetoothGatt = null;
         }
     }
 

@@ -246,21 +246,43 @@ public class DeviceConnection {
      */
     public void stop() {
         Log.i(TAG, "stop connection!");
+
+        //mHandler.removeCallbacksAndMessages(null);
+        if(this.isConnected())
+        aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
         bIsConnected = false;
         bFirstBTCommands = true;
-        mHandler.removeCallbacksAndMessages(null);
-        bStopWatchDog = true;
         synchronized (aWatchDogThread) {
+            bStopWatchDog = true;
+            aWatchDogThread.notifyAll();
+        }
+        //aWatchDogThread.interrupt();
+
+        if (aBTCommandsList != null )
+            aBTCommandsList.clear();
+        if (mBTChat != null) {
+            mBTChat.stop();
+        }
+
+    }
+    private void stopWithoutSendMessage() {
+        Log.i(TAG, "stop connection!");
+        bIsConnected = false;
+        bFirstBTCommands = true;
+        //mHandler.removeCallbacksAndMessages(null);
+
+        synchronized (aWatchDogThread) {
+            bStopWatchDog = true;
             aWatchDogThread.notify();
         }
         //aWatchDogThread.interrupt();
         if (mBTChat != null) {
-              mBTChat.stop();
+            mBTChat.stop();
         }
         if (aBTCommandsList != null && aBTCommandsList.size() > 0)
             aBTCommandsList.clear();
-        if( aBluetoothAdapter!=null )
-            aBluetoothAdapter = null;
+        //   if( aBluetoothAdapter!=null )
+        //     aBluetoothAdapter = null;
 
     }
 
@@ -343,8 +365,10 @@ public class DeviceConnection {
                 case GlobalSetting.MESSAGE_SERVICE_STOP:
                     // System.out.println("MESSAGE SERVICE STOP");
                     bIsConnected = false;
+
                     if (mBTChat != null)
                         mBTChat.stop();
+
                     break;
                 case GlobalSetting.MESSAGE_SEND_DATA:
                     switch (msg.arg1) {
@@ -548,10 +572,7 @@ public class DeviceConnection {
                                 if (!aCommands.isFinished()) {
                                     Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
                                     aCommands.handleTimeout();
-                                    if( aCommands!=null && aBTCommandsList.size()==0) {
-                                        aCommands.getCommandList();
-                                        aCommands = null;
-                                    }
+
                                 } else {
                                     Log.i(TAG, "Before timeout , command had finished!");
                                 }
@@ -593,7 +614,7 @@ public class DeviceConnection {
 
                             break;
                         case GlobalSetting.MESSAGE_DISCONNECTED:
-                            stop();
+
                             Log.e(TAG, "MESSAGE_CONNECTION_FAIL!");
                             if (aConnectionHandler == null) {
                                 Log.e(TAG, "No connectionHandler!");
@@ -604,6 +625,7 @@ public class DeviceConnection {
                             aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
                             aMessage.setData(aBundle);
                             aConnectionHandler.sendMessage(aMessage);
+                            stopWithoutSendMessage();
                             break;
                         case GlobalSetting.STATE_CONNECTING:
                             break;
@@ -653,7 +675,7 @@ public class DeviceConnection {
                 case GlobalSetting.MESSAGE_DEVICE_NAME:
                     break;
                 case GlobalSetting.MESSAGE_CONNECTION_FAIL:
-                    stop();
+
                     Log.e(TAG, "MESSAGE_CONNECTION_FAIL!");
                     if (aConnectionHandler == null) {
                         Log.e(TAG, "No connectionHandler!");
@@ -664,9 +686,10 @@ public class DeviceConnection {
                     aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
                     aMessage.setData(aBundle);
                     aConnectionHandler.sendMessage(aMessage);
+                    stopWithoutSendMessage();
                     break;
                 case GlobalSetting.MESSAGE_CONNECTION_LOST:
-                    stop();
+
                     Log.e(TAG, "MESSAGE_CONNECTION_LOST!");
                     if (aConnectionHandler == null) {
                         Log.e(TAG, "No connectionHandler!");
@@ -677,7 +700,7 @@ public class DeviceConnection {
                     aBundle.putParcelable(GlobalSetting.BUNDLE_KEY_BLUETOOTH_INFO, aBTInfo);
                     aMessage.setData(aBundle);
                     aConnectionHandler.sendMessage(aMessage);
-
+                    stopWithoutSendMessage();
                     break;
                 case GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_SUCCESS:
                     aTmpBundle = msg.getData();
