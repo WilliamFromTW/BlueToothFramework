@@ -47,7 +47,7 @@ public class LeDiscoveryService implements IDiscoveryService {
     private boolean bCancelDiscovery = false;
     private Vector<String> aFilter = null;
 
-    private int iDefaultDiscoveryMode = DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY;
+    private int iDefaultDiscoveryMode = DISCOVERY_MODE_FOUND_AND_CONTINUE_DISCOVERY;
 
     private LeDiscoveryService() {
     }
@@ -173,7 +173,7 @@ public class LeDiscoveryService implements IDiscoveryService {
 
             @Override
             public void onScanResult(int callbackType, android.bluetooth.le.ScanResult result) {
-                if ( !isRunning())
+                if ( !isRunning()||bCancelDiscovery)
                     return;
                 BluetoothDevice device = result.getDevice();
                 if (filterFoundBTDevice(device.getName()) || filterFoundBTDevice(device.getAddress())) {
@@ -203,6 +203,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                         mHandler.sendMessage(msg);
 
                         if (iDefaultDiscoveryMode == LeDiscoveryService.DISCOVERY_MODE_FOUND_AND_STOP_DISCOVERY) {
+                            cancelDiscovery();
                             mHandler.obtainMessage(GlobalSetting.MESSAGE_STATUS_DEVICE_DISCOVERY_FINISHED).sendToTarget();
                         }
                     }
@@ -256,6 +257,7 @@ public class LeDiscoveryService implements IDiscoveryService {
 
         Log.d(TAG, "startDiscoveryService()");
         bRun = true;
+        bCancelDiscovery = false;
         if( GlobalSetting.getSimulation()){
             mHandler.obtainMessage(GlobalSetting.MESSAGE_START_DISCOVERY_SERVICE_SUCCESS).sendToTarget();
             return;

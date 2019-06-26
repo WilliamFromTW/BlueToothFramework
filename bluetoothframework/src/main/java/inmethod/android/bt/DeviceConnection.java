@@ -571,6 +571,7 @@ public class DeviceConnection {
                             try {
                                 if (!aCommands.isFinished()) {
                                     Log.i(TAG, "commands timeout! commands is " + aCommands.getClass());
+                                    aCommands.getCommandList().clear();
                                     aCommands.handleTimeout();
 
                                 } else {

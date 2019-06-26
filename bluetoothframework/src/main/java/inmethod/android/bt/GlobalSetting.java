@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "6.1.0b4";
+	public static final String VERSION = "6.1.0b5";
 
 	private static boolean enable_simulation = false;
 	private static byte[] byteAdvertisementData = null;
