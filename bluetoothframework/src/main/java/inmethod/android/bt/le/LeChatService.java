@@ -240,6 +240,7 @@ public class LeChatService implements IChatService {
             ((BluetoothGattCharacteristic) aWriterUUIDString).setValue(out);
             mBluetoothGatt.writeCharacteristic(((BluetoothGattCharacteristic) aWriterUUIDString));
         } else if (aWriterUUIDString != null && aWriterUUIDString instanceof String) {
+            if( allCharacteristic==null)   throw new NoWriterException("writer is null or unexpected error! UUID =" + aWriterUUIDString);
             BluetoothGattCharacteristic aCustomWriter = allCharacteristic.get(((String) aWriterUUIDString).toUpperCase());
             if (aCustomWriter != null) {
                 aCustomWriter.setValue(out);

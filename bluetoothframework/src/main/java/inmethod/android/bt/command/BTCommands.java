@@ -112,6 +112,7 @@ public abstract class BTCommands {
 	public String getsSimulationNotificationUUID(){
 		return sSimulationUUID;
 	}
+
 	/**
 	 * send extra message to remote device.
 	 * 
@@ -151,7 +152,13 @@ public abstract class BTCommands {
 	 * @param bFinished
 	 */
 	public void setFinished(boolean bFinished) {
+		if( 		aDeviceConnection!=null && aDeviceConnection.getCurrentBTCommands()!=null ){
+			aDeviceConnection.getCurrentBTCommands().getCommandList().clear();
+			aDeviceConnection.clearTimeoutThread();
+		}
+
 		this.bFinished = bFinished;
+
 	}
 
 	/**

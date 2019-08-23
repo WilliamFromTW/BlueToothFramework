@@ -177,21 +177,22 @@ public class LeDiscoveryService implements IDiscoveryService {
                     return;
                 BluetoothDevice device = result.getDevice();
                 if (filterFoundBTDevice(device.getName()) || filterFoundBTDevice(device.getAddress())) {
-                    BTInfo aBTInfo = new BTInfo();
-                    aBTInfo.setDeviceAddress(device.getAddress());
-                    aBTInfo.setDeviceName(device.getName());
-                    //aBTInfo.setDeviceBlueToothType(BTInfo.DEVICE_TYPE_LE );
-                    aBTInfo.setDeviceBlueToothType( device.getType() );
-                    aBTInfo.setRSSI(result.getRssi());
-                    aBTInfo.setAdvertisementData(result.getScanRecord().getBytes());
+
                     boolean bTheSameDeviceFound = false;
                     for (BTInfo aInfo : aOnlineDeviceList) {
-                        if (aInfo.getDeviceAddress().equalsIgnoreCase(aBTInfo.getDeviceAddress()) ) {
+                        if (aInfo.getDeviceAddress().equalsIgnoreCase(device.getAddress()) ) {
                             bTheSameDeviceFound = true;
                         }
                     }
                     if( alwaysCallBackIfTheSameDeviceDiscovery == false && bTheSameDeviceFound) return;
+
                     else {
+                        BTInfo aBTInfo = new BTInfo();
+                        aBTInfo.setDeviceAddress(device.getAddress());
+                        aBTInfo.setDeviceName(device.getName());
+                        aBTInfo.setDeviceBlueToothType( device.getType() );
+                        aBTInfo.setRSSI(result.getRssi());
+                        aBTInfo.setAdvertisementData(result.getScanRecord().getBytes());
                         if( !bTheSameDeviceFound )  aOnlineDeviceList.add(aBTInfo);
                          Log.i(TAG,"name="+aBTInfo.getDeviceName()+",address="+aBTInfo.getDeviceAddress()+",type="+aBTInfo.getDeviceBlueToothType() );
                         bDeviceFound = true;
@@ -214,7 +215,7 @@ public class LeDiscoveryService implements IDiscoveryService {
 
                 Log.i(TAG, "error code is:" + errorCode);
                 if( errorCode == ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED) {
-                   Log.e(TAG,"Scan Statsu  = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED , Please consider disable bluetooth and enable bluetooth power");
+                   Log.e(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED , Please consider disable bluetooth and enable bluetooth power");
                 }
             };
 

@@ -135,11 +135,10 @@ public class DeviceConnection {
                     if( aBTCommandsList.size() >0 && aCommands==null ) aCommands = aBTCommandsList.poll();
                     if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
                         if (aCommands.isFinished()) {
-                            Log.i(TAG, "remove timeout thread because command is finished!");
-                            if (rTimeout != null) {
+                            if (rTimeout != null ) {
+                                Log.i(TAG, "try to remove not null timeout thread when command was finished!");
                                 mHandler.removeCallbacks(rTimeout);
                                 if( aCommands!=null && aBTCommandsList.size()==0) {
-                                    aCommands.getCommandList();
                                     aCommands = null;
                                 }
                             }
@@ -247,7 +246,11 @@ public class DeviceConnection {
     public void stop() {
         Log.i(TAG, "stop connection!");
 
-        //mHandler.removeCallbacksAndMessages(null);
+        if( mHandler!=null) {
+            if(rTimeout!=null)     rTimeout=null;
+            mHandler.removeCallbacksAndMessages(null);
+        }
+
         if(this.isConnected())
         aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
         bIsConnected = false;
@@ -292,6 +295,10 @@ public class DeviceConnection {
     public void clearBTCommands() {
         if (aBTCommandsList != null && aBTCommandsList.size() > 0)
             aBTCommandsList.clear();
+    }
+
+    public void clearTimeoutThread(){
+        if ( rTimeout != null)    mHandler.removeCallbacks(rTimeout);
     }
 
     /**
@@ -580,7 +587,7 @@ public class DeviceConnection {
                             } catch (Exception ee) {
                                 Log.e(TAG, "sleep error", ee);
 
-                                aCommands.getCommandList().clear();
+                             //   aCommands.getCommandList().clear();
                                 aCommands.setFinished(true);
                             }
                             break;

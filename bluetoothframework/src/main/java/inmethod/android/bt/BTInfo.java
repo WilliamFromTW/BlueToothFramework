@@ -2,6 +2,7 @@ package inmethod.android.bt;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
+import android.os.ParcelUuid;
 import android.os.Parcelable;
 
 /**
@@ -143,6 +144,7 @@ public class BTInfo implements Parcelable {
 		arg0.writeString(sDeviceAddress);
 		arg0.writeInt(iDeviceBlueToothType);
 		arg0.writeInt(iRSSI);
+
 		if( byteAdvertisement!=null && byteAdvertisement.length>0) {
 			arg0.writeInt(byteAdvertisement.length);
 			arg0.writeByteArray(byteAdvertisement);
@@ -160,6 +162,7 @@ public class BTInfo implements Parcelable {
 		iDeviceBlueToothType = in.readInt();
 		iRSSI = in.readInt();
 		byteAdvertisement = new byte[in.readInt()];
+
 		in.readByteArray(byteAdvertisement);
 	}
 
