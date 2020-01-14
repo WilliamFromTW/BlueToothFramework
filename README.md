@@ -15,7 +15,7 @@ Note:
 
 
 # Simple sequence diagram    
-![SimpleFramework.png](https://cloud.fromtw.com/index.php/apps/files_sharing/ajax/publicpreview.php?x=1904&y=468&a=true&file=Overall.png&t=0wlciKsFvBLMzDk&scalingup=0)
+![SimpleFramework.png](https://github.com/WilliamFromTW/BlueToothFramework/blob/master/design/Overall.png?raw=true)
 
 # Operation System Requirement    
 * Android API 23 (Anroid 6.0)  or above
