@@ -15,7 +15,11 @@ Note:
 
 
 # Simple sequence diagram    
+<<<<<<< HEAD
 ![SimpleFramework.png](https://github.com/WilliamFromTW/BlueToothFramework/blob/master/design/Overall.png?raw=true)
+=======
+![SimpleFramework.png](https://github.com/WilliamFromTW/BlueToothFramework/blob/NewUI/design/Overall.png?raw=true)
+>>>>>>> f95d3063b28010da40409556ad4c666a7c7eab69
 
 # Operation System Requirement    
 * Android API 23 (Anroid 6.0)  or above
