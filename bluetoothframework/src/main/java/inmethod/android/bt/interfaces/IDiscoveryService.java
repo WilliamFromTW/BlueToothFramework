@@ -122,4 +122,9 @@ public interface IDiscoveryService {
 	 */
 	public void alwaysCallBackIfTheSameDeviceDiscovery(boolean bAlways);
 
+
+	/**
+	 * prepareBluetoothAdapter
+	 */
+	public boolean prepareBluetoothAdapter();
 }

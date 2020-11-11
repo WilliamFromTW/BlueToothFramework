@@ -1,5 +1,6 @@
 package inmethod.android.bt.handler;
 
+import android.bluetooth.le.ScanCallback;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,12 +15,15 @@ public abstract class DiscoveryServiceCallbackHandler extends Handler {
     public final static int START_SERVICE_BLUETOOTH_NOT_ENABLE = 2;
     public final static int START_SERVICE_BLUETOOTH_OFF = 4;
     public final static int START_SERVICE_BLUETOOTH_ON = 8;
-
+    public final static int SCAN_FAILED_APPLICATION_REGISTRATION_FAILED = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED;
 
     public BTInfo aOnlineDevice;
 
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            case GlobalSetting.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED:
+                StartServiceStatus(false, SCAN_FAILED_APPLICATION_REGISTRATION_FAILED);
+                break;
             case GlobalSetting.MESSAGE_STATUS_BLUETOOTH_OFF:
                 StartServiceStatus(false, START_SERVICE_BLUETOOTH_OFF);
                 break;

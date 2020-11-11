@@ -132,7 +132,7 @@ public class LeDiscoveryService implements IDiscoveryService {
             return true;
     }
 
-    private boolean prepareBluetoothAdapter() {
+    public boolean prepareBluetoothAdapter() {
         // Get local Bluetooth adapter
         Log.d(TAG, "prepareBluetoothAdapter");
         if( mBluetoothAdapter !=null ){
@@ -216,6 +216,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                 Log.i(TAG, "error code is:" + errorCode);
                 if( errorCode == ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED) {
                    Log.e(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED , Please consider disable bluetooth and enable bluetooth power");
+                   mHandler.obtainMessage(GlobalSetting.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED).sendToTarget();
                 }
             };
 
@@ -241,6 +242,15 @@ public class LeDiscoveryService implements IDiscoveryService {
         Log.d(TAG, "stopDiscoveryService()");
         clearData();
         mHandler.obtainMessage(GlobalSetting.MESSAGE_STOP_DISCOVERY_SERVICE).sendToTarget();
+        bRun = false;
+    }
+
+    /**
+     * stop service
+     */
+    public void stopServiceWithoutNotify() {
+        Log.d(TAG, "stopServiceWithoutNotify()");
+        clearData();
         bRun = false;
     }
 

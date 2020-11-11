@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BleFW.iml" filepath="$PROJECT_DIR$/BleFW.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bluetoothframework/bluetoothframework.iml" filepath="$PROJECT_DIR$/bluetoothframework/bluetoothframework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothframework/BleFW.bluetoothframework.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothframework/BleFW.bluetoothframework.iml" />
     </modules>
   </component>
 </project>
