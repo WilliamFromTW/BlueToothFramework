@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 11
-        versionName "6.1.1b2"
+        versionCode 12
+        versionName "6.1.1b3"
     }
     buildTypes {
         release {
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile 'androidx.appcompat:appcompat:1.0.2'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
 }

@@ -154,6 +154,7 @@ public class DeviceConnection {
                             ee.printStackTrace();
                         }
                         Log.d(TAG, "aCommands from poll is " + aCommands);
+                        if(!aCommands.getCurrentConnection().isConnected()) continue;
                         if (aCommands.getCommandList().size() >= 1) {
 
                             try {
