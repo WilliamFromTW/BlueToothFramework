@@ -132,7 +132,10 @@ public class DeviceConnection {
                     if (!isConnected() && aBTCommandsList != null && aBTCommandsList.size() > 0) {
                         aBTCommandsList.clear();
                     }
-                    if( aBTCommandsList.size() >0 && aCommands==null ) aCommands = aBTCommandsList.poll();
+                    if( aBTCommandsList.size() >0 && aCommands==null ) {
+                        Log.i(TAG, "call aBTCommandsList.poll");
+                        aCommands = aBTCommandsList.poll();
+                    }
                     if (isConnected() && aBTCommandsList.size() > 0 && (aCommands.isFinished() || bFirstBTCommands)) {
                         if (aCommands.isFinished()) {
                             if (rTimeout != null ) {
@@ -144,6 +147,7 @@ public class DeviceConnection {
                             }
                         }
                         bFirstBTCommands = false;
+                        Log.i(TAG, "call aBTCommandsList.poll");
                         aCommands = aBTCommandsList.poll();
                         int iTotalDelayTime = 0;
                         if (aCommands == null) continue;
@@ -439,6 +443,7 @@ public class DeviceConnection {
 
                         case 2:
                             try {
+                                Log.i(TAG, "MESSAGE_SEND_COMMAND 2 , aCommands size = "+aCommands.getCommandList().size());
                                 BTCommand aCmd2 = (BTCommand) aCommands.getCommandList().get(1);
                                 Log.i(TAG, "MESSAGE_SEND_COMMAND 2 = asc(" + new String(aCmd2.getCommandString()) + "),hex("
                                         + HexAndStringConverter.convertHexByteToHexString(aCmd2.getCommandString()) + ")");
@@ -478,6 +483,7 @@ public class DeviceConnection {
                                 }
                             } catch (Exception ee) {
                                 Log.e(TAG, "some error occurr when send second command!" + ee.getMessage());
+                                ee.printStackTrace();
                             }
                             break;
 
