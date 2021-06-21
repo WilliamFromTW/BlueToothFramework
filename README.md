@@ -1,4 +1,4 @@
-# Android Bluetooth Framework v6.1.1b3 (20201127)
+# Android Bluetooth Framework v6.1.2b1 (20210621)
 
 This Framework is designed for Handheld APP to communicate with Bluetooth device easily.
 
@@ -22,10 +22,10 @@ Note:
 >>>>>>> f95d3063b28010da40409556ad4c666a7c7eab69
 
 # Operation System Requirement    
-* Android API 23 (Anroid 6.0)  or above
+* Android API 23 (Anroid 6.0.1)  or above
 
 ## Develop Environment    
-* Android Studio 4 or above
+* Android Studio 4.2.1 or above
 
 # Premission Requirement     
 
@@ -33,6 +33,8 @@ Note:
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 ~~~~
 
 ACCESS_COARSE_LOCATION is run-time permission (android M or above)     
@@ -57,6 +59,18 @@ NOTE:
         });
         builder.show();
       };
+      if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+          builder.setTitle("This app needs location access");
+          builder.setMessage("Please grant location access");
+          builder.setPositiveButton(android.R.string.ok, null);
+          builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+          public void onDismiss(DialogInterface dialog) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+          };
+        });
+        builder.show();
+      }
       LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
       if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
         // show open gps message
