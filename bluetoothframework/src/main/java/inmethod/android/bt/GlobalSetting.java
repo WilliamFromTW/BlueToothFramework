@@ -2,7 +2,7 @@ package inmethod.android.bt;
 
 public class GlobalSetting {
 	public static final String TAG = "InMethod-Android-BT";
-	public static final String VERSION = "6.1.1b3";
+	public static final String VERSION = "6.1.24";
 
 	private static boolean enable_simulation = false;
 	private static byte[] byteAdvertisementData = null;
@@ -23,6 +23,8 @@ public class GlobalSetting {
 	public static final int MESSAGE_DISCONNECTED = 15;
 	public static final int SCAN_FAILED_APPLICATION_REGISTRATION_FAILED = 16;
 	public static final int SCAN_FAILED_ALREADY_STARTED = 17;
+	public static final int SCAN_NEED_TO_CANCEL = 18;
+
 
 	public static final String DEVICE_NAME = "device_name";
 	public static final String DEVICE_ADRESS = "device_adress";

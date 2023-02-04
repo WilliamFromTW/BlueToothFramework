@@ -173,8 +173,15 @@ public class LeDiscoveryService implements IDiscoveryService {
 
             @Override
             public void onScanResult(int callbackType, android.bluetooth.le.ScanResult result) {
-                if ( !isRunning()||bCancelDiscovery)
+                //Log.e(TAG,"is isRunning ?"+isRunning()+", bCancelDiscovery = "+ bCancelDiscovery +",Scan Status ,callbackType="+callbackType+",ScanResult = "+ result);
+                if( bCancelDiscovery ){
+                    Log.i(TAG,"Scan Status  = ScanCallback.SCAN_NEED_TO_CANCEL , Please consider LeDiscoveryService.cancelDiscovery()");
+                    mHandler.obtainMessage(GlobalSetting.SCAN_NEED_TO_CANCEL).sendToTarget();
+                    bCancelDiscovery = false;
                     return;
+                }
+                if ( !isRunning() )
+                  return;
                 BluetoothDevice device = result.getDevice();
                 if (filterFoundBTDevice(device.getName()) || filterFoundBTDevice(device.getAddress())) {
 
@@ -219,7 +226,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                    mHandler.obtainMessage(GlobalSetting.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED).sendToTarget();
                 }
                 else if (errorCode == ScanCallback.SCAN_FAILED_ALREADY_STARTED ){
-                    Log.e(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_ALREADY_STARTED , Please consider disable bluetooth and enable bluetooth power");
+                    Log.i(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_ALREADY_STARTED , Please consider disable bluetooth and enable bluetooth power");
                     mHandler.obtainMessage(GlobalSetting.SCAN_FAILED_ALREADY_STARTED).sendToTarget();
                 }
             };
@@ -404,7 +411,7 @@ public class LeDiscoveryService implements IDiscoveryService {
                         mBluetoothAdapter.getBluetoothLeScanner().startScan(filters,scanSettings,mLeScanCallback);
                         isDiscovering = true;
                     }
-                }, 10);
+                }, 200);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
