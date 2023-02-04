@@ -218,6 +218,10 @@ public class LeDiscoveryService implements IDiscoveryService {
                    Log.e(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED , Please consider disable bluetooth and enable bluetooth power");
                    mHandler.obtainMessage(GlobalSetting.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED).sendToTarget();
                 }
+                else if (errorCode == ScanCallback.SCAN_FAILED_ALREADY_STARTED ){
+                    Log.e(TAG,"Scan Status  = ScanCallback.SCAN_FAILED_ALREADY_STARTED , Please consider disable bluetooth and enable bluetooth power");
+                    mHandler.obtainMessage(GlobalSetting.SCAN_FAILED_ALREADY_STARTED).sendToTarget();
+                }
             };
 
         };

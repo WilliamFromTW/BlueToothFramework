@@ -80,7 +80,7 @@ public abstract class BTCommands {
 
 	/**
 	 * set simulation notification UUID string
-	 * @deprecated  use setSimulationNotificationUUID instead of setSimulationResponsedUUID
+	 * @Deprecated  use setSimulationNotificationUUID instead of setSimulationResponsedUUID
 	 * @param sUUID
      */
 	public void setSimulationResponsedUUID(String sUUID){
@@ -98,7 +98,7 @@ public abstract class BTCommands {
 
 	/**
 	 * get simulation notification UUID
-	 * @deprecated  use getsSimulationNotificationUUID instead of getSimulationResponsedUUID
+	 * @Deprecated  use getsSimulationNotificationUUID instead of getSimulationResponsedUUID
 	 * @return
      */
 	public String getSimulationResponsedUUID(){

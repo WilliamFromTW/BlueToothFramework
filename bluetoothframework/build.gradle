@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "28.0.2"
+    compileSdkVersion 33
+    buildToolsVersion '32.0.0'
     defaultConfig {
-        applicationId "inmethod.android.bt"
-        minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 14
-        versionName "6.1.22"
+        minSdkVersion 26
+        targetSdkVersion 33
+        versionCode 15
+        versionName "6.1.23"
     }
     buildTypes {
         release {
@@ -17,12 +16,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility 11
+        sourceCompatibility 11
+    }
     productFlavors {
     }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.13.2'
 }

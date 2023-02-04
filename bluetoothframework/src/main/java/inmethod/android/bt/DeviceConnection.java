@@ -256,8 +256,9 @@ public class DeviceConnection {
             mHandler.removeCallbacksAndMessages(null);
         }
 
-        if(this.isConnected())
-        aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
+        if(isConnected()) {
+            aConnectionHandler.obtainMessage(GlobalSetting.MESSAGE_CONNECTION_LOST).sendToTarget();
+        }
         bIsConnected = false;
         bFirstBTCommands = true;
         synchronized (aWatchDogThread) {

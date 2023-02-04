@@ -16,11 +16,15 @@ public abstract class DiscoveryServiceCallbackHandler extends Handler {
     public final static int START_SERVICE_BLUETOOTH_OFF = 4;
     public final static int START_SERVICE_BLUETOOTH_ON = 8;
     public final static int SCAN_FAILED_APPLICATION_REGISTRATION_FAILED = ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED;
+    public final static int SCAN_FAILED_ALREADY_STARTED = ScanCallback.SCAN_FAILED_ALREADY_STARTED;
 
     public BTInfo aOnlineDevice;
 
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            case GlobalSetting.SCAN_FAILED_ALREADY_STARTED:
+                StartServiceStatus(false, SCAN_FAILED_ALREADY_STARTED);
+                break;
             case GlobalSetting.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED:
                 StartServiceStatus(false, SCAN_FAILED_APPLICATION_REGISTRATION_FAILED);
                 break;

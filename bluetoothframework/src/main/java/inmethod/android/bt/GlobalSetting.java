@@ -22,6 +22,7 @@ public class GlobalSetting {
 	public static final int MESSAGE_READ_BUT_NO_COMMNAND_HANDLE = 14;
 	public static final int MESSAGE_DISCONNECTED = 15;
 	public static final int SCAN_FAILED_APPLICATION_REGISTRATION_FAILED = 16;
+	public static final int SCAN_FAILED_ALREADY_STARTED = 17;
 
 	public static final String DEVICE_NAME = "device_name";
 	public static final String DEVICE_ADRESS = "device_adress";
