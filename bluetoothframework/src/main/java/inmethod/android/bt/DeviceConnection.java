@@ -728,7 +728,7 @@ public class DeviceConnection {
                     aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
                             aTmpBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
                     aMessage.setData(aBundle);
-                    aConnectionHandler.sendMessageDelayed(aMessage, 500);
+                    aConnectionHandler.sendMessageDelayed(aMessage, 300);
                     break;
                 case GlobalSetting.MESSAGE_ENABLE_NOTIFICATION_OR_INDICATOR_FAIL:
                     aTmpBundle = msg.getData();
@@ -740,7 +740,7 @@ public class DeviceConnection {
                     aBundle.putString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING,
                             aTmpBundle.getString(GlobalSetting.BUNDLE_KEY_READER_UUID_STRING));
                     aMessage.setData(aBundle);
-                    aConnectionHandler.sendMessageDelayed(aMessage, 500);
+                    aConnectionHandler.sendMessageDelayed(aMessage, 300);
                     break;
                 case GlobalSetting.MESSAGE_TOAST:
                     break;
