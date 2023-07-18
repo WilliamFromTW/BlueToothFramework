@@ -1,6 +1,7 @@
 package inmethod.android.bt.le;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
@@ -478,11 +479,14 @@ public class LeChatService implements IChatService {
         }
 
         try {
-            mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
             BluetoothGattDescriptor descriptor = characteristic
                     .getDescriptor(UUID.fromString(GlobalSetting.Client_Characteristic_Configuration));
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+            if( !Arrays.equals( descriptor.getValue(),BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE ) ) {
+                mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
 
+                writeDescriptor(descriptor);
+            }
             writeDescriptor(descriptor);
         } catch (Exception ee) {
             ee.printStackTrace();
