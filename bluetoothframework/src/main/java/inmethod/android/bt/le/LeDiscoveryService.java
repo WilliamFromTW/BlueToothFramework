@@ -132,6 +132,11 @@ public class LeDiscoveryService implements IDiscoveryService {
             return true;
     }
 
+    @Override
+    public void useBLEonly(boolean bBLE) {
+        ;//no use
+    }
+
     public boolean prepareBluetoothAdapter() {
         // Get local Bluetooth adapter
         Log.d(TAG, "prepareBluetoothAdapter");

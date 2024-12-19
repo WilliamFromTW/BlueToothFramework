@@ -3,6 +3,7 @@ package inmethod.android.bt.interfaces;
 import java.util.Vector;
 
 import android.content.Context;
+import android.util.Log;
 
 import inmethod.android.bt.handler.DiscoveryServiceCallbackHandler;
 
@@ -39,7 +40,17 @@ public interface IDiscoveryService {
 	 */
 	public boolean isBlueToothReady();
 
-	
+	/**
+	 * default is false (communication can discover classic , dual and ble
+	 * device). true: communication can discover ble device only.
+	 *
+	 * @param bBLE
+	 */
+	public void useBLEonly(boolean bBLE);
+
+
+	public void stopServiceWithoutNotify() ;
+
 	/**
 	 * check this communication is running
 	 * 
