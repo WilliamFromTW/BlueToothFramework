@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BlueToothFramework.iml" filepath="$PROJECT_DIR$/.idea/modules/BlueToothFramework.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.main.iml" filepath="$PROJECT_DIR$/.idea/modules/bluetoothframework/BlueToothFramework.bluetoothframework.main.iml" />
